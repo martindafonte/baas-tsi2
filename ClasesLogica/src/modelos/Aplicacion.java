@@ -3,6 +3,8 @@ package modelos;
 import java.io.Serializable;
 import java.lang.Long;
 import java.lang.String;
+import java.util.List;
+
 import javax.persistence.*;
 
 /**
@@ -14,23 +16,44 @@ public class Aplicacion implements Serializable {
 
 	   
 	@Id
-	private Long id;
+	private Long aplicacionId;
 	private String Nombre;
 	@ManyToOne
 	@JoinColumn(name= "owner", referencedColumnName="personaId")
 	private Desarrollador owner;
+	
+	@OneToMany(mappedBy="aplicacion")
+	private List<Canal> canales;
 	private static final long serialVersionUID = 1L;
 
 	public Aplicacion() {
 		super();
 	}   
-	public Long getid() {
-		return this.id;
+	
+	public Long getAplicacionId() {
+		return aplicacionId;
 	}
 
-	public void setid(Long AplicacionId) {
-		this.id = AplicacionId;
-	}   
+	public void setAplicacionId(Long aplicacionId) {
+		this.aplicacionId = aplicacionId;
+	}
+
+	public Desarrollador getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Desarrollador owner) {
+		this.owner = owner;
+	}
+
+	public List<Canal> getCanales() {
+		return canales;
+	}
+
+	public void setCanales(List<Canal> canales) {
+		this.canales = canales;
+	}
+
 	public String getNombre() {
 		return this.Nombre;
 	}

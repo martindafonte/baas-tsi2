@@ -4,5 +4,7 @@
 		<class>modelos.Aplicacion</class>
 		<class>modelos.Persona</class>
 		<class>modelos.Desarrollador</class>
+		<class>modelos.Canal</class>
+		<class>modelos.Mensaje</class>
 	</persistence-unit>
 </persistence>
