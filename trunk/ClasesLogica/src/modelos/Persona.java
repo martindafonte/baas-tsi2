@@ -9,7 +9,7 @@ import javax.persistence.*;
  *
  */
 @Entity
-public class Persona implements Serializable {
+public abstract class Persona implements Serializable {
 
 	   
 	@Id
@@ -23,13 +23,6 @@ public class Persona implements Serializable {
 
 	public Persona() {
 		super();
-	}   
-	public long getPersonaId() {
-		return this.personaId;
-	}
-
-	public void setPersonaId(long personaId) {
-		this.personaId = personaId;
 	}   
 	public String getNick() {
 		return this.nick;
@@ -58,6 +51,12 @@ public class Persona implements Serializable {
 
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
+	}
+	public long getPersonaId() {
+		return personaId;
+	}
+	public void setPersonaId(long personaId) {
+		this.personaId = personaId;
 	}
    
 }

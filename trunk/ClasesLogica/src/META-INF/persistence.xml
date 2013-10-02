@@ -3,5 +3,6 @@
 	<persistence-unit name="ClasesLogica">
 		<class>modelos.Aplicacion</class>
 		<class>modelos.Persona</class>
+		<class>modelos.Desarrollador</class>
 	</persistence-unit>
 </persistence>

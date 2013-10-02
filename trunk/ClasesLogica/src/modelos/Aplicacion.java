@@ -14,19 +14,22 @@ public class Aplicacion implements Serializable {
 
 	   
 	@Id
-	private Long AplicacionId;
+	private Long id;
 	private String Nombre;
+	@ManyToOne
+	@JoinColumn(name= "owner", referencedColumnName="personaId")
+	private Desarrollador owner;
 	private static final long serialVersionUID = 1L;
 
 	public Aplicacion() {
 		super();
 	}   
-	public Long getAplicacionId() {
-		return this.AplicacionId;
+	public Long getid() {
+		return this.id;
 	}
 
-	public void setAplicacionId(Long AplicacionId) {
-		this.AplicacionId = AplicacionId;
+	public void setid(Long AplicacionId) {
+		this.id = AplicacionId;
 	}   
 	public String getNombre() {
 		return this.Nombre;
