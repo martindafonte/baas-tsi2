@@ -22,7 +22,7 @@
     <!-- GCM requires Android SDK version 2.2 (API level 8) or above. -->
     <!-- The targetSdkVersion is optional, but it's always a good practice
          to target higher versions. -->
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18"/>
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="18"/>
 
     <!-- GCM connects to Google Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -73,7 +73,7 @@
           so only GCM services can send data messages for the app.
         -->
         <receiver
-            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:name="com.google.android.gcm.demo.app.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <!-- Receives the actual messages. -->
@@ -91,7 +91,7 @@
           By default, it must be named .GCMIntentService, unless the
           application uses a custom BroadcastReceiver that redefines its name.
         -->
-        <service android:name=".GCMIntentService" />
+        <service android:name=".GcmIntentService" />
     </application>
 
 </manifest>
