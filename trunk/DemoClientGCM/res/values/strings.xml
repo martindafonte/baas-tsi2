@@ -16,8 +16,8 @@
 -->
 <resources>
 
-    <string name="app_name">GCM Demo</string>
-    <string name="send">Send</string>
-    <string name="clear">Clear</string>
+    <string name="app_name">Ejemplo TSI2</string>
+    <string name="send">Registrarme al Canal</string>
+    <string name="clear">No recibir más Notificaciones</string>
 
 </resources>

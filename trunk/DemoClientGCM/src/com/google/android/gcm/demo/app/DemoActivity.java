@@ -45,21 +45,20 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
  */
 public class DemoActivity extends Activity {
 
-    public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    static final String SERVER_URL = "http://192.168.0.104:8080/webdemoservergcm/";
-
+    static final String SERVER_URL = "http://192.168.0.101:8080/webdemoservergcm/";
+    
     /**
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "920697992611";
+    static final String SENDER_ID = "920697992611";
 
     /**
      * Tag used on log messages.
      */
-    static final String TAG = "GCM";
+    static final String TAG = "Ejemplo TSI2";
 
     TextView mDisplay;
     GoogleCloudMessaging gcm;
@@ -82,9 +81,6 @@ public class DemoActivity extends Activity {
             gcm = GoogleCloudMessaging.getInstance(this);
             regid = this.getRegistrationId(context);
 
-            if (regid.isEmpty()) {
-                registerInBackground();
-            }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
@@ -165,7 +161,7 @@ public class DemoActivity extends Activity {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
                     regid = gcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID=" + regid;
+                    msg = "Se ha registrado el Dispositivo, su registro ID es: " + "\n" + regid;
 
                     // You should send the registration ID to your server over HTTP, so it
                     // can use GCM/HTTP or CCS to send messages to your app.
@@ -188,42 +184,53 @@ public class DemoActivity extends Activity {
 
             @Override
             protected void onPostExecute(String msg) {
-                mDisplay.append(msg + "\n");
+                mDisplay.setText(msg + "\n");
             }
         }.execute(null, null, null);
     }
+    
+    private void unregisterInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    gcm.unregister();
+                    msg = "Ya no le llegaran nuevas notificaciones a su Dispositivo";
 
-    // Send an upstream message.
-    @SuppressWarnings("unused")
+                    // You should send the registration ID to your server over HTTP, so it
+                    // can use GCM/HTTP or CCS to send messages to your app.
+                    deleteRegistrationIdToBackend();
+
+                    // Delete the regID.
+                    storeRegistrationId(context, "");
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                    // If there is an error, don't just keep trying to register.
+                    // Require the user to click a button again, or perform
+                    // exponential back-off.
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                mDisplay.setText(msg + "\n");
+            }
+        }.execute(null, null, null);
+    }
+    
+    // Register or Unregister
 	public void onClick(final View view) {
 
-//        if (view == findViewById(R.id.Send)) {
-    	if(true){
-            new AsyncTask<Void, Void, String>() {
-                @Override
-                protected String doInBackground(Void... params) {
-                    String msg = "";
-                    try {
-                        Bundle data = new Bundle();
-                        data.putString("my_message", "Hello World");
-                        data.putString("my_action", "com.google.android.gcm.demo.app.ECHO_NOW");
-                        String id = Integer.toString(msgId.incrementAndGet());
-                        gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
-                        msg = "Sent message";
-                    } catch (IOException ex) {
-                        msg = "Error :" + ex.getMessage();
-                    }
-                    return msg;
-                }
-
-                @Override
-                protected void onPostExecute(String msg) {
-                    mDisplay.append(msg + "\n");
-                }
-            }.execute(null, null, null);
-//        } else if (view == findViewById(R.id.clear)) {
-    	}else if (true){
-            mDisplay.setText("");
+        if (view == findViewById(R.id.Send)) {
+        	registerInBackground();
+        	
+        } else if (view == findViewById(R.id.Clear)) {
+        	unregisterInBackground();
         }
     }
 
@@ -243,6 +250,15 @@ public class DemoActivity extends Activity {
         return getSharedPreferences(DemoActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
+    
+    
+//    private void sendNotificationToDisplay(String msg) {
+//    	TextView nDisplay;
+//    	nDisplay = (TextView) findViewById(R.id.display);
+//    	nDisplay.setText(msg);
+//      }
+//    
+    
     /**
      * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
      * messages to your app. Not needed for this demo since the device sends upstream messages
@@ -251,12 +267,30 @@ public class DemoActivity extends Activity {
     private void sendRegistrationIdToBackend() {
       ServerUtilities.register(context, regid);
     }
+    
+    private void deleteRegistrationIdToBackend() {
+        ServerUtilities.unregister(context, regid);
+      }
 }
+
 final class ServerUtilities {
 
     private static final int MAX_ATTEMPTS = 5;
     private static final int BACKOFF_MILLI_SECONDS = 2000;
     private static final Random random = new Random();
+    
+    
+    /**
+     * Intent used to display a message in the screen.
+     */
+    static final String DISPLAY_MESSAGE_ACTION =
+            "com.google.android.gcm.demo.app.DISPLAY_MESSAGE";
+
+    /**
+     * Intent's extra that contains the message to be displayed.
+     */
+    static final String EXTRA_MESSAGE = "message";
+
 
     /**
      * Register this account/device pair within the server.
@@ -276,12 +310,7 @@ final class ServerUtilities {
         for (int i = 1; i <= MAX_ATTEMPTS; i++) {
             Log.d(TAG, "Attempt #" + i + " to register");
             try {
-//                displayMessage(context, context.getString(
-//                        R.string.server_registering, i, MAX_ATTEMPTS));
                 post(serverUrl, params);
-                //GCMRegistrar.setRegisteredOnServer(context, true);
-                //String message = context.getString(R.string.server_registered);
-                CommonUtilities.displayMessage(context, "registrado");
                 return true;
             } catch (IOException e) {
                 // Here we are simplifying and retrying on any error; in a real
@@ -304,9 +333,6 @@ final class ServerUtilities {
                 backoff *= 2;
             }
         }
-//        String message = context.getString(R.string.server_register_error,
-//                MAX_ATTEMPTS);
-        CommonUtilities.displayMessage(context, "otro error");
         return false;
     }
 
@@ -321,19 +347,7 @@ final class ServerUtilities {
         params.put("regId", regId);
         try {
             post(serverUrl, params);
-           // GCMRegistrar.setRegisteredOnServer(context, false);
-//            String message = context.getString(R.string.server_unregistered);
-            CommonUtilities.displayMessage(context, "desregistrado");
-        } catch (IOException e) {
-            // At this point the device is unregistered from GCM, but still
-            // registered in the server.
-            // We could try to unregister again, but it is not necessary:
-            // if the server tries to send a message to the device, it will get
-            // a "NotRegistered" error message and should unregister the device.
-//            String message = context.getString(R.string.server_unregister_error,
-//                    e.getMessage());
-            CommonUtilities.displayMessage(context, "error");
-        }
+        } catch (IOException e) {}
     }
 
     /**
