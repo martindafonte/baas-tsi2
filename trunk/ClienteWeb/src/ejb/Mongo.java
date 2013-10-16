@@ -2,35 +2,11 @@ package ejb;
 
 
 import javax.ejb.Stateless;
-
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Properties;
-
 import javax.ejb.LocalBean;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.google.gson.Gson;
 import com.mongodb.*;
 import com.mongodb.util.JSON;
 
@@ -89,33 +65,38 @@ public class Mongo implements MongoLocal {
 		// TODO Auto-generated method stub
 		MongoClient mongoClient = new MongoClient("localhost",27017);
 		mongoClient.dropDatabase(nombreDB);
+		
 	}
 
 	@Override
-	public void IngresarJson(String nombreDB, JSONObject json, int clienteId) throws UnknownHostException {
+	public String IngresarJson(String nombreDB, String json, int clienteId) throws UnknownHostException {
 		// TODO Auto-generated method stub
 		MongoClient mongoClient = new MongoClient("localhost",27017);
 		DB base = mongoClient.getDB(nombreDB); 
 		
 		// Ya existe
         if ( ExisteCliente(nombreDB, clienteId)){
-        	System.out.println("********************\n");
-        	System.out.println("Ya existe cliente, error no se igresa el Json");
-        	System.out.println("********************\n");
-        	return;
+//        	System.out.println("********************\n");
+//        	System.out.println("Ya existe cliente, error no se igresa el Json");
+//        	System.out.println("********************\n");
+        	return "Ya existe cliente, error no se igresa el Json";
         }
         
         // no existe el cliente
         DBCollection collection = base.getCollection("Json");
     	BasicDBObject document = new BasicDBObject();	
 		document.put("id",clienteId);		
-		DBObject object = (DBObject) JSON.parse(json.toString());
+		
+		
+		DBObject object = (DBObject) JSON.parse(json);
 		document.put("json",object);
+		//document.put("json",json);
 		collection.insert(document);	
+		return "Ok";
 	}
 
 	@Override
-	public JSONObject Json(String nombreDB, int clienteId) throws UnknownHostException, JSONException {
+	public String Json(String nombreDB, int clienteId) throws UnknownHostException, JSONException {
 		// TODO Auto-generated method stub
 		MongoClient mongoClient = new MongoClient("localhost",27017);
 		DB base = mongoClient.getDB(nombreDB); 
@@ -126,10 +107,11 @@ public class Mongo implements MongoLocal {
         DBCursor cursor = collection.find(query);
         
         if (cursor.size() == 0){
-        	System.out.println("********************\n");
-        	System.out.println("No existe el cliente, no se puede ingresar json");
-        	System.out.println("********************\n");
-        	return null;
+//        	System.out.println("********************\n");
+//        	System.out.println("No existe el cliente, no se puede ingresar json");
+//        	System.out.println("********************\n");
+        	
+        	return  "No existe el cliente, no se puede ingresar json";
         }
         // Existe el cliente
       
@@ -139,24 +121,25 @@ public class Mongo implements MongoLocal {
       //  DBObject j = JSON.parse(json.toString());
         JSONObject aj = new JSONObject(json.toString());
         
-		return aj;
+		return aj.toString();
 	}
 
 	@Override
-	public void ActualizarJson(String nombreDB, JSONObject json, int clienteId) throws UnknownHostException {
+	public String ActualizarJson(String nombreDB, String json, int clienteId) throws UnknownHostException {
 		// TODO Auto-generated method stub
 		
 		if (!ExisteCliente(nombreDB, clienteId)){	
-        	System.out.println("********************\n");
-        	System.out.println("No existe el cliente, no se puede actualizar");
-        	System.out.println("********************\n");
+//        	System.out.println("********************\n");
+//        	System.out.println("No existe el cliente, no se puede actualizar");
+//        	System.out.println("********************\n");
+        	return "No existe el cliente, no se puede actualizar";
 		}
 		MongoClient mongoClient = new MongoClient("localhost",27017);
 		DB base = mongoClient.getDB(nombreDB); 
 		DBCollection collection = base.getCollection("Json");
 	
     	BasicDBObject document = new BasicDBObject();			
-		DBObject object = (DBObject) JSON.parse(json.toString());
+		DBObject object = (DBObject) JSON.parse(json);
 		document.put("id",clienteId);
 		document.put("json",object);
 		
@@ -165,16 +148,17 @@ public class Mongo implements MongoLocal {
 		BasicDBObject query = new BasicDBObject().append("id", clienteId);
 	 
 		collection.findAndModify(query, document);
+		return "Cliente actualizado";
 	}
 
 	@Override
-	public void EliminarJson(String nombreDB, int clienteId) throws UnknownHostException {
+	public String EliminarJson(String nombreDB, int clienteId) throws UnknownHostException {
 		// TODO Auto-generated method stub
 		if (!ExisteCliente(nombreDB, clienteId)){
-			System.out.println("********************\n");
-        	System.out.println("No existe el cliente, no se puede eliminar");
-        	System.out.println("********************\n");
-        	return;
+//			System.out.println("********************\n");
+//        	System.out.println("No existe el cliente, no se puede eliminar");
+//        	System.out.println("********************\n");
+        	return "No existe el cliente, no se puede eliminar";
 		}
 		
 		
@@ -186,6 +170,7 @@ public class Mongo implements MongoLocal {
 		searchQuery.put("id", clienteId);
 	 
 		collection.remove(searchQuery);
+		return "Cliente eliminado";
 	}
 
 }
