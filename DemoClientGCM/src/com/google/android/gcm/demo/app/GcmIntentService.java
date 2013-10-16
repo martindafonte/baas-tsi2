@@ -43,7 +43,7 @@ public class GcmIntentService extends IntentService {
     public GcmIntentService() {
         super("GcmIntentService");
     }
-    public static final String TAG = "GCM Demo";
+    public static final String TAG = "Ejemplo TSI2";
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -97,11 +97,11 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.ic_stat_gcm)
-        .setContentTitle("GCM Notification")
+        .setContentTitle("Notificacion TSI2")
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))
         .setContentText(msg);
-
+       
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
