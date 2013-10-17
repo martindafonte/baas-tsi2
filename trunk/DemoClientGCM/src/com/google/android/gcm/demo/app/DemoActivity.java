@@ -47,7 +47,7 @@ public class DemoActivity extends Activity {
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    static final String SERVER_URL = "http://192.168.0.101:8080/webdemoservergcm/";
+    static final String SERVER_URL = "http://192.168.0.107:8080/WebUserManager";
     
     /**
      * Substitute you own sender ID here. This is the project number you got
