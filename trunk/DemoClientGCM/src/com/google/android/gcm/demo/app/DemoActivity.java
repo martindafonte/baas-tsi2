@@ -15,7 +15,9 @@
  */
 package com.google.android.gcm.demo.app;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -231,7 +233,23 @@ public class DemoActivity extends Activity {
         	
         } else if (view == findViewById(R.id.Clear)) {
         	unregisterInBackground();
+        }  else if (view == findViewById(R.id.button1)) {
+        	setContentView(R.layout.activity_login);
         }
+    }
+	
+	public void onClick2(final View view) {
+		String serverUrl = "http://192.168.0.107:8080/WebUserManager/prueba1";
+		Map<String, String> params = new HashMap<String, String>();
+        params.put("user", "bruno");
+        params.put("pass", "bruno");
+        String ok = "caca";
+        try {
+            ok = ServerUtilities.post2(serverUrl, params);
+        } catch (IOException e) {}
+		
+        TextView mDisplay = (TextView) findViewById(R.id.textView1);
+        mDisplay.setText(ok);
     }
 
     @Override
@@ -358,7 +376,7 @@ final class ServerUtilities {
      *
      * @throws IOException propagated from POST.
      */
-    private static void post(String endpoint, Map<String, String> params)
+    static void post(String endpoint, Map<String, String> params)
             throws IOException {
     	String  TAG = com.google.android.gcm.demo.app.DemoActivity.TAG;
         URL url;
@@ -404,6 +422,67 @@ final class ServerUtilities {
                 conn.disconnect();
             }
         }
+      }
+    
+    static String post2(String endpoint, Map<String, String> params)
+            throws IOException {
+    	String  TAG = com.google.android.gcm.demo.app.DemoActivity.TAG;
+        URL url;
+        try {
+            url = new URL("http://192.168.0.107:8080/WebUserManager/prueba1/hola");
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("invalid url: " + endpoint);
+        }
+//        StringBuilder bodyBuilder = new StringBuilder();
+//        Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
+        // constructs the POST body using the parameters
+//        while (iterator.hasNext()) {
+//            Entry<String, String> param = iterator.next();
+//            bodyBuilder.append(param.getKey()).append('=')
+//                    .append(param.getValue());
+//            if (iterator.hasNext()) {
+//                bodyBuilder.append('&');
+//            }
+//        }
+//        String body = bodyBuilder.toString();
+//        Log.v(TAG, "Posting '" + body + "' to " + url);
+        HttpURLConnection conn = null; 
+        String res;
+        try {
+            conn = (HttpURLConnection) url.openConnection();
+            conn.connect();
+            
+            int responseCode = conn.getResponseCode();
+            
+            BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+			StringBuffer response = new StringBuffer();
+	 
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+	 
+			//print result
+			res = response.toString();
+            
+
+            // handle the response
+            int status = conn.getResponseCode();
+            if (status != 200) {
+              throw new IOException("Post failed with error code " + status);
+            }
+        }catch(Exception ex){
+        	int a = ex.hashCode();
+        	return null;
+        	
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+            
+        }
+        return res;
       }
 }
 
