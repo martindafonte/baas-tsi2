@@ -15,9 +15,7 @@
  */
 package com.google.android.gcm.demo.app;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -25,12 +23,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +48,7 @@ public class DemoActivity extends Activity {
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    static final String SERVER_URL = "http://192.168.0.107:8080/WebUserManager";
+    static final String SERVER_URL = "http://192.168.0.104:8080/WebUserManager";
     
     /**
      * Substitute you own sender ID here. This is the project number you got
@@ -165,15 +164,7 @@ public class DemoActivity extends Activity {
                     regid = gcm.register(SENDER_ID);
                     msg = "Se ha registrado el Dispositivo, su registro ID es: " + "\n" + regid;
 
-                    // You should send the registration ID to your server over HTTP, so it
-                    // can use GCM/HTTP or CCS to send messages to your app.
                     sendRegistrationIdToBackend();
-
-                    // For this demo: we don't need to send it because the device will send
-                    // upstream messages to a server that echo back the message using the
-                    // 'from' address in the message.
-
-                    // Persist the regID - no need to register again.
                     storeRegistrationId(context, regid);
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
@@ -234,24 +225,11 @@ public class DemoActivity extends Activity {
         } else if (view == findViewById(R.id.Clear)) {
         	unregisterInBackground();
         }  else if (view == findViewById(R.id.button1)) {
-        	setContentView(R.layout.activity_login);
+        	Intent in = new Intent(DemoActivity.this, LoginActivity.class);
+        	startActivity(in);
         }
     }
 	
-	public void onClick2(final View view) {
-		String serverUrl = "http://192.168.0.107:8080/WebUserManager/prueba1";
-		Map<String, String> params = new HashMap<String, String>();
-        params.put("user", "bruno");
-        params.put("pass", "bruno");
-        String ok = "caca";
-        try {
-            ok = ServerUtilities.post2(serverUrl, params);
-        } catch (IOException e) {}
-		
-        TextView mDisplay = (TextView) findViewById(R.id.textView1);
-        mDisplay.setText(ok);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -270,14 +248,7 @@ public class DemoActivity extends Activity {
     }
     
     
-//    private void sendNotificationToDisplay(String msg) {
-//    	TextView nDisplay;
-//    	nDisplay = (TextView) findViewById(R.id.display);
-//    	nDisplay.setText(msg);
-//      }
-//    
-    
-    /**
+   /**
      * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
      * messages to your app. Not needed for this demo since the device sends upstream messages
      * to a server that echoes back the message using the 'from' address in the message.
@@ -422,67 +393,6 @@ final class ServerUtilities {
                 conn.disconnect();
             }
         }
-      }
-    
-    static String post2(String endpoint, Map<String, String> params)
-            throws IOException {
-    	String  TAG = com.google.android.gcm.demo.app.DemoActivity.TAG;
-        URL url;
-        try {
-            url = new URL("http://192.168.0.107:8080/WebUserManager/prueba1/hola");
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("invalid url: " + endpoint);
-        }
-//        StringBuilder bodyBuilder = new StringBuilder();
-//        Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
-        // constructs the POST body using the parameters
-//        while (iterator.hasNext()) {
-//            Entry<String, String> param = iterator.next();
-//            bodyBuilder.append(param.getKey()).append('=')
-//                    .append(param.getValue());
-//            if (iterator.hasNext()) {
-//                bodyBuilder.append('&');
-//            }
-//        }
-//        String body = bodyBuilder.toString();
-//        Log.v(TAG, "Posting '" + body + "' to " + url);
-        HttpURLConnection conn = null; 
-        String res;
-        try {
-            conn = (HttpURLConnection) url.openConnection();
-            conn.connect();
-            
-            int responseCode = conn.getResponseCode();
-            
-            BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-			StringBuffer response = new StringBuffer();
-	 
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-	 
-			//print result
-			res = response.toString();
-            
-
-            // handle the response
-            int status = conn.getResponseCode();
-            if (status != 200) {
-              throw new IOException("Post failed with error code " + status);
-            }
-        }catch(Exception ex){
-        	int a = ex.hashCode();
-        	return null;
-        	
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
-            
-        }
-        return res;
-      }
+      }      
 }
 
