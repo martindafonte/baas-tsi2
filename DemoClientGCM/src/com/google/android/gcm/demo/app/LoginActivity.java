@@ -1,8 +1,23 @@
 package com.google.android.gcm.demo.app;
 
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -11,6 +26,8 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -23,13 +40,6 @@ import android.widget.TextView;
  * well.
  */
 public class LoginActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
-
 	/**
 	 * The default email to populate the email field with.
 	 */
@@ -88,10 +98,6 @@ public class LoginActivity extends Activity {
 					}
 				});
 	}
-	
-	public void onClick2(final View view) {
-		attemptLogin();
-    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,61 +124,55 @@ public class LoginActivity extends Activity {
 		mEmail = mEmailView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
 
-		
-		String serverUrl = "http://192.168.0.107:8080/WebUserManager/prueba1/";
 		Map<String, String> params = new HashMap<String, String>();
-        params.put("user", mEmail);
-        params.put("pass", mPassword);
-        String ok = "caca";
-        try {
-            ok = ServerUtilities.post2(serverUrl, params);
-        } catch (IOException e) {}
-		
-        TextView mDisplay = (TextView) findViewById(R.id.textView1);
-        mDisplay.setText(ok);
-        // Show a progress spinner, and kick off a background task to
-        // perform the user login attempt.
+		params.put("user", mEmail);
+		params.put("pass", mPassword);
+		String ok = "Login exitoso";
+		TextView mDisplay = (TextView) findViewById(R.id.textView1);
+		mDisplay.setText(ok);
+		// Show a progress spinner, and kick off a background task to
+		// perform the user login attempt.
 		mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 		showProgress(true);
 		mAuthTask = new UserLoginTask();
-		mAuthTask.execute((Void) null);
-//		boolean cancel = false;
-//		View focusView = null;
+		boolean cancel = false;
+		View focusView = null;
 
 		// Check for a valid password.
-//		if (TextUtils.isEmpty(mPassword)) {
-//			mPasswordView.setError(getString(R.string.error_field_required));
-//			focusView = mPasswordView;
-//			cancel = true;
-//		} else if (mPassword.length() < 4) {
-//			mPasswordView.setError(getString(R.string.error_invalid_password));
-//			focusView = mPasswordView;
-//			cancel = true;
-//		}
-//
-//		// Check for a valid email address.
-//		if (TextUtils.isEmpty(mEmail)) {
-//			mEmailView.setError(getString(R.string.error_field_required));
-//			focusView = mEmailView;
-//			cancel = true;
-//		} else if (!mEmail.contains("@")) {
-//			mEmailView.setError(getString(R.string.error_invalid_email));
-//			focusView = mEmailView;
-//			cancel = true;
-//		}
-//
-//		if (cancel) {
-//			// There was an error; don't attempt login and focus the first
-//			// form field with an error.
-//			focusView.requestFocus();
-//		} else {
-//			// Show a progress spinner, and kick off a background task to
-//			// perform the user login attempt.
-//			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-//			showProgress(true);
-//			mAuthTask = new UserLoginTask();
-//			mAuthTask.execute((Void) null);
-//		}
+		if (TextUtils.isEmpty(mPassword)) {
+			mPasswordView.setError(getString(R.string.error_field_required));
+			focusView = mPasswordView;
+			cancel = true;
+		}
+		// } else if (mPassword.length() < 4) {
+		// mPasswordView.setError(getString(R.string.error_invalid_password));
+		// focusView = mPasswordView;
+		// cancel = true;
+		// }
+
+		// // Check for a valid email address.
+		if (TextUtils.isEmpty(mEmail)) {
+			mEmailView.setError(getString(R.string.error_field_required));
+			focusView = mEmailView;
+			cancel = true;
+		}
+		// else if (!mEmail.contains("@")) {
+		// mEmailView.setError(getString(R.string.error_invalid_email));
+		// focusView = mEmailView;
+		// cancel = true;
+		// }
+
+		if (cancel) {
+			// // There was an error; don't attempt login and focus the first
+			// // form field with an error.
+			focusView.requestFocus();
+		} else {
+			// // Show a progress spinner, and kick off a background task to
+			// // perform the user login attempt.
+			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+			showProgress(true);
+			mAuthTask.execute((Void) null);
+		}
 	}
 
 	/**
@@ -223,25 +223,55 @@ public class LoginActivity extends Activity {
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
+			String url = DemoActivity.SERVER_URL;
+			url += "/prueba1";
+			return logear(url);
+		}
 
+		protected boolean logear(String p_url) {
+			HttpClient httpClient = new DefaultHttpClient();
+			HttpPost login = new HttpPost(p_url);
+			// login.setHeader("content-type", "application/json");
+			// HttpParams params = new BasicHttpParams();
 			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
+				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
+						2);
+				nameValuePairs.add(new BasicNameValuePair("user", mEmail));
+				nameValuePairs.add(new BasicNameValuePair("pass", mPassword));
+				login.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			try {
+				HttpResponse resp = httpClient.execute(login);
+				HttpEntity httpEntity = resp.getEntity();
+				InputStream is = httpEntity.getContent();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is, "iso-8859-1"), 8);
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				is.close();
+				String json = sb.toString();
+				JSONObject jObj = new JSONObject(json);
+				int codigo = jObj.getInt("codigo");
+				// int codigo = m.codigo;
+				if (codigo == 0) {
+					return true;
+				} else {
+					return false;
+				}
+			} catch (Exception ex) {
+				Log.e("ServicioRest", "Error!", ex);
 				return false;
 			}
+		}
 
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
-			return true;
+		public class Mensaje {
+			public int codigo;
+			public String descripcion;
 		}
 
 		@Override

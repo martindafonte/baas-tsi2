@@ -19,5 +19,6 @@
     <string name="app_name">Ejemplo TSI2</string>
     <string name="send">Registrarme al Canal</string>
     <string name="clear">No recibir más Notificaciones</string>
+    <string name="Boton1">Log in</string>
 
 </resources>
