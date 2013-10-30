@@ -5,14 +5,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -60,11 +57,12 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	protected DefaultHttpClient httpClient;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		httpClient = new DefaultHttpClient();
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.
@@ -124,12 +122,7 @@ public class LoginActivity extends Activity {
 		mEmail = mEmailView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
 
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("user", mEmail);
-		params.put("pass", mPassword);
-		String ok = "Login exitoso";
-		TextView mDisplay = (TextView) findViewById(R.id.textView1);
-		mDisplay.setText(ok);
+		
 		// Show a progress spinner, and kick off a background task to
 		// perform the user login attempt.
 		mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
@@ -172,6 +165,7 @@ public class LoginActivity extends Activity {
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 			mAuthTask.execute((Void) null);
+			
 		}
 	}
 
@@ -224,12 +218,12 @@ public class LoginActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			String url = DemoActivity.SERVER_URL;
-			url += "/prueba1";
+			url += "/Users";
 			return logear(url);
 		}
 
 		protected boolean logear(String p_url) {
-			HttpClient httpClient = new DefaultHttpClient();
+			
 			HttpPost login = new HttpPost(p_url);
 			// login.setHeader("content-type", "application/json");
 			// HttpParams params = new BasicHttpParams();
@@ -280,6 +274,9 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
+				String ok = "Login exitoso";
+				TextView mDisplay = (TextView) findViewById(R.id.textView1);
+				mDisplay.setText(ok);
 				finish();
 			} else {
 				mPasswordView
