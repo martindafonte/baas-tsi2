@@ -1,0 +1,5 @@
+int string player1_turn 0x7f020004
+int string player1_win 0x7f020001
+int string player2_turn 0x7f020003
+int string player2_win 0x7f020000
+int string tie 0x7f020002
