@@ -230,7 +230,7 @@ public class LoginActivity extends Activity {
 			try {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
 						2);
-				nameValuePairs.add(new BasicNameValuePair("user", mEmail));
+				nameValuePairs.add(new BasicNameValuePair("nick", mEmail));
 				nameValuePairs.add(new BasicNameValuePair("pass", mPassword));
 				login.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			} catch (UnsupportedEncodingException e) {
