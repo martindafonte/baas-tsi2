@@ -16,6 +16,7 @@ public abstract class Factory {
 	protected static long l_app_id=-1;
 	private static SDKUser l_userSDK = null;
 	private static SDKPush l_pushSDK = null;
+	//persistir despues la cookie de sesion
 	private static DefaultHttpClient l_httpClient;
 	private static Context ctx;
 	private static String l_regid;

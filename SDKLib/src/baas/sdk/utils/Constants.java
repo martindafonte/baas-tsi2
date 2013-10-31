@@ -9,6 +9,7 @@ public abstract class Constants {
 	public static final String appId ="apid";
 	public static final String canal ="chanel";
 	public static final String regId ="id";
+	public static final String jsonId ="jsonid";
 	
 	//Constantes de error en la SDK
 	public static final int Exito = 0;
