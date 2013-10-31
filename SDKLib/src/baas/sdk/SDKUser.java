@@ -30,7 +30,7 @@ class SDKUser implements ISDKUser {
 
 	@Override
 	public Message login(String nick, String pass) {
-		Message msg = new Message();
+		Message msg;
 		try {
 			HttpPost login = new HttpPost(l_baseURL);
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -41,16 +41,15 @@ class SDKUser implements ISDKUser {
 			HttpResponse resp = l_httpClient.execute(login);
 			JSONObject jObj = Http.obtenerJSONRespuesta(resp);
 			if (jObj == null) {
-				msg.codigo = Constants.User_Login_parsingException;
-				msg.descripcion = "Ocurrio una excepcion al intentar parsear el json obtenido";
+				msg=new Message( Constants.User_Login_parsingException);
 			} else {
+				msg = new Message();
 				msg.codigo = jObj.getInt("codigo");
 				msg.descripcion = jObj.getString("descripcion");
 			}
 			return msg;
 		} catch (Exception ex) {
-			msg.codigo = Constants.User_login_exception;
-			msg.descripcion = "Ocurrio una excepción al intentar logear";
+			msg=new Message( Constants.User_login_exception);
 			return msg;
 		}
 	}
