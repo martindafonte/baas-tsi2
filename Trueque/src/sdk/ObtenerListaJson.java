@@ -16,9 +16,9 @@ public class ObtenerListaJson {
 	
 	public String obtenerLista(JSONObject filtro, int appid) throws ClientProtocolException, IOException {
 		// TODO Auto-generated method stub
-		
+		try{
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://192.168.0.106:8080/WebUserManager/MongoServicios/listaJson/"+Integer.toString(appid));
+			HttpPost post = new HttpPost("http://192.168.1.41:8080/WebUserManager/MongoServicios/listaJson/"+Integer.toString(appid));
 				 
 			post.setHeader("content-type", "application/json");
 			StringEntity entity = new StringEntity(filtro.toString());
@@ -28,6 +28,9 @@ public class ObtenerListaJson {
 			HttpResponse resp = httpClient.execute(post);
 		   
 		    return EntityUtils.toString(resp.getEntity());		    		   
-	
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}    
 	}
 }

@@ -11,8 +11,7 @@
     <!-- GCM connects to Google Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -23,8 +22,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/app_name" >
         <activity
             android:name="com.trueque.MainActivity"
             android:label="@string/app_name" >
@@ -34,8 +32,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--  ******************** -->
-         <activity
+        <!-- ******************** -->
+        <activity
             android:name="de.vogella.camera.api.MakePhotoActivity"
             android:label="@string/app_name" >
             <intent-filter>
@@ -44,7 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--  ******************** -->
+        <!-- ******************** -->
         <activity android:name="com.trueque.IngresarTrueque" >
         </activity>
         <activity
@@ -66,6 +64,10 @@
         <activity
             android:name="com.trueque.FotoActivity"
             android:label="@string/title_activity_foto" >
+        </activity>
+        <activity
+            android:name="com.trueque.VerTruequeActivity"
+            android:label="@string/title_activity_ver_trueque" >
         </activity>
     </application>
 
