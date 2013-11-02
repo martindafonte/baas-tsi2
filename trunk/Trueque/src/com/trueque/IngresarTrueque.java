@@ -1,5 +1,6 @@
 package com.trueque;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,7 +27,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,10 +54,7 @@ public class IngresarTrueque extends Activity {
 	
 	int TAKE_PHOTO_CODE = 0;
 	public static int count=0;
-	
-	private static final String TAG = "CameraDemo";
 	Camera camera;
-	
 	Button botonImagen;
 	
 	
@@ -74,27 +76,39 @@ public class IngresarTrueque extends Activity {
         botonImagen.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
         	
-        	// capture picture
             captureImage();
         	
-        	
-         //    here,counter will be incremented each time,and the picture taken by camera will be stored as 1.jpg,2.jpg and likewise.
-//            count++;
-//            String file = dir+count+".jpg";
-//            File newfile = new File(file);
-//            try {
-//                newfile.createNewFile();
-//            } catch (IOException e) {}       
-//
-//            Uri outputFileUri = Uri.fromFile(newfile);
-//
-//            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); 
-//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-//
-//            startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
         }
     });
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu); 
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    return true;
+		
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+
+		
+	    switch (item.getItemId()) {
+	    	case android.R.id.home:
+	    		// Volver!
+	    	case R.id.itemaceptar:
+	    		agregarTrueque();
+	            //openSearch();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	
+	
 	/**
      * Checking device has camera hardware or not
      * */
@@ -195,7 +209,7 @@ public class IngresarTrueque extends Activity {
 
 
 	
-	public void agregarTrueque(View boton){
+	public void agregarTrueque(){
 		 
 		final EditText tipo =  (EditText)findViewById(R.id.EditTextTipo);
 		String tipo_var = tipo.getText().toString();
@@ -205,10 +219,21 @@ public class IngresarTrueque extends Activity {
 		
 		final EditText descripcion = (EditText)findViewById(R.id.editTextDescripcion);
 		String descripcion_var = descripcion.getText().toString();
-		String a = imagen.toString();
+		
+		 BitmapFactory.Options options = new BitmapFactory.Options();
+		 
+         // downsizing image as it throws OutOfMemory Exception for larger
+         // images
+         options.inSampleSize = 8;
+
+         Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
+                 options);
+         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+         String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 		
 		IngresarComunicacion claseInsertar = new IngresarComunicacion(this);
-		claseInsertar.execute( "trueque",tipo_var,valor_var,descripcion_var,a);
+		claseInsertar.execute( "trueque",tipo_var,valor_var,descripcion_var,encodedImage);
 		
 		//setContentView(R.layout.activity_main);
 	 }

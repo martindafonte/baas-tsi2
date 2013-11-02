@@ -10,24 +10,28 @@ import sdk.IngresarJson;
 
 import com.trueque.MainActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
 public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
 	
-
+	private ProgressDialog dialog;
 	private Context context;
 	
 	public IngresarComunicacion(Context c) {
 		super();
 		context = c;
+		dialog = new ProgressDialog(context);
 	}
 
 	@Override
 	protected void onPostExecute(Boolean result) {
 		// TODO Auto-generated method stub
-		
+		if (dialog.isShowing()){
+			dialog.dismiss();
+		}
 		Intent i = new Intent(this.context.getApplicationContext(),MainActivity.class);
 		this.context.startActivity(i);
 		super.onPostExecute(result);
@@ -36,6 +40,9 @@ public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
 	@Override
 	protected void onPreExecute() {
 		// TODO Auto-generated method stub
+		this.dialog.setMessage("Guardando");
+		this.dialog.show();
+		super.onPreExecute();
 		super.onPreExecute();
 	}
 
