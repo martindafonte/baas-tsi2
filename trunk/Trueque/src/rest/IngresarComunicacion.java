@@ -6,40 +6,45 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import sdk.SdkJson;
-
-import com.trueque.MainActivity;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import baas.sdk.Factory;
+import baas.sdk.utils.exceptions.NotInitilizedException;
 
-public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
-	
+import com.trueque.MainActivity;
+
+public class IngresarComunicacion extends AsyncTask<String, Integer, Boolean> {
+
 	private ProgressDialog dialog;
 	private Context context;
-	
+	private baas.sdk.ISDKJson sdkJson;
+
 	public IngresarComunicacion(Context c) {
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
+		Factory.initialize(1, c);
+		try {
+			sdkJson = Factory.getJsonSDK();
+		} catch (NotInitilizedException e) {
+		}
 	}
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		// TODO Auto-generated method stub
-		if (dialog.isShowing()){
+		if (dialog.isShowing()) {
 			dialog.dismiss();
 		}
-		Intent i = new Intent(this.context.getApplicationContext(),MainActivity.class);
+		Intent i = new Intent(this.context.getApplicationContext(),
+				MainActivity.class);
 		this.context.startActivity(i);
 		super.onPostExecute(result);
 	}
 
 	@Override
 	protected void onPreExecute() {
-		// TODO Auto-generated method stub
 		this.dialog.setMessage("Guardando");
 		this.dialog.show();
 		super.onPreExecute();
@@ -48,30 +53,26 @@ public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
 
 	@Override
 	protected Boolean doInBackground(String... params) {
-		// TODO Auto-generated method stub
-
-			SdkJson j = new SdkJson();			
+		try {
+			JSONObject dato = new JSONObject();
 			try {
-				
-				JSONObject dato = new JSONObject();
-			    try {
-			    	dato.put("tipoObjeto", params[0]);
-					dato.put("Tipo",params[1] );
-					dato.put("Valor", params[2]);
-					dato.put("Descripcion", params[3]);
-					dato.put("imagen", params[4]);		
-			    }catch(JSONException e){
-			    	e.printStackTrace();
-			    }
-				j.Ingresar(dato,0);
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				dato.put("tipoObjeto", params[0]);
+				dato.put("Tipo", params[1]);
+				dato.put("Valor", params[2]);
+				dato.put("Descripcion", params[3]);
+				dato.put("imagen", params[4]);
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			return true;
+			sdkJson.addJson(dato);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
-	
+
 }

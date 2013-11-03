@@ -15,18 +15,23 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class SdkJson {
+public class SdkJson implements ISDKJson {
 	
-	static String ip = "192.168.0.104";
+	private DefaultHttpClient l_httpClient;
+	static String l_baseURL = "192.168.0.104";
 	String ultimo;
 	
 	
+	/* (non-Javadoc)
+	 * @see sdk.ISDKJson#Ingresar(org.json.JSONObject, int)
+	 */
+	@Override
 	public String Ingresar(JSONObject dato, int appid) throws ClientProtocolException, IOException {
 		// TODO Auto-generated method stub
 		try{	
 			HttpClient httpClient = new DefaultHttpClient();
 			 
-		    HttpPost post = new HttpPost("http://" + ip +":8080/WebUserManager/MongoServicios/" + Integer.toString(appid));
+		    HttpPost post = new HttpPost("http://" + l_baseURL +":8080/WebUserManager/MongoServicios/" + Integer.toString(appid));
 		 
 		    post.setHeader("content-type", "application/json");	
 			StringEntity entity = new StringEntity(dato.toString());
@@ -42,21 +47,25 @@ public class SdkJson {
 		}    
 	}
 	
+	/* (non-Javadoc)
+	 * @see sdk.ISDKJson#obtenerJson(int, int)
+	 */
+	@Override
 	public String obtenerJson(int appid, int jsonid){
 
 		
 		try{
-			HttpClient httpClient = new DefaultHttpClient();
+			HttpClient l_httpClient = new DefaultHttpClient();
 			 
 			String id = Integer.toString(jsonid);
 			String app = Integer.toString(appid);
 			 
-			HttpGet del = new HttpGet("http://" + ip +":8080/WebUserManager/MongoServicios/" +app +"/" + id);
+			HttpGet del = new HttpGet("http://" + l_baseURL +":8080/WebUserManager/MongoServicios/" +app +"/" + id);
 			 
 			del.setHeader("content-type", "application/json");
 			 
 			
-		    HttpResponse resp = httpClient.execute(del);
+		    HttpResponse resp = l_httpClient.execute(del);
 		    String hola = EntityUtils.toString(resp.getEntity());
 		    
 		    return hola; 
@@ -72,6 +81,10 @@ public class SdkJson {
 	
 	}
 
+	/* (non-Javadoc)
+	 * @see sdk.ISDKJson#obtenerLista(org.json.JSONObject, int, int, int)
+	 */
+	@Override
 	public JSONArray obtenerLista(JSONObject filtro, int appid, int desde, int cant) throws ClientProtocolException, IOException {
 		// TODO Auto-generated method stub
 		try{
@@ -83,7 +96,7 @@ public class SdkJson {
 			String cantString = Integer.toString(cant);
 			
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://" + ip + ":8080/WebUserManager/MongoServicios/listaJson/"+appidString+"/" + desde + "/"+ cantString);
+			HttpPost post = new HttpPost("http://" + l_baseURL + ":8080/WebUserManager/MongoServicios/listaJson/"+appidString+"/" + desde + "/"+ cantString);
 				 
 			post.setHeader("content-type", "application/json");
 			StringEntity entity = new StringEntity(filtro.toString());
@@ -101,10 +114,14 @@ public class SdkJson {
 		}    
 	}
 
+	/* (non-Javadoc)
+	 * @see sdk.ISDKJson#ActualizarJson(org.json.JSONObject, int, int)
+	 */
+	@Override
 	public String ActualizarJson(JSONObject json, int id, int appid){
 		try{
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPut put = new HttpPut("http://" + ip +":8080/WebUserManager/MongoServicios/"+Integer.toString(appid)+"/" +Integer.toString(id));
+			HttpPut put = new HttpPut("http://" + l_baseURL +":8080/WebUserManager/MongoServicios/"+Integer.toString(appid)+"/" +Integer.toString(id));
 				 
 			put.setHeader("content-type", "application/json");
 			StringEntity entity = new StringEntity(json.toString());
@@ -122,11 +139,15 @@ public class SdkJson {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see sdk.ISDKJson#EliminarJson(int, int)
+	 */
+	@Override
 	public String EliminarJson(int id, int appid){
 		
 		try {
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpDelete delete = new HttpDelete("http://" + ip +":8080/WebUserManager/MongoServicios/"+Integer.toString(appid)+"/"+Integer.toString(id));
+			HttpDelete delete = new HttpDelete("http://" + l_baseURL +":8080/WebUserManager/MongoServicios/"+Integer.toString(appid)+"/"+Integer.toString(id));
 				 
 			delete.setHeader("content-type", "application/json");
 	       	

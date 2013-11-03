@@ -8,7 +8,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import sdk.ISDKJson;
 import sdk.SdkJson;
+
+import baas.sdk.Factory;
+import baas.sdk.messages.MessageJson;
+import baas.sdk.messages.MessageJsonList;
+import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.trueque.MainActivity;
 import com.trueque.R;
@@ -41,6 +47,7 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 	private ProgressDialog dialog;
 	private Context context;
 	public JSONArray array;
+	private baas.sdk.ISDKJson sdkJson;
 
 	
 	
@@ -48,6 +55,11 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
+		Factory.initialize(1, c);
+		try {
+			sdkJson = Factory.getJsonSDK();
+		} catch (NotInitilizedException e) {
+		}
 	}
 	
 	@Override
@@ -76,7 +88,6 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 	@Override
 	protected Boolean doInBackground(String... params) {
 		// TODO Auto-generated method stub
-		SdkJson j = new SdkJson();
 		JSONObject json = new JSONObject();
 		try {
 			json.put("tipoObjeto", params[0]);
@@ -84,10 +95,9 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String respuesta;
-		try {
-		    
-		    array = j.obtenerLista(json,0,0,10);
+		try {	
+			MessageJsonList mj = sdkJson.getJsonList(json,0,10);
+		    array =mj.resultList;
 		    
 		    // LLenar
 		    MainActivity.trueques = new String[array.length()];

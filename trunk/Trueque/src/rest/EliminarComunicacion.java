@@ -3,11 +3,14 @@ package rest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sdk.ISDKJson;
 import sdk.SdkJson;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import baas.sdk.Factory;
+import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.trueque.MainActivity;
 
@@ -15,11 +18,17 @@ public class EliminarComunicacion  extends AsyncTask<String,Integer,Boolean> {
 
 	private ProgressDialog dialog;
 	private Context context;
+	private baas.sdk.ISDKJson sdkJson;
 	
 	public EliminarComunicacion(Context c) {
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
+		Factory.initialize(1, c);
+		try {
+			sdkJson = Factory.getJsonSDK();
+		} catch (NotInitilizedException e) {
+		}
 	}
 
 	@Override
@@ -48,8 +57,8 @@ public class EliminarComunicacion  extends AsyncTask<String,Integer,Boolean> {
 	protected Boolean doInBackground(String... params) {
 		// TODO Auto-generated method stub
 
-			SdkJson j = new SdkJson();			
-			j.EliminarJson(Integer.parseInt(params[0]), 0);
+			ISDKJson j = new SdkJson();			
+			sdkJson.deleteJson(Integer.parseInt(params[0]));
 			
 			return true;
 	}

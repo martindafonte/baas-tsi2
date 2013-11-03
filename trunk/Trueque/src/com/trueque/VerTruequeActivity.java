@@ -25,6 +25,7 @@ public class VerTruequeActivity extends Activity {
 	
 	public static String trueque;
 	public int indice;
+	private JSONObject j;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class VerTruequeActivity extends Activity {
 		String id = bundle.getString("id");
 		
 		indice = -1;
-		JSONObject j;
+	
 		for(int i = 0; i < MainActivity.trueques.length;i++){
 			try {
 				j = new JSONObject(MainActivity.trueques[i]);
@@ -106,7 +107,13 @@ public class VerTruequeActivity extends Activity {
 	            return true;
 	    	case R.id.borrar:
 	    		 EliminarComunicacion eliminar = new EliminarComunicacion(this);
-	    		 eliminar.execute(Integer.toString(indice));
+	    		 
+			try {
+				eliminar.execute(j.getString("_id"));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             
 	        default:
 	            return super.onOptionsItemSelected(item);

@@ -6,7 +6,11 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sdk.ISDKJson;
 import sdk.SdkJson;
+
+import baas.sdk.Factory;
+import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.trueque.MainActivity;
 
@@ -19,11 +23,17 @@ public class ActualizarComunicacion extends AsyncTask<String,Integer,Boolean> {
 
 	private ProgressDialog dialog;
 	private Context context;
+	private baas.sdk.ISDKJson sdkJson;
 	
 	public ActualizarComunicacion(Context c) {
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
+		Factory.initialize(1, c);
+		try {
+			sdkJson = Factory.getJsonSDK();
+		} catch (NotInitilizedException e) {
+		}
 	}
 
 	@Override
@@ -51,8 +61,7 @@ public class ActualizarComunicacion extends AsyncTask<String,Integer,Boolean> {
 	@Override
 	protected Boolean doInBackground(String... params) {
 		// TODO Auto-generated method stub
-
-			SdkJson j = new SdkJson();			
+	
 			JSONObject dato = new JSONObject();
 		    try {
 		    	dato.put("tipoObjeto", params[0]);
@@ -63,7 +72,7 @@ public class ActualizarComunicacion extends AsyncTask<String,Integer,Boolean> {
 		    }catch(JSONException e){
 		    	e.printStackTrace();
 		    }
-			j.ActualizarJson(dato, Integer.parseInt(params[5]), 0);
+			sdkJson.updateJson(Integer.parseInt(params[5]), dato);
 			
 			return true;
 	}
