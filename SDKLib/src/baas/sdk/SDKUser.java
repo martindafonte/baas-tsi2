@@ -12,6 +12,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import baas.sdk.messages.Message;
+import baas.sdk.messages.MessageStringList;
+import baas.sdk.messages.MessageUser;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.Http;
 import baas.sdk.utils.User;
@@ -62,6 +64,30 @@ class SDKUser implements ISDKUser {
 
 	@Override
 	public Message logout() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MessageUser getUser(String nick) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MessageStringList getUserPermissions(String nick) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Message setUserRole(String nick, String role) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Message removeUserRole(String nick, String role) {
 		// TODO Auto-generated method stub
 		return null;
 	}
