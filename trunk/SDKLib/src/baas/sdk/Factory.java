@@ -63,7 +63,7 @@ public abstract class Factory {
 			throw new NotInitilizedException();
 		}
 		if (l_jsonSDK == null) {
-			l_jsonSDK = new SDKJson();
+			l_jsonSDK = new SDKJson(l_app_id);
 		}
 		return (ISDKJson) l_jsonSDK;
 	}

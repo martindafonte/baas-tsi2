@@ -29,14 +29,14 @@ class SDKPush implements ISDKPush {
 	}
 
 	@Override
-	public Message registrarseCanal(String p_canalId) {
+	public Message registerInChanel(String p_canalId) {
 		//TODO Controlar los errores
 		sendRegistrationIdToBackend(p_canalId);
 		return new Message(Constants.Exito);
 	}
 
 	@Override
-	public Message desregistrarseCanal(String canalId) {
+	public Message unregisterFromChanel(String canalId) {
 		//TODO Controlar los errores
 			deleteRegistrationIdToBackend(canalId);
 		return new Message(Constants.Exito);
@@ -151,5 +151,17 @@ class SDKPush implements ISDKPush {
 				conn.disconnect();
 			}
 		}
+	}
+
+	@Override
+	public Message sendToUser(String nick, String message) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Message sendToChanel(String message, String chanel) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
