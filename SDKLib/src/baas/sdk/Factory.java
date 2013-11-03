@@ -16,6 +16,7 @@ public abstract class Factory {
 	protected static long l_app_id=-1;
 	private static SDKUser l_userSDK = null;
 	private static SDKPush l_pushSDK = null;
+	private static SDKJson l_jsonSDK = null;
 	//persistir despues la cookie de sesion
 	private static DefaultHttpClient l_httpClient;
 	private static Context ctx;
@@ -55,6 +56,16 @@ public abstract class Factory {
 			l_pushSDK = new SDKPush(l_regid, l_app_id);
 		}
 		return (ISDKPush) l_pushSDK;
+	}
+	
+	public static ISDKJson getJsonSDK() throws NotInitilizedException {
+		if(l_app_id==-1){
+			throw new NotInitilizedException();
+		}
+		if (l_jsonSDK == null) {
+			l_jsonSDK = new SDKJson();
+		}
+		return (ISDKJson) l_jsonSDK;
 	}
 
 	private static void registrarGCM() throws IOException {
