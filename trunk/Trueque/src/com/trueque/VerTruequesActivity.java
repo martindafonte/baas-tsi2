@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class VerTruequesActivity extends Activity {
 	
@@ -63,7 +62,7 @@ public class VerTruequesActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.ver_trueques, menu);
+		//getMenuInflater().inflate(R.menu.ver_trueques, menu);
 		return true;
 	}
 	
@@ -84,7 +83,7 @@ public class VerTruequesActivity extends Activity {
 			// TODO Auto-generated method stub
 		
 			LayoutInflater i = context.getLayoutInflater();
-			View item = i.inflate(R.layout.item_nuevo, null);
+			View item = i.inflate(R.layout.item_trueque, null);
 			
 			
 			JSONObject j;

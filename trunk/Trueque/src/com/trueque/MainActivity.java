@@ -1,19 +1,20 @@
 package com.trueque;
 
-import org.json.JSONException;
 import rest.ListarComunicacion;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+
 
 public class MainActivity extends Activity  {
 	
 	public static  String trueques[];
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,7 @@ public class MainActivity extends Activity  {
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+	    	
 	}
 
 	@Override
@@ -42,8 +44,10 @@ public class MainActivity extends Activity  {
 	    	case android.R.id.home:
 	    		
 	    
-	    	case R.id.itemBuscar:
+	    	case R.id.listar:
 	            //openSearch();
+	    		
+				verTrueques();
 	            return true;
 	        case R.id.itemAgregar:
 	            //openSettings();
@@ -60,8 +64,11 @@ public class MainActivity extends Activity  {
         startActivity(i);
 	}
 
-	public void verTrueques(View view) throws JSONException{
+	public void verTrueques() {
 		ListarComunicacion j = new ListarComunicacion(this);
 	    j.execute("trueque");
 	}
+
 }
+
+

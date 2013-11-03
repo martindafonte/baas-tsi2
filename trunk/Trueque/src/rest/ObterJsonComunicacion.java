@@ -3,7 +3,8 @@ package rest;
 import com.trueque.VerTruequeActivity;
 import com.trueque.VerTruequesActivity;
 
-import sdk.ObtenerJson;
+
+import sdk.SdkJson;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,7 +23,7 @@ public class ObterJsonComunicacion extends AsyncTask  <String,Integer,Boolean> {
 		// TODO Auto-generated method stub
 		
 		int id = Integer.parseInt(params[0]);
-		ObtenerJson j = new ObtenerJson();
+		SdkJson j = new SdkJson();
 		trueque = j.obtenerJson(0,id);
 		return null ;
 	}
@@ -40,9 +41,5 @@ public class ObterJsonComunicacion extends AsyncTask  <String,Integer,Boolean> {
 		
 	}
 
-	private ObtenerJson ObtenerJson() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
