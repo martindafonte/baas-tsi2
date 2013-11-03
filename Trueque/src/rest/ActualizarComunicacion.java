@@ -15,12 +15,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
-public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
-	
+public class ActualizarComunicacion extends AsyncTask<String,Integer,Boolean> {
+
 	private ProgressDialog dialog;
 	private Context context;
 	
-	public IngresarComunicacion(Context c) {
+	public ActualizarComunicacion(Context c) {
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
@@ -32,6 +32,8 @@ public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
 		if (dialog.isShowing()){
 			dialog.dismiss();
 		}
+		// Llamar a ver perfil.
+		
 		Intent i = new Intent(this.context.getApplicationContext(),MainActivity.class);
 		this.context.startActivity(i);
 		super.onPostExecute(result);
@@ -51,27 +53,19 @@ public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
 		// TODO Auto-generated method stub
 
 			SdkJson j = new SdkJson();			
-			try {
-				
-				JSONObject dato = new JSONObject();
-			    try {
-			    	dato.put("tipoObjeto", params[0]);
-					dato.put("Tipo",params[1] );
-					dato.put("Valor", params[2]);
-					dato.put("Descripcion", params[3]);
-					dato.put("imagen", params[4]);		
-			    }catch(JSONException e){
-			    	e.printStackTrace();
-			    }
-				j.Ingresar(dato,0);
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			JSONObject dato = new JSONObject();
+		    try {
+		    	dato.put("tipoObjeto", params[0]);
+				dato.put("Tipo",params[1] );
+				dato.put("Valor", params[2]);
+				dato.put("Descripcion", params[3]);
+				dato.put("imagen", params[4]);		
+		    }catch(JSONException e){
+		    	e.printStackTrace();
+		    }
+			j.ActualizarJson(dato, Integer.parseInt(params[5]), 0);
+			
 			return true;
 	}
-	
+
 }

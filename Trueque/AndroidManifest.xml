@@ -69,6 +69,10 @@
             android:name="com.trueque.VerTruequeActivity"
             android:label="@string/title_activity_ver_trueque" >
         </activity>
+        <activity
+            android:name="com.trueque.EditarTrueque"
+            android:label="@string/title_activity_editar_trueque" >
+        </activity>
     </application>
 
 </manifest>

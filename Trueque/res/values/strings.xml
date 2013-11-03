@@ -18,5 +18,6 @@
     <string name="btn_camara">Foto</string>
     <string name="title_activity_foto">FotoActivity</string>
     <string name="title_activity_ver_trueque">VerTruequeActivity</string>
+    <string name="title_activity_editar_trueque">EditarTrueque</string>
 
 </resources>

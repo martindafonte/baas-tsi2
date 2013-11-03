@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/itemBuscar"
+        android:id="@+id/listar"
             android:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_search" >
+        android:icon="@drawable/ic_action_view_as_list" >
     </item>
     <item
         android:id="@+id/itemAgregar"

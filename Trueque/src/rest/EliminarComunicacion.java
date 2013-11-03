@@ -1,26 +1,22 @@
 package rest;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import sdk.SdkJson;
-
-import com.trueque.MainActivity;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
-public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
-	
+import com.trueque.MainActivity;
+
+public class EliminarComunicacion  extends AsyncTask<String,Integer,Boolean> {
+
 	private ProgressDialog dialog;
 	private Context context;
 	
-	public IngresarComunicacion(Context c) {
+	public EliminarComunicacion(Context c) {
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
@@ -32,6 +28,8 @@ public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
 		if (dialog.isShowing()){
 			dialog.dismiss();
 		}
+		// Llamar a ver perfil.
+		
 		Intent i = new Intent(this.context.getApplicationContext(),MainActivity.class);
 		this.context.startActivity(i);
 		super.onPostExecute(result);
@@ -40,7 +38,7 @@ public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
 	@Override
 	protected void onPreExecute() {
 		// TODO Auto-generated method stub
-		this.dialog.setMessage("Guardando");
+		this.dialog.setMessage("Eliminando");
 		this.dialog.show();
 		super.onPreExecute();
 		super.onPreExecute();
@@ -51,27 +49,9 @@ public class IngresarComunicacion extends AsyncTask<String,Integer,Boolean> {
 		// TODO Auto-generated method stub
 
 			SdkJson j = new SdkJson();			
-			try {
-				
-				JSONObject dato = new JSONObject();
-			    try {
-			    	dato.put("tipoObjeto", params[0]);
-					dato.put("Tipo",params[1] );
-					dato.put("Valor", params[2]);
-					dato.put("Descripcion", params[3]);
-					dato.put("imagen", params[4]);		
-			    }catch(JSONException e){
-			    	e.printStackTrace();
-			    }
-				j.Ingresar(dato,0);
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			j.EliminarJson(Integer.parseInt(params[0]), 0);
+			
 			return true;
 	}
-	
+
 }

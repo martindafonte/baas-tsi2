@@ -2,49 +2,34 @@ package com.trueque;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import rest.ActualizarComunicacion;
 import rest.IngresarComunicacion;
-import android.app.Activity;
-import android.content.Intent;
-
-
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.hardware.Camera.ShutterCallback;
-import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-
-
-public class IngresarTrueque extends Activity {
+public class EditarTrueque extends Activity {
 	
-	
-	private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -55,41 +40,59 @@ public class IngresarTrueque extends Activity {
 	int TAKE_PHOTO_CODE = 0;
 	public static int count=0;
 	Camera camera;
-	Button botonImagen;
+	JSONObject jsonActual;
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.creartrueque);
+		setContentView(R.layout.activity_editar_trueque);
 		
+		Bundle bundle = getIntent().getExtras();
 		
-		// **********************************************
-		//here,we are making a folder named picFolder to store pics taken by the camera using this application
-        final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Trueque/"; 
-        File newdir = new File(dir); 
-        newdir.mkdirs();
+		try {
+			jsonActual = new JSONObject(bundle.getString("trueque"));
+			
+			final EditText tipo =  (EditText)findViewById(R.id.EditTextTipo);
+			tipo.setText(jsonActual.get("Tipo").toString(),TextView.BufferType.EDITABLE);
 
-        imagen = (ImageView) findViewById(R.id.Preview);
-        
-        imagen.setOnClickListener(new View.OnClickListener() {
-        	public void onClick(View v) {
-        		
-        		captureImage();
-        	
-        	};
-        });	
+			final EditText valor = (EditText)findViewById(R.id.editTextValor);
+			valor.setText(jsonActual.get("Valor").toString(),TextView.BufferType.EDITABLE);
+			
+			final EditText descripcion = (EditText)findViewById(R.id.editTextDescripcion);
+			descripcion.setText(jsonActual.get("Descripcion").toString(),TextView.BufferType.EDITABLE);
+			
+			imagen = (ImageView)findViewById(R.id.Preview);
+			
+			byte [] encodeByte=Base64.decode(jsonActual.getString("imagen"),Base64.DEFAULT);
+	        Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+	        imagen.setImageBitmap(bitmap);	
+	        
+	        imagen.setOnClickListener(new View.OnClickListener() {
+	        	public void onClick(View v) {
+	        		
+	        		captureImage();
+	        	
+	        	};
+	        });	
+	        
+	        
+		}catch(Exception e){
+			
+		}
+    
+		
 	}
+
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu); 
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main, menu);
-	    return true;
-		
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
@@ -99,16 +102,51 @@ public class IngresarTrueque extends Activity {
 	    	case android.R.id.home:
 	    		// Volver!
 	    	case R.id.itemaceptar:
-	    		agregarTrueque();
+	    		actualizarJson();
 	            //openSearch();
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+
+
+
+	private void actualizarJson() {
+		// TODO Auto-generated method stub
+		final EditText tipo =  (EditText)findViewById(R.id.EditTextTipo);
+		String tipo_var = tipo.getText().toString();
+
+		final EditText valor = (EditText)findViewById(R.id.editTextValor);
+		String valor_var  = valor.getText().toString();
+		
+		final EditText descripcion = (EditText)findViewById(R.id.editTextDescripcion);
+		String descripcion_var = descripcion.getText().toString();
+		
+		 BitmapFactory.Options options = new BitmapFactory.Options();
+		 
+         // downsizing image as it throws OutOfMemory Exception for larger
+         // images
+         options.inSampleSize = 8;
+
+         Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
+                 options);
+         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+         String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+		
+         try {
+         // Actualizar
+        	 ActualizarComunicacion claseactualizar = new ActualizarComunicacion(this);
+        	 claseactualizar.execute( "trueque",tipo_var,valor_var,descripcion_var,encodedImage,jsonActual.getString("_id"));
+         }catch(Exception e){
+        	 
+         }
+	}
 	
-	
-	
+
+
+	// FOTO**************************************************************
 	/**
      * Checking device has camera hardware or not
      * */
@@ -207,35 +245,8 @@ public class IngresarTrueque extends Activity {
         }
     }
 
-
 	
-	public void agregarTrueque(){
-		 
-		final EditText tipo =  (EditText)findViewById(R.id.EditTextTipo);
-		String tipo_var = tipo.getText().toString();
-
-		final EditText valor = (EditText)findViewById(R.id.editTextValor);
-		String valor_var  = valor.getText().toString();
-		
-		final EditText descripcion = (EditText)findViewById(R.id.editTextDescripcion);
-		String descripcion_var = descripcion.getText().toString();
-		
-		 BitmapFactory.Options options = new BitmapFactory.Options();
-		 
-         // downsizing image as it throws OutOfMemory Exception for larger
-         // images
-         options.inSampleSize = 8;
-
-         Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
-                 options);
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-         String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-		
-		IngresarComunicacion claseInsertar = new IngresarComunicacion(this);
-		claseInsertar.execute( "trueque",tipo_var,valor_var,descripcion_var,encodedImage);
-		
-		//setContentView(R.layout.activity_main);
-	 }
+	
+	
 	
 }
