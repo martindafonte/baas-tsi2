@@ -13,4 +13,5 @@ public interface ISDKUser {
 	public abstract MessageStringList getUserPermissions(String nick);
 	public abstract Message setUserRole(String nick, String role);
 	public abstract Message removeUserRole(String nick, String role);
+	public abstract Message isloggedIn(String nick);
 }

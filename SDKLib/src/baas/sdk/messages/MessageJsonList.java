@@ -1,14 +1,10 @@
 package baas.sdk.messages;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 public class MessageJsonList extends Message {
-	public List<JSONObject> resultList;
+	public JSONArray resultList;
 	
 	public MessageJsonList(){
-		resultList = new LinkedList<JSONObject>();
 	}
 }

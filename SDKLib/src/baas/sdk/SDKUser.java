@@ -15,7 +15,7 @@ import baas.sdk.messages.Message;
 import baas.sdk.messages.MessageStringList;
 import baas.sdk.messages.MessageUser;
 import baas.sdk.utils.Constants;
-import baas.sdk.utils.Http;
+import baas.sdk.utils.Helper_Http;
 import baas.sdk.utils.User;
 
 class SDKUser implements ISDKUser {
@@ -23,6 +23,7 @@ class SDKUser implements ISDKUser {
 	private DefaultHttpClient l_httpClient;
 	private long l_appid;
 	private String l_baseURL;
+	private String logged_nick;
 
 	SDKUser(DefaultHttpClient p_httpclient, long p_app_id) {
 		l_httpClient = p_httpclient;
@@ -41,13 +42,13 @@ class SDKUser implements ISDKUser {
 			nameValuePairs.add(new BasicNameValuePair("pass", pass));
 			login.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse resp = l_httpClient.execute(login);
-			JSONObject jObj = Http.obtenerJSONRespuesta(resp);
+			JSONObject jObj = Helper_Http.obtenerJSONRespuesta(resp);
 			if (jObj == null) {
 				msg=new Message( Constants.User_Login_parsingException);
 			} else {
 				msg = new Message();
-				msg.codigo = jObj.getInt("codigo");
-				msg.descripcion = jObj.getString("descripcion");
+				msg.codigo = Helper_Http.obtenerCodigo(jObj);
+				msg.descripcion = Helper_Http.obtenerDescripcion(jObj);
 			}
 			return msg;
 		} catch (Exception ex) {
@@ -89,6 +90,12 @@ class SDKUser implements ISDKUser {
 	@Override
 	public Message removeUserRole(String nick, String role) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Message isloggedIn(String nick) {
+		// TODO En caso de estar offline y se haya logeado devolver true sino consultar el servicio
 		return null;
 	}
 
