@@ -223,7 +223,7 @@ class SDKUser implements ISDKUser {
 	public boolean isloggedIn(String nick) throws Exception {
 		if(isNetworkAvailable()){
 				HttpGet obtener = new HttpGet(l_baseURL + "/" + l_appid + "/"
-						+ nick);
+						+ nick+"/login");
 				HttpResponse resp = l_httpClient.execute(obtener);
 				JSONObject jObj = Helper_Http.obtenerJSONRespuesta(resp);
 				if (jObj == null) {
