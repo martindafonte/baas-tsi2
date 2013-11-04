@@ -23,6 +23,9 @@ public abstract class Factory {
 	private static String l_regid;
 	private static GoogleCloudMessaging l_gcm;
 
+	protected static Context getContext(){
+		return ctx;
+	}
 	public static Message initialize(long p_app_id, Context p_ctx) {
 		Message msg;
 		l_app_id = p_app_id;

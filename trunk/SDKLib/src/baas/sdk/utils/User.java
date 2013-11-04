@@ -1,8 +1,9 @@
 package baas.sdk.utils;
 
 public class User{
-	String Nick;
-	String Name;
-	String Surename;
-	String Password;
+	public String Nick;
+	public String Name;
+	public String Surename;
+	public String Password;
+	public String ChanelId;
 }
