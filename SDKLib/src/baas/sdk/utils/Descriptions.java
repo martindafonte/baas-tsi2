@@ -7,7 +7,7 @@ public abstract class Descriptions {
 		case Constants.Exito:
 			return "Ok";
 	//UserSDK 100-199
-		case Constants.User_login_exception:
+		case Constants.User_exception:
 			return "Ocurrio una excepcion al hacer login";
 		case Constants.User_Login_parsingException:
 			return "Ocurrio una excepcion al intentar parsear la respuesta";

@@ -13,6 +13,14 @@ public abstract class Constants {
 	public static final String codigo = "codigo";
 	public static final String descripcion = "descripcion";
 	public static final String json = "json";
+	public static final String mensaje = "msg";
+	public static final String nick = "nick";
+	public static final String pass = "pass";
+	public static final String nombre = "nombre";
+	public static final String apellido = "apellido";
+	public static final String canalcodigo = "codigoCanal";
+	public static final String permisos = "permisos";
+	public static final String rol = "rol";
 	
 	//Constantes de error en la SDK
 	public static final int Exito = 0;
@@ -20,8 +28,9 @@ public abstract class Constants {
 	
 	
 	//UserSDK 10100-10199
-	public static final int User_login_exception = 10100;
+	public static final int User_exception = 10100;
 	public static final int User_Login_parsingException = 10101;
+	public static final int User_no_logged_user = 10102;
 	
 	//Factory 10200-10299
 	public static final int GCM_Problem_Registering = 10200;

@@ -5,25 +5,39 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
 import baas.sdk.messages.Message;
 import baas.sdk.utils.Constants;
+import baas.sdk.utils.Helper_Http;
 
 class SDKPush implements ISDKPush {
 
-	private static String baseURL;
+	private static String l_baseURL;
+	private DefaultHttpClient l_httpClient;
 	private static final int MAX_ATTEMPTS = 3;
 	private static final Random random = new Random();
 	private static String l_regId;
 	private static String l_appId;
 
 	SDKPush(String p_regId, long p_appId) {
-		baseURL = Constants.baseURL;
+		l_httpClient = new DefaultHttpClient();
+		l_baseURL = Constants.baseURL;
 		l_regId = p_regId;
 		l_appId = String.valueOf(p_appId);
 	}
@@ -37,16 +51,64 @@ class SDKPush implements ISDKPush {
 
 	@Override
 	public Message unregisterFromChanel(String canalId) {
-		//TODO Controlar los errores
-			deleteRegistrationIdToBackend(canalId);
-		return new Message(Constants.Exito);
+		Message mj = new Message();
+		try {
+			String serverUrl = l_baseURL + "/"+l_appId+"/"+canalId+"/User/"+l_regId;
+			HttpDelete desregistrar = new HttpDelete(serverUrl);
+			HttpResponse resp =l_httpClient.execute(desregistrar);
+			JSONObject obj = Helper_Http.obtenerJSONRespuesta(resp);
+			mj.codigo = Helper_Http.obtenerCodigo(obj);
+			mj.descripcion = Helper_Http.obtenerDescripcion(obj);
+		} catch (Exception e) {
+			mj.codigo = Constants.JSON_Exception;
+			mj.descripcion = e.getMessage();
+		}
+		return mj;
+	}
+	
+	@Override
+	public Message sendToUser(String nick, String message) {
+		Message mj = new Message();
+		try {
+			String serverUrl = l_baseURL + "/"+l_appId+"/User/"+nick;
+			HttpPost send = new HttpPost(serverUrl);
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+			nameValuePairs.add(new BasicNameValuePair(Constants.mensaje, message));
+			send.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse resp =l_httpClient.execute(send);
+			JSONObject obj = Helper_Http.obtenerJSONRespuesta(resp);
+			mj.codigo = Helper_Http.obtenerCodigo(obj);
+			mj.descripcion = Helper_Http.obtenerDescripcion(obj);
+		} catch (Exception e) {
+			mj.codigo = Constants.JSON_Exception;
+			mj.descripcion = e.getMessage();
+		}
+		return mj;
 	}
 
+	@Override
+	public Message sendToChanel(String message, String chanel) {
+		Message mj = new Message();
+		try {
+			String serverUrl = l_baseURL + "/"+l_appId+"/"+chanel+"/Message";
+			HttpPost send = new HttpPost(serverUrl);
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+			nameValuePairs.add(new BasicNameValuePair(Constants.mensaje, message));
+			send.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse resp =l_httpClient.execute(send);
+			JSONObject obj = Helper_Http.obtenerJSONRespuesta(resp);
+			mj.codigo = Helper_Http.obtenerCodigo(obj);
+			mj.descripcion = Helper_Http.obtenerDescripcion(obj);
+		} catch (Exception e) {
+			mj.codigo = Constants.JSON_Exception;
+			mj.descripcion = e.getMessage();
+		}
+		return mj;
+	}
+	
 	private Boolean sendRegistrationIdToBackend(String p_canalId) {
-		String serverUrl = baseURL + "/register";
+		String serverUrl = l_baseURL + "/"+l_appId+"/"+p_canalId+"/User";
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(Constants.appId,l_appId );
-		params.put(Constants.canal, p_canalId);
 		params.put(Constants.regId, l_regId);
 		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
 			long backoff = random.nextInt(1000);
@@ -69,33 +131,7 @@ class SDKPush implements ISDKPush {
 		return false;
 	}
 
-	private boolean deleteRegistrationIdToBackend(String p_canalId) {
-		String serverUrl = baseURL + "/unregister";
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(Constants.appId,l_appId );
-		params.put(Constants.canal, p_canalId);
-		params.put(Constants.regId, l_regId);
-		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-			long backoff = random.nextInt(1000);
-			try {
-				post(serverUrl, params);
-				return true;
-			} catch (IOException e) {
-				if (i == MAX_ATTEMPTS) {
-					break;
-				}
-				try {
-					Thread.sleep(backoff);
-				} catch (InterruptedException e1) {
-					// Interrumpieron el thread
-					Thread.currentThread().interrupt();
-					return false;
-				}
-			}
-		}
-		return false;
-	}
-
+	
 	/**
 	 * Issue a POST request to the server.
 	 * 
@@ -151,17 +187,5 @@ class SDKPush implements ISDKPush {
 				conn.disconnect();
 			}
 		}
-	}
-
-	@Override
-	public Message sendToUser(String nick, String message) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Message sendToChanel(String message, String chanel) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
