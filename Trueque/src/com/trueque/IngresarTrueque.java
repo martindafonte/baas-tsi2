@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import rest.IngresarComunicacion;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 
@@ -64,6 +65,8 @@ public class IngresarTrueque extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.creartrueque);
 		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		// **********************************************
 		//here,we are making a folder named picFolder to store pics taken by the camera using this application
@@ -73,13 +76,19 @@ public class IngresarTrueque extends Activity {
 
         imagen = (ImageView) findViewById(R.id.Preview);
         
-        imagen.setOnClickListener(new View.OnClickListener() {
-        	public void onClick(View v) {
-        		
-        		captureImage();
+        if (isDeviceSupportCamera()){
+        	imagen.setOnClickListener(new View.OnClickListener() {
+            	public void onClick(View v) {
+            		
+            		captureImage();
+            	
+            	};
+            });
+        }else{
+        	// no spoprta camara!
+        }
+        
         	
-        	};
-        });	
 	}
 	
 	@Override
@@ -97,11 +106,13 @@ public class IngresarTrueque extends Activity {
 		
 	    switch (item.getItemId()) {
 	    	case android.R.id.home:
-	    		// Volver!
+	    		Intent i = new Intent(this, MainActivity.class );
+	            startActivity(i);
 	    	case R.id.itemaceptar:
 	    		agregarTrueque();
-	            //openSearch();
 	            return true;
+	    	case R.id.itemcamara:
+	    		captureImage();
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -200,7 +211,10 @@ public class IngresarTrueque extends Activity {
  
             final Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
                     options);
- 
+            
+    //        Camara c = new Camara();
+     //       c.Bitmap(bitmap, imagen);
+            
             imagen.setImageBitmap(bitmap);
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -228,9 +242,18 @@ public class IngresarTrueque extends Activity {
 
          Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
                  options);
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-         String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+         String encodedImage;
+         if (bitmap != null){
+        	 ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+             encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+         }else{
+        	 encodedImage = "";
+         }
+         
+//         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//         String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 		
 		IngresarComunicacion claseInsertar = new IngresarComunicacion(this);
 		claseInsertar.execute( "trueque",tipo_var,valor_var,descripcion_var,encodedImage);

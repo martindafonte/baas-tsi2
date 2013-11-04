@@ -8,11 +8,13 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="18" />
 
+    <uses-feature android:name="android.hardware.camera" />
+
     <!-- GCM connects to Google Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
@@ -72,6 +74,10 @@
         <activity
             android:name="com.trueque.EditarTrueque"
             android:label="@string/title_activity_editar_trueque" >
+        </activity>
+        <activity
+            android:name="com.trueque.Camara"
+            android:label="@string/title_activity_camara" >
         </activity>
     </application>
 
