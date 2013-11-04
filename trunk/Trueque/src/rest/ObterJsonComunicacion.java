@@ -1,18 +1,13 @@
 package rest;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import baas.sdk.Factory;
 import baas.sdk.messages.MessageJson;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.trueque.VerTruequeActivity;
-import com.trueque.VerTruequesActivity;
-
-
-import sdk.ISDKJson;
-import sdk.SdkJson;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 
 public class ObterJsonComunicacion extends AsyncTask  <String,Integer,Boolean> {
 	
@@ -22,7 +17,7 @@ public class ObterJsonComunicacion extends AsyncTask  <String,Integer,Boolean> {
 	public ObterJsonComunicacion(Context context) {
 		super();
 		this.c = context;
-		Factory.initialize(1, c);
+		Factory.initialize(0, c);
 		try {
 			sdkJson = Factory.getJsonSDK();
 		} catch (NotInitilizedException e) {

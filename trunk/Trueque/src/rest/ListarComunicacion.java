@@ -7,23 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-import sdk.ISDKJson;
-import sdk.SdkJson;
-
-import baas.sdk.Factory;
-import baas.sdk.messages.MessageJson;
-import baas.sdk.messages.MessageJsonList;
-import baas.sdk.utils.exceptions.NotInitilizedException;
-
-import com.trueque.MainActivity;
-import com.trueque.R;
-import com.trueque.VerTruequeActivity;
-import com.trueque.VerTruequesActivity;
-
-
-import com.trueque.VerTruequesActivity.adaptarElemento;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,12 +18,16 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+import baas.sdk.Factory;
+import baas.sdk.messages.MessageJsonList;
+import baas.sdk.utils.exceptions.NotInitilizedException;
+
+import com.trueque.MainActivity;
+import com.trueque.R;
+import com.trueque.VerTruequesActivity;
 
 public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 
@@ -55,7 +42,7 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
-		Factory.initialize(1, c);
+		Factory.initialize(0, c);
 		try {
 			sdkJson = Factory.getJsonSDK();
 		} catch (NotInitilizedException e) {

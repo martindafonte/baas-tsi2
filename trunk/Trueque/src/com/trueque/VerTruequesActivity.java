@@ -103,7 +103,11 @@ public class VerTruequesActivity extends Activity {
 				
 				byte [] encodeByte=Base64.decode(j.getString("imagen"),Base64.DEFAULT);
   		        Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-				imagen.setImageBitmap(bitmap);
+				
+//  		        Camara c = new Camara();
+//  		        Bitmap  bit = c.Bitmap(j.getString("imagen"), imagen);
+//  		        imagen.setImageBitmap(bit);
+  		        imagen.setImageBitmap(bitmap);
   		        
 				return item;	
 			} catch (JSONException e) {
