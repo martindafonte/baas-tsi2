@@ -1,7 +1,7 @@
 package baas.sdk.utils;
 /**Clase que contiene la definición de las constantes que se pueden devolver*/
 public abstract class Constants {
-	public static final String baseURL="http://192.168.0.100:8080/WebUserManager";
+	public static final String baseURL="http://192.168.1.109:8080/WebUserManager";
 	public static final String SENDER_ID = "920697992611";
 	
 	
@@ -13,6 +13,13 @@ public abstract class Constants {
 	public static final String codigo = "codigo";
 	public static final String descripcion = "descripcion";
 	public static final String json = "json";
+	public static final String jsonidMongo = "_id";
+	public static final String jsonTipoMongo = "TipoObjeto";
+	public static final String json_imagen_chica = "ImagenChica";
+	public static final String json_imagen_grande = "ImagenGrande";
+	public static final String jsonIdMensajeJson ="jsonId";
+	public static final String jsonIdUsuario = "UsuarioId";
+	public static final String tipoTrueque = "trueque";
 	public static final String mensaje = "msg";
 	public static final String nick = "nick";
 	public static final String pass = "pass";
@@ -21,6 +28,7 @@ public abstract class Constants {
 	public static final String canalcodigo = "codigoCanal";
 	public static final String permisos = "permisos";
 	public static final String rol = "rol";
+	
 	
 	//Constantes de error en la SDK
 	public static final int Exito = 0;
@@ -37,5 +45,6 @@ public abstract class Constants {
 	
 	//JSONSDK 10300-10399
 	public static final int JSON_Exception = 10300;
+	public static final int Json_Error_paginado = 10301;
 	
 }
