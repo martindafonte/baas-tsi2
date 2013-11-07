@@ -46,7 +46,6 @@ class SDKUser implements ISDKUser {
 		try {
 			HttpPost login = new HttpPost(l_baseURL + "/" + l_appid+"/"+nick+"/login");
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-			
 			nameValuePairs.add(new BasicNameValuePair(Constants.pass, pass));
 			nameValuePairs.add(new BasicNameValuePair("regid", l_regid));
 			login.setEntity(new UrlEncodedFormEntity(nameValuePairs));
