@@ -9,29 +9,29 @@
     tools:context=".Camara" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/buttonRegistrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/nombre"
+        android:layout_below="@+id/nombre"
         android:layout_marginLeft="48dp"
         android:layout_marginTop="103dp"
         android:onClick="sacarfoto"
         android:text="Button" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/imageOfertar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/nombre"
         android:layout_marginTop="26dp"
-        android:layout_toRightOf="@+id/button1"
+        android:layout_toRightOf="@+id/buttonRegistrar"
         android:src="@drawable/ic_action_person" />
 
 </RelativeLayout>

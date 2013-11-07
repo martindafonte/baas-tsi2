@@ -1,81 +1,93 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="agregarTrueque" >
+    android:onClick="agregarTrueque"
+    android:orientation="vertical"
+    android:scrollbars="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <LinearLayout
+           <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical" >
 
-                <EditText
-                    android:id="@+id/EditTextTipo"
+                <TextView
+                    android:id="@+id/valor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/Tipo" >
+                    android:text="Categoria" />
 
-                    <requestFocus />
-                </EditText>
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                <Spinner
+                    android:id="@+id/spinnerCategorias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                <EditText
-                    android:id="@+id/editTextValor"
+                <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/Valor"
-                    android:inputType="numberSigned" />
+                    android:text="Valor" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                    <Spinner
+                        android:id="@+id/spinnerMoneda"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <EditText
+                        android:id="@+id/editTextValor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="numberSigned" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Descripcion" />
 
                 <EditText
                     android:id="@+id/editTextDescripcion"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="74dp"
                     android:ems="10"
-                    android:hint="@string/Descripcion"
                     android:inputType="textMultiLine"
-                    android:lines="@integer/Lineas" />
+                    android:lines="@integer/Lineas" >
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                    <requestFocus />
+                </EditText>
 
                 <ImageView
                     android:id="@+id/Preview"
-                    android:layout_width="134dp"
-                    android:layout_height="200dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="0.36"
                     android:src="@drawable/ic_action_person" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Acepto" />
+
+                <ListView
+                    android:id="@+id/categoriasaceptadas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom|end" >
+
+                </ListView>
             </LinearLayout>
 
-        </LinearLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

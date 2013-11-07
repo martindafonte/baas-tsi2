@@ -3,21 +3,19 @@ package com.trueque;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-
+import org.json.JSONException;
 import org.json.JSONObject;
-
 import rest.ActualizarComunicacion;
-import rest.IngresarComunicacion;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,7 +62,7 @@ private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 			
 			imagen = (ImageView)findViewById(R.id.Preview);
 			
-			byte [] encodeByte=Base64.decode(jsonActual.getString("imagen"),Base64.DEFAULT);
+			byte [] encodeByte=Base64.decode(bundle.getString("imagen"),Base64.DEFAULT);
 	        Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 	        imagen.setImageBitmap(bitmap);	
 	        
@@ -96,14 +94,13 @@ private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
-
-		
 	    switch (item.getItemId()) {
 	    	case android.R.id.home:
-	    		// Volver!
+	    		Intent i = new Intent(this, VerTruequeActivity.class );
+	            startActivity(i);
+	            return true;
 	    	case R.id.itemaceptar:
 	    		actualizarJson();
-	            //openSearch();
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -128,17 +125,25 @@ private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
          // downsizing image as it throws OutOfMemory Exception for larger
          // images
          options.inSampleSize = 8;
-
-         Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
-                 options);
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-         String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-		
+         String encodedImage = "";
+         if (fileUri != null){
+	         Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
+	                 options);
+	         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+	         encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+         }else{
+        	 try {
+				encodedImage = jsonActual.getString("imagen");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+         }
          try {
          // Actualizar
         	 ActualizarComunicacion claseactualizar = new ActualizarComunicacion(this);
-        	 claseactualizar.execute( "trueque",tipo_var,valor_var,descripcion_var,encodedImage,jsonActual.getString("_id"));
+     //   	 claseactualizar.execute( "trueque",tipo_var,valor_var,descripcion_var,encodedImage,jsonActual.getString("_id"));
          }catch(Exception e){
         	 
          }

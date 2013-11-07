@@ -1,6 +1,10 @@
 package rest;
 
 import java.io.IOException;
+import java.util.Calendar;
+
+import modelo.Transaccion;
+import modelo.Trueque;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -8,9 +12,19 @@ import org.json.JSONObject;
 
 
 
+
+
+
+
+
+
+
 import baas.sdk.Factory;
+import baas.sdk.messages.MessageJson;
+import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
+import com.google.gson.Gson;
 import com.trueque.MainActivity;
 
 import android.app.ProgressDialog;
@@ -18,7 +32,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
-public class ActualizarComunicacion extends AsyncTask<String,Integer,Boolean> {
+public class ActualizarComunicacion extends AsyncTask<Trueque,Integer,Boolean> {
 
 	private ProgressDialog dialog;
 	private Context context;
@@ -58,22 +72,45 @@ public class ActualizarComunicacion extends AsyncTask<String,Integer,Boolean> {
 	}
 
 	@Override
-	protected Boolean doInBackground(String... params) {
-		// TODO Auto-generated method stub
-	
-			JSONObject dato = new JSONObject();
-		    try {
-		    	dato.put("tipoObjeto", params[0]);
-				dato.put("Tipo",params[1] );
-				dato.put("Valor", params[2]);
-				dato.put("Descripcion", params[3]);
-				dato.put("imagen", params[4]);		
+	protected Boolean doInBackground(Trueque... trueques) {
+			Gson g = new Gson();
+			Transaccion t = trueques[0];
+			int tiempo = Calendar.getInstance().get(Calendar.SECOND);
+			try {	
+				// si no cambio la foto no actualizo
+				if (!t.imagenChica.equals("")){
+					JSONObject imagenChica = new JSONObject();
+					imagenChica.put(Constants.jsonTipoMongo,Constants.json_imagen_chica);
+					imagenChica.put("Imagen",t.imagenChica);
+					imagenChica.put("imagenId","chica"+t.nick+tiempo);
+					MessageJson mjImagenChica = sdkJson.addJson(imagenChica,true);
+					//sdkJson.updateJson(t.id_imagenChica,imagenChica);
+					
+					JSONObject imagenGrande = new JSONObject();
+					imagenGrande.put(Constants.jsonTipoMongo, Constants.json_imagen_grande);
+					imagenGrande.put("Imagen",t.imagenGrande);
+					imagenChica.put("imagenId","grande"+t.nick+tiempo);
+					MessageJson mjImagenGrande = sdkJson.addJson(imagenGrande,true);
+					//sdkJson.updateJson(t.id_imagenGrande, imagenGrande);
+					
+					t.id_imagenChica = "chica"+t.nick+tiempo;
+					t.id_imagenGrande = "grande"+t.nick+tiempo;
+				}
+		
+				JSONObject dato = new JSONObject(g.toJson(t));
+				sdkJson.updateJson(t.id, dato,true);
+				
 		    }catch(JSONException e){
 		    	e.printStackTrace();
-		    }
-			sdkJson.updateJson(Integer.parseInt(params[5]), dato);
-			
+		    } catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 			return true;
 	}
+
 
 }
