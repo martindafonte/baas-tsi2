@@ -32,22 +32,23 @@
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <application android:name="Factory">
-        <receiver
-        android:name=".utils.GCMBroadcastReceiver"
-        android:permission="com.google.android.c2dm.permission.SEND" >
-        <intent-filter>
 
-            <!-- Receives the actual messages. -->
-            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            <!-- Receives the registration id. -->
-            <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+        
+<!--         <receiver -->
+<!--         android:name=".utils.GCMBroadcastReceiver" -->
+<!--         android:permission="com.google.android.c2dm.permission.SEND" > -->
+<!--         <intent-filter> -->
 
-            <category android:name="com.google.android.gcm.demo.app" />
-        </intent-filter>
-    </receiver>
+<!--             Receives the actual messages. -->
+<!--             <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
+<!--             Receives the registration id. -->
+<!--             <action android:name="com.google.android.c2dm.intent.REGISTRATION" /> -->
 
-    <service android:name=".utils.GcmIntentService" />
-    </application>
+<!--             <category android:name="com.google.android.gcm.demo.app" /> -->
+<!--         </intent-filter> -->
+<!--     </receiver> -->
+
+<!--     <service android:name=".utils.GcmIntentService" /> -->
+
 
 </manifest>

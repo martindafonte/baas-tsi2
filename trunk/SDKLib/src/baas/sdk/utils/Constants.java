@@ -1,7 +1,7 @@
 package baas.sdk.utils;
 /**Clase que contiene la definici�n de las constantes que se pueden devolver*/
 public abstract class Constants {
-	public static final String baseURL="http://172.16.106.228:8080/WebUserManager";
+	public static final String baseURL="http://172.16.107.44:8080/WebUserManager";
 	public static final String SENDER_ID = "920697992611";
 	
 	

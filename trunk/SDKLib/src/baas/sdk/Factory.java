@@ -6,13 +6,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Looper;
 import baas.sdk.messages.Message;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-public class Factory extends Application{
+public abstract class Factory {
 
 	protected static long l_app_id = -1;
 	private static SDKUser l_userSDK = null;
@@ -34,12 +35,23 @@ public class Factory extends Application{
 	// Instance fields
 
 	protected static Context getContext() {
+//		if(app==null){
+//			app = new SDKActivity();
+//		}
+//		return app.getApplicationContext();
 		return ctx;
 	}
 
+	protected static String getRegid() {
+//		if(app==null){
+//			app = new SDKActivity();
+//		}
+//		return app.getApplicationContext();
+		return l_regid;
+	}
+	
 	public static Message initialize(long p_app_id, Context p_ctx) {
 		Message msg = null;
-
 		l_app_id = 1;
 		if (!initiliazed) {
 			l_httpClient = new DefaultHttpClient();
@@ -74,7 +86,7 @@ public class Factory extends Application{
 			throw new NotInitilizedException();
 		}
 		if (l_userSDK == null) {
-			l_userSDK = new SDKUser(l_httpClient, l_app_id, l_regid);
+			l_userSDK = new SDKUser(l_httpClient, l_app_id);
 		}
 		return (ISDKUser) l_userSDK;
 	}

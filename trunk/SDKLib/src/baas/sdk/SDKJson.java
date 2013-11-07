@@ -81,8 +81,8 @@ public class SDKJson implements ISDKJson {
 	public MessageJson addJson(JSONObject data,boolean save_offline) {
 		MessageJson mj = new MessageJson();
 		
-		//boolean a = isNetworkAvailable();
-		if (!save_offline ||true) {
+		boolean a = isNetworkAvailable();
+		if (!save_offline ||a) {
 		try {
 			HttpPost post = new HttpPost(l_baseURL + "/" + l_appid);
 			post.setHeader("content-type", "application/json");

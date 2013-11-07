@@ -64,8 +64,8 @@ public class GcmIntentService extends IntentService {
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
             	
                 Context context = getApplicationContext();
-                
-                ComponentName comp = new ComponentName(context.getPackageName(),baas.sdk.ISDKPush.SDKIntentService.class.getName());
+                String name =context.getPackageName()+"."+"PushReciber";
+                ComponentName comp = new ComponentName(context.getPackageName(),name);
                 startService(intent.setComponent(comp));
             }
         }
