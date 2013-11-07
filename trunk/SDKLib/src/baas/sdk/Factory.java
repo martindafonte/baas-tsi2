@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.Application;
 import android.content.Context;
 import baas.sdk.messages.Message;
 import baas.sdk.utils.Constants;
@@ -11,7 +12,7 @@ import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-public abstract class Factory {
+public class Factory extends Application{
 
 	protected static long l_app_id = -1;
 	private static SDKUser l_userSDK = null;
