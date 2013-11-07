@@ -16,6 +16,7 @@ public class UserLogin {
 	
 	private java.lang.String nick;
 	private java.lang.String pass;
+	private String rol;
 
 	
 	private Boolean login = false;
@@ -34,6 +35,15 @@ public class UserLogin {
 
 
 	public UserLogin() {
+	}
+	
+	
+	public String getRol() {
+		return rol;
+	}
+	
+	public void setRol(String rol) {
+		this.rol = rol;
 	}
 	
 	public java.lang.String getNick() {
@@ -70,6 +80,15 @@ public class UserLogin {
 		
 	}
 	
+	public void agregarRol(){
+		
+		serv.setearRolUsuario(nick, rol);
+	}
+	
+	public void quitarRol(){
+		
+		serv.quitarRolUsuario(nick, rol);
+	}
 	
 	public String go(){
 		
