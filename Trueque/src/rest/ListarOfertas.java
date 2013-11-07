@@ -31,7 +31,7 @@ import com.trueque.MainActivity;
 import com.trueque.R;
 import com.trueque.VerTruequesActivity;
 
-public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
+public class ListarOfertas extends AsyncTask <String,Integer,Boolean> {
 
 	private ProgressDialog dialog;
 	private Context context;
@@ -41,7 +41,7 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 
 	
 	
-	public ListarComunicacion(Context c,String nick) {
+	public ListarOfertas(Context c,String nick) {
 		super();
 		context = c;
 		this.nick = nick;
@@ -81,10 +81,8 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 		JSONObject json = new JSONObject();
 		try {
 			json.put(Constants.jsonTipoMongo, params[0]);
+			json.put("idTrueque", nick);
 			
-			if (nick != null){
-				json.put(Constants.nickapp, nick);
-			}
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -98,11 +96,12 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 		    MainActivity.trueques = new String[array.length()];
 
 	        for(int i=0;i<MainActivity.trueques.length;i++) {
-	        		JSONObject query = new JSONObject();
-	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
-					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
-					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
-					array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
+//	        		JSONObject query = new JSONObject();
+//	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
+//					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
+//					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
+					//array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
+					array.getJSONObject(i).put("Imagen", "");
 					MainActivity.trueques[i] = array.getString(i);
 	        }
 			

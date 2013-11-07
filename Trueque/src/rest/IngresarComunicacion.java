@@ -98,7 +98,7 @@ public class IngresarComunicacion extends AsyncTask<Transaccion, Integer, Boolea
 				try {
 					//Resources res = getResources();
 					//String[] categorias = res.getStringArray(R.array.array_categorias);
-					Factory.getPushSDK().sendToUser(o.nickTrueque, o.nick +" ha ofertado por tu " + t.tipo);
+					Factory.getPushSDK().sendToUser(o.idTrueque, o.nick +" ha ofertado por en tu trueque.");
 				} catch (NotInitilizedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

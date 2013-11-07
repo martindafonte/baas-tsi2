@@ -8,6 +8,8 @@ import com.trueque.R.menu;
 import baas.sdk.messages.MessageJsonList;
 import baas.sdk.utils.Constants;
 import rest.EliminarComunicacion;
+import rest.ListarComunicacion;
+import rest.ListarOfertas;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -68,20 +70,33 @@ public class VerTruequeActivity extends Activity {
 		SharedPreferences sharedPref = this.getSharedPreferences("claves", Context.MODE_PRIVATE);
 		nick = sharedPref.getString(Constants.nickapp, null);
 		Button b = (Button)findViewById(R.id.buttonOfertar);
+	
 		try {
 			if ((nick == null) || (nick.equals(j.getString("nick")))){
-				
-				b.setVisibility(View.GONE);
+				b.setText("Ver Ofertas");
+			}else{
+				b.setText("Ofertar");
+//				bOfertar.setVisibility(View.GONE);
 			}
 				
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
 		
-		b.setOnClickListener(new View.OnClickListener() {
+        b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            	ofertar();
+            	try {
+					if (nick.equals(j.getString("nick"))){
+						verofertas();
+					}else{
+						
+						ofertar();
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });;
 		
@@ -108,10 +123,22 @@ public class VerTruequeActivity extends Activity {
 		}
 		
 	}
+	protected void verofertas() {
+		ListarOfertas jc;
+		try {
+			jc = new ListarOfertas(this,j.get("_id").toString());
+			jc.execute("oferta");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+		
+	}
 	public void ofertar(){
 		Intent i = new Intent(VerTruequeActivity.this, CrearOferta.class);
 		try {
-			i.putExtra("nick_trueque", j.getString("nick"));
+			i.putExtra("nick_trueque", j.getString("_id"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,6 +151,16 @@ public class VerTruequeActivity extends Activity {
 		super.onCreateOptionsMenu(menu); 
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.menu_trueque, menu);
+	    
+	    try {
+			if (!nick.equals(j.getString("nick"))){
+				menu.removeItem(R.id.editar);
+		    	menu.removeItem(R.id.borrar);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    return true;
 		
 	}

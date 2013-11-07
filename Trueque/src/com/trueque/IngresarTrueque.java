@@ -88,6 +88,7 @@ public class IngresarTrueque extends Activity {
 	private ListView catAceptadas;
 	private AdaptarCategoria adapterCategorias;
 	public  String[] categorias;
+	public String nick;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,8 @@ public class IngresarTrueque extends Activity {
         
         imagen = (ImageView) findViewById(R.id.Preview);
 
-      
+        SharedPreferences sharedPref = this.getSharedPreferences("claves", Context.MODE_PRIVATE);
+		nick = sharedPref.getString(Constants.nickapp, null);
       	//combo box de categoria y moneda.
       	Resources res = getResources();
 		categorias = res.getStringArray(R.array.array_categorias);
@@ -228,6 +230,7 @@ public class IngresarTrueque extends Activity {
  				t.tipoOfertas.add(Integer.valueOf(i));
  			}
  		}    
+         t.nick = nick;
          t.imagenChica = imagenchica;
          t.id_imagenChica = jsonActual.getString(Constants.json_id_imagen_chica);
          t.imagenGrande = imagenGrande;
@@ -265,8 +268,8 @@ public class IngresarTrueque extends Activity {
         
         t.imagenChica = imagenchica;
         t.imagenGrande = imagenGrande;
-        SharedPreferences sharedPref = this.getSharedPreferences("claves", Context.MODE_PRIVATE);
-		t.nick = sharedPref.getString(Constants.nickapp, null);
+        
+		t.nick = nick;
 		
 		for (int i = 0; i < adapterCategorias.checkBoxState.length;i++){
 			if (adapterCategorias.checkBoxState[i]){
