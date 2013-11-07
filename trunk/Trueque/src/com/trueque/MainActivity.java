@@ -80,7 +80,6 @@ public class MainActivity extends Activity implements OnItemClickListener  {
 		 SharedPreferences.Editor editor = settings.edit();
 	      editor.putString("key1", "value1");
 	      editor.commit();
-	      Factory.initialize(0, getApplicationContext());
 	     SyncUtils.CreateSyncAccount(this);
 	     
 	}
