@@ -1,11 +1,39 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"> 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<h:head></h:head> 
-<body> 
-
-</body> 
+<h:head></h:head>
+<body>
+	<ui:include src="/BannerTop.xhtml"></ui:include>
+	<div class="container">
+		<h:form class="form-horizontal">
+			<fieldset>
+				<label style="font-weight: bold !important">Agregar y quitar
+					roles</label>
+				<div>
+					<label for="inputEmail">Rol </label>
+					<div>
+						<h:inputText class="span3" id="rolU" type="text"
+							value="#{userLogin.rol}" placeholder="Ingrese un rol"
+							autocomplete="off" />
+					</div>
+				</div>
+				<div>
+					<div>
+						<h:commandButton value="Agregar"
+							action="#{userLogin.agregarRol()}" class="btn btn-primary" />
+					</div>
+				</div>
+				<div>
+					<div>
+						<h:commandButton value="Quitar" action="#{userLogin.quitarRol()}"
+							class="btn btn-primary" />
+					</div>
+				</div>
+			</fieldset>
+		</h:form>
+	</div>
+</body>
 </html>
