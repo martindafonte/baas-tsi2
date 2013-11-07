@@ -43,7 +43,13 @@ public abstract class Helper_Http {
 			return "";
 		}
 	}
-	
+	public static int obtenerJsonId(JSONObject p_obj) {
+		try {
+			return Integer.parseInt(p_obj.getString(Constants.jsonIdMensajeJson));
+		} catch (JSONException e) {
+			return -1;
+		}
+	}
 	public static int obtenerCodigo(JSONObject p_obj) {
 		try {
 			return p_obj.getInt(Constants.codigo);

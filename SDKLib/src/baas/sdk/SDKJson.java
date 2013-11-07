@@ -78,8 +78,8 @@ public class SDKJson implements ISDKJson {
 	}
 
 	@Override
-	public Message addJson(JSONObject data, boolean save_offline) {
-		Message mj = new Message();
+	public MessageJson addJson(JSONObject data,boolean save_offline) {
+		MessageJson mj = new MessageJson();
 		if (!save_offline ||isNetworkAvailable()) {
 		try {
 			HttpPost post = new HttpPost(l_baseURL + "/" + l_appid);
@@ -88,11 +88,16 @@ public class SDKJson implements ISDKJson {
 			post.setEntity(entity);
 			HttpResponse resp = l_httpClient.execute(post);
 			JSONObject obj = Helper_Http.obtenerJSONRespuesta(resp);
+			
 			mj.codigo = Helper_Http.obtenerCodigo(obj);
 			mj.descripcion = Helper_Http.obtenerDescripcion(obj);
+			mj.jsonid = Helper_Http.obtenerJsonId(obj);
+			mj.json = null;
 		} catch (Exception e) {
 			mj.codigo = Constants.JSON_Exception;
 			mj.descripcion = e.getMessage();
+			mj.jsonid = -1;
+			mj.json = null;
 		}
 		} else{
 			if(saveInBD(Constants.create, data.toString(), "0")){
@@ -154,14 +159,23 @@ public class SDKJson implements ISDKJson {
 			JSONObject obj = Helper_Http.obtenerJSONRespuesta(resp);
 			mj.codigo = Helper_Http.obtenerCodigo(obj);
 			mj.descripcion = Helper_Http.obtenerDescripcion(obj);
-			mj.resultList = new JSONArray(obj.get(Constants.json).toString());
+			String a = obj.getString(Constants.json); 
+			if ( obj.getString(Constants.json).equals("null"))
+				mj.resultList = new JSONArray();
+			else
+				mj.resultList = new JSONArray(obj.get(Constants.json).toString());
+			
 		} catch (Exception e) {
 			mj.codigo = Constants.JSON_Exception;
 			mj.descripcion = e.getMessage();
 		}
 		return mj;
 	}
-
+	
+	public Query getQuery(JSONObject consulta, int cantPorPagina){
+		Query q = new Query(consulta, cantPorPagina,l_appid,l_baseURL);
+		return q;
+	}
 	private boolean isNetworkAvailable() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) Factory
 				.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
