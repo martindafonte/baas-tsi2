@@ -35,7 +35,7 @@ public class Servicios implements ServiciosLocal {
     /**
      * Default constructor. 
      */
-	public static final String baseURL ="http://192.168.1.109:8080/WebUserManager";
+	public static final String baseURL ="http://localhost:8080/WebUserManager";
 	public static final String app ="0";
     public Servicios() {
         
