@@ -5,7 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"> 
 
 <h:head>
-	<title>PRUEBAS API</title>
+<title>PRUEBAS API</title>
 <!-- Bootstrap -->
 	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet" />
 	<link href="resources/css/bootstrap.css" rel="stylesheet"
@@ -21,17 +21,8 @@ body {
 	padding-bottom: 40px;
 }
 </style>
-	
 </h:head> 
 <body> 
-<ui:include src="/BannerTop.xhtml"></ui:include>
-<div class="container">
-	<div class="row-fluid">
-		<div class="span4">
-			<h1>Administradores</h1>
-			<p>Esta página únicamente puede ser accedida por Usuarios Administradores</p>
-		</div>
-	</div>
-</div>
+<ui:include src="#{userLogin.permitirA()}"/>
 </body> 
 </html>

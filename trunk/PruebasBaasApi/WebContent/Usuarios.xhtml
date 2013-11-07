@@ -4,36 +4,54 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<h:head></h:head>
+<h:head>
+	<title>PRUEBAS API</title>
+<!-- Bootstrap -->
+	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet" />
+	<link href="resources/css/bootstrap.css" rel="stylesheet"
+		media="screen" />
+	<link href="resources/css/newStyles.css" rel="stylesheet" />
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="resources/js/bootstrap.js"></script>
+	<script src="resources/js/limpiar.js"></script>
+	
+	<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
+</h:head>
 <body>
 	<ui:include src="/BannerTop.xhtml"></ui:include>
 	<div class="container">
+		<div class="row-fluid">
 		<h:form class="form-horizontal">
-			<fieldset>
-				<label style="font-weight: bold !important">Agregar y quitar
-					roles</label>
-				<div>
-					<label for="inputEmail">Rol </label>
-					<div>
-						<h:inputText class="span3" id="rolU" type="text"
-							value="#{userLogin.rol}" placeholder="Ingrese un rol"
-							autocomplete="off" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<h:commandButton value="Agregar"
-							action="#{userLogin.agregarRol()}" class="btn btn-primary" />
-					</div>
-				</div>
-				<div>
-					<div>
-						<h:commandButton value="Quitar" action="#{userLogin.quitarRol()}"
-							class="btn btn-primary" />
-					</div>
-				</div>
-			</fieldset>
+			<h1>Agregar y Quitar Roles</h1>
+			<table class="table table-bordered  table-condensed">
+				<tr align="center">	
+					<td><h4>
+						<h:outputText value="Rol:" />
+					</h4></td>
+					<td><h:inputText class="span3" id="rolU" type="text"
+					value="#{userLogin.rol}" placeholder="Ingrese un rol"
+					autocomplete="off" /></td>
+					
+				</tr>
+				<tr align="center">	
+					<td></td>
+					<td><table>
+						<tr align="center">
+					  		<td><h:commandButton value="Agregar"
+							action="#{userLogin.agregarRol()}" class="btn btn-small btn-success" /></td>
+							<td><h:commandButton value="Quitar" action="#{userLogin.quitarRol()}"
+							class="btn btn-small btn-danger" /></td>
+						</tr>	
+					</table></td>
+				</tr>
+			</table>
 		</h:form>
+		</div>
 	</div>
 </body>
 </html>

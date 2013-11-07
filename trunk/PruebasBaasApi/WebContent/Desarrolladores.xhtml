@@ -4,13 +4,33 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"> 
 
-<h:head></h:head> 
+<h:head>
+	<title>PRUEBAS API</title>
+<!-- Bootstrap -->
+	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet" />
+	<link href="resources/css/bootstrap.css" rel="stylesheet"
+		media="screen" />
+	<link href="resources/css/newStyles.css" rel="stylesheet" />
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="resources/js/bootstrap.js"></script>
+	<script src="resources/js/limpiar.js"></script>
+	
+	<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
+</h:head> 
 <body> 
-<div class="container-fluid">
-	<div class="span4">
-		<h1>Desarrolladores</h1>
-		<p>Esta página únicamente puede ser accedida por Usuarios Desarrolladores</p>
-	</div>
+<ui:include src="/BannerTop.xhtml"></ui:include>
+<div class="container">
+	<div class="row-fluid">
+		<div class="span4">
+			<h1>Desarrolladores</h1>
+			<p>Esta página únicamente puede ser accedida por Usuarios Desarrolladores</p>
+		</div>
+	</div>	
 </div>
 </body> 
 </html>

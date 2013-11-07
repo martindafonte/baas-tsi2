@@ -66,7 +66,7 @@ public class UserBean {
 			u.setPass(pass);
 			u.setLogin(true);
 			
-			return "/showAplicaciones.xhtml";
+			return "/Usuarios.xhtml";
 		}
 		else return "/index.xhtml";	
 	}
