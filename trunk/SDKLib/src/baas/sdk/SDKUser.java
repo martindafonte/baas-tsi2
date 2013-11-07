@@ -31,6 +31,7 @@ class SDKUser implements ISDKUser {
 	private String l_baseURL;
 	private String logged_nick;
 	private String l_regid;
+	
 
 	SDKUser(DefaultHttpClient p_httpclient, long p_app_id, String p_regid) {
 		l_httpClient = p_httpclient;
