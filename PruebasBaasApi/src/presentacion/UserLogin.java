@@ -78,8 +78,6 @@ public class UserLogin {
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.getExternalContext().getSessionMap().remove("userLogin");
 		login = false;
-//		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-//		String ret = req.getRequestURL().toString();
 		return "/index.xhtml";
 		
 	}
@@ -94,7 +92,7 @@ public class UserLogin {
 		serv.quitarRolUsuario(nick, rol);
 	}
 	
-	public String permitirA(){
+	public String permitirA1(){
 		try {
 			List<String> lp = serv.obtenerPermisosUsuario(nick);
 			if (lp.contains("Administrador"))
@@ -104,7 +102,7 @@ public class UserLogin {
 		return "/ErrorPermiso.xhtml";
 	}
 	
-	public String permitirD(){
+	public String permitirD1(){
 		try {
 			List<String> lp = serv.obtenerPermisosUsuario(nick);
 			if (lp.contains("Desarrollador"))
