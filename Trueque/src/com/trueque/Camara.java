@@ -1,5 +1,7 @@
 package com.trueque;
 
+import java.io.ByteArrayOutputStream;
+
 import com.trueque.R.id;
 
 import android.os.Bundle;
@@ -8,6 +10,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.util.Base64;
 import android.view.Menu;
 import android.widget.ImageView;
 
@@ -69,4 +73,21 @@ public class Camara extends Activity {
 	   return bitmap;
 	    //imagen.setImageBitmap(bitmap);
 	}
+	
+	public static String redimensionarImagenMaximo(Bitmap mBitmap, float newWidth, float newHeigth){
+		   //Redimensionamos
+		   int width = mBitmap.getWidth();
+		   int height = mBitmap.getHeight();
+		   float scaleWidth = ((float) newWidth) / width;
+		   float scaleHeight = ((float) newHeigth) / height;
+		   // create a matrix for the manipulation
+		   Matrix matrix = new Matrix();
+		   // resize the bit map
+		   matrix.postScale(scaleWidth, scaleHeight);
+		   // recreate the new Bitmap
+		   Bitmap bitmap= Bitmap.createBitmap(mBitmap, 0, 0, width, height, matrix, false);
+		   ByteArrayOutputStream baos = new ByteArrayOutputStream();
+           bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+           return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+		}
 }

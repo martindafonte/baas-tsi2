@@ -14,17 +14,46 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <!-- Keeps the processor from sleeping when a message is received. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
+    
+     <permission
+        android:name="com.google.android.gcm.demo.app.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.google.android.gcm.demo.app.permission.C2D_MESSAGE" />
+
+    <!-- This app has permission to register and receive data message. -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    
+
+   
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
+        
+         <service android:name="com.google.android.gcm.demo.app.GcmIntentService" />
+        <receiver
+        android:name="com.google.android.gcm.demo.app.GCMBroadcastReceiver"
+        android:permission="com.google.android.c2dm.permission.SEND" >
+        <intent-filter>
+
+            <!-- Receives the actual messages. -->
+            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            <!-- Receives the registration id. -->
+            <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+            <category android:name="com.google.android.gcm.demo.app" />
+        </intent-filter>
+    </receiver>
         <activity
             android:name="com.trueque.MainActivity"
             android:label="@string/app_name" >
@@ -78,6 +107,23 @@
         <activity
             android:name="com.trueque.Camara"
             android:label="@string/title_activity_camara" >
+        </activity>
+        <activity
+            android:name="com.trueque.IniciarSesion"
+            android:label="@string/title_activity_iniciar_sesion"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name="com.trueque.Login"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name="com.trueque.AltaUsuario"
+            android:label="@string/title_activity_alta_usuario" >
+        </activity>
+        <activity
+            android:name="com.trueque.CrearOferta"
+            android:label="@string/title_activity_crear_oferta" >
         </activity>
     </application>
 

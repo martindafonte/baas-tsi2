@@ -11,8 +11,5 @@
         android:id="@+id/borrar"
          android:showAsAction="ifRoom"
        android:icon="@drawable/ic_action_remove" >      
-    </item>
-        
-        
-        
+    </item>        
     </menu>

@@ -1,16 +1,20 @@
 package rest;
 
 
+import org.json.JSONObject;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import baas.sdk.Factory;
+import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
+import com.google.gson.JsonObject;
 import com.trueque.MainActivity;
 
-public class EliminarComunicacion  extends AsyncTask<String,Integer,Boolean> {
+public class EliminarComunicacion  extends AsyncTask<JSONObject,Integer,Boolean> {
 
 	private ProgressDialog dialog;
 	private Context context;
@@ -50,13 +54,19 @@ public class EliminarComunicacion  extends AsyncTask<String,Integer,Boolean> {
 	}
 
 	@Override
-	protected Boolean doInBackground(String... params) {
-		// TODO Auto-generated method stub
+	protected Boolean doInBackground(JSONObject... params) {
+		try{
 
-						
-			sdkJson.deleteJson(Integer.parseInt(params[0]));
+			JSONObject j = params[0];
+			sdkJson.deleteJson(j.getInt(Constants.json_id_imagen_chica));
+			sdkJson.deleteJson(j.getInt(Constants.json_id_imagen_grande));
+			sdkJson.deleteJson(j.getInt(Constants.jsonidMongo));
 			
 			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

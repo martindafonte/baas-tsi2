@@ -22,7 +22,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import baas.sdk.Factory;
+import baas.sdk.messages.MessageJson;
 import baas.sdk.messages.MessageJsonList;
+import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.trueque.MainActivity;
@@ -35,12 +37,14 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 	private Context context;
 	public JSONArray array;
 	private baas.sdk.ISDKJson sdkJson;
+	private String nick;
 
 	
 	
-	public ListarComunicacion(Context c) {
+	public ListarComunicacion(Context c,String nick) {
 		super();
 		context = c;
+		this.nick = nick;
 		dialog = new ProgressDialog(context);
 		Factory.initialize(0, c);
 		try {
@@ -51,12 +55,9 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-		// TODO Auto-generated method stub
-
 		if (dialog.isShowing()){
 			dialog.dismiss();
 		}
-		  
 		Intent i = new Intent(this.context.getApplicationContext(),VerTruequesActivity.class);
 		this.context.startActivity(i);
 		super.onPostExecute(result);
@@ -74,12 +75,14 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 
 	@Override
 	protected Boolean doInBackground(String... params) {
-		// TODO Auto-generated method stub
 		JSONObject json = new JSONObject();
 		try {
-			json.put("tipoObjeto", params[0]);
+			json.put(Constants.jsonTipoMongo, params[0]);
+			if (nick != null){
+				json.put(Constants.nickapp, nick);
+			}
+			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {	
@@ -87,77 +90,27 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 		    array =mj.resultList;
 		    
 		    // LLenar
+		    
 		    MainActivity.trueques = new String[array.length()];
 
 	        for(int i=0;i<MainActivity.trueques.length;i++) {
-	        	
+	        		JSONObject query = new JSONObject();
+	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
+					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
+					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
+					array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
 					MainActivity.trueques[i] = array.getString(i);
 	        }
 			
 		} catch (ClientProtocolException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		return null;
-	}
-	
-
-	
-	// ********* ADAPTAR ITEM ***************
-	public class adaptarElemento extends ArrayAdapter<Object>{
-		Activity context;
-		
-		public adaptarElemento(Activity c) {
-			// TODO Auto-generated constructor stub
-			super(c, R.layout.ver_trueques,MainActivity.trueques);
-			this.context = c;
-	
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
-		
-			LayoutInflater i = context.getLayoutInflater();
-			View item = i.inflate(R.layout.item_trueque, null);
-			
-			
-			JSONObject j;
-			try {
-				j = new JSONObject(MainActivity.trueques[position]);
-				
-				TextView Tipo = (TextView) item.findViewById(R.id.title);
-				Tipo.setText(j.getString("Tipo"));
-				
-				//TextView Valor = (TextView) item.findViewById(R.id.secondLine);
-				//Valor.setText(j.getString("Valor"));
-				
-				TextView Descripcion = (TextView) item.findViewById(R.id.artist);
-				Descripcion.setText(j.getString("Descripcion"));
-				
-				ImageView imagen = (ImageView) item.findViewById(R.id.list_image);
-				
-				byte [] encodeByte=Base64.decode(j.getString("imagen"),Base64.DEFAULT);
-  		        Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-				imagen.setImageBitmap(bitmap);
-  		        
-				return item;	
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			return null;
-		}
-		
-	}
+	}	
 
 }
 
