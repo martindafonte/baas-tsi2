@@ -92,7 +92,7 @@ public class UserLogin {
 		serv.quitarRolUsuario(nick, rol);
 	}
 	
-	public String permitirA1(){
+	public String permitirA(){
 		try {
 			List<String> lp = serv.obtenerPermisosUsuario(nick);
 			if (lp.contains("Administrador"))
@@ -102,7 +102,7 @@ public class UserLogin {
 		return "/ErrorPermiso.xhtml";
 	}
 	
-	public String permitirD1(){
+	public String permitir(){
 		try {
 			List<String> lp = serv.obtenerPermisosUsuario(nick);
 			if (lp.contains("Desarrollador"))
