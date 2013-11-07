@@ -3,6 +3,7 @@
  */
 package presentacion;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -95,7 +96,7 @@ public class UserLogin {
 	public String permitirA(){
 		try {
 			List<String> lp = serv.obtenerPermisosUsuario(nick);
-			if (lp.contains("Administrador"))
+			if (lp.contains("Administradores"))
 				return "/Administradores.xhtml";
 		} catch (JSONException e) {
 		}
@@ -105,11 +106,17 @@ public class UserLogin {
 	public String permitir(){
 		try {
 			List<String> lp = serv.obtenerPermisosUsuario(nick);
-			if (lp.contains("Desarrollador"))
-				return "/Desarrolladores.xhtml";
+			for(Iterator<String> itp = lp.iterator(); itp.hasNext();){
+				if (itp.next().equals("Desarrolladores")){
+					return "/Desarrolladores.xhtml";
+				}
+			}
+				
 		} catch (JSONException e) {
+		
 		}
 		return "/ErrorPermiso.xhtml";
+		
 	}
 	
 	public String go(){
