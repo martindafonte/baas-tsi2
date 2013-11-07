@@ -106,7 +106,7 @@ public class CrearOferta extends Activity {
 		SharedPreferences sharedPref = this.getSharedPreferences("claves", Context.MODE_PRIVATE);
 		o.nick = sharedPref.getString(Constants.nickapp, null);
 		
-		o.nickTrueque = id;
+		o.idTrueque = id;
 		IngresarComunicacion claseInsertar = new IngresarComunicacion(this);
 		claseInsertar.execute(o);
 		

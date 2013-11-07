@@ -98,17 +98,16 @@ public class ActualizarComunicacion extends AsyncTask<Trueque,Integer,Boolean> {
 					t.id_imagenChica = "chica"+t.nick+tiempo;
 					t.id_imagenGrande = "grande"+t.nick+tiempo;
 				}
-		
+				t.imagenChica = "";
+				t.imagenGrande = "";
 				JSONObject dato = new JSONObject(g.toJson(t));
 				sdkJson.updateJson(t.id, dato,true);
 				
 		    }catch(JSONException e){
 		    	e.printStackTrace();
 		    } catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 			return true;
