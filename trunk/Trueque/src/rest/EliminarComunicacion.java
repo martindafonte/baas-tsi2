@@ -24,19 +24,12 @@ public class EliminarComunicacion  extends AsyncTask<JSONObject,Integer,Boolean>
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
-		Factory.initialize(0, c);
-		try {
-			sdkJson = Factory.getJsonSDK();
-		} catch (NotInitilizedException e) {
-		}
+		
 	}
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		// TODO Auto-generated method stub
-		if (dialog.isShowing()){
-			dialog.dismiss();
-		}
+		
 		// Llamar a ver perfil.
 		
 		Intent i = new Intent(this.context.getApplicationContext(),MainActivity.class);
@@ -56,10 +49,17 @@ public class EliminarComunicacion  extends AsyncTask<JSONObject,Integer,Boolean>
 	@Override
 	protected Boolean doInBackground(JSONObject... params) {
 		try{
-
+			Factory.initialize(1, context);
+			try {
+				sdkJson = Factory.getJsonSDK();
+			} catch (NotInitilizedException e) {
+			}
+			if (dialog.isShowing()){
+				dialog.dismiss();
+			}
 			JSONObject j = params[0];
-			sdkJson.deleteJson(j.getInt(Constants.json_id_imagen_chica));
-			sdkJson.deleteJson(j.getInt(Constants.json_id_imagen_grande));
+			//sdkJson.deleteJson(j.getInt(Constants.json_id_imagen_chica));
+			//sdkJson.deleteJson(j.getInt(Constants.json_id_imagen_grande));
 			sdkJson.deleteJson(j.getInt(Constants.jsonidMongo));
 			
 			return true;

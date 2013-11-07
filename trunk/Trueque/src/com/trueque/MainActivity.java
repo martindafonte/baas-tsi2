@@ -212,13 +212,13 @@ class CerrarSesion extends AsyncTask<String, String, String>{
 	
 	public CerrarSesion(Context context){
 		c = context;
-		Factory.initialize(0, c);
+		
 	}
 	
 	@Override
 	protected String doInBackground(String... params) {
 		try {
-			
+			Factory.initialize(1, c);
 			Message m = Factory.getUserSDK().logout();
 			if (m.codigo == Constants.Exito){
 				SharedPreferences sharedPref = c.getSharedPreferences("claves", Context.MODE_PRIVATE);

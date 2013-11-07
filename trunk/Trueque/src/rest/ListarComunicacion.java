@@ -46,11 +46,7 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 		context = c;
 		this.nick = nick;
 		dialog = new ProgressDialog(context);
-		Factory.initialize(0, c);
-		try {
-			sdkJson = Factory.getJsonSDK();
-		} catch (NotInitilizedException e) {
-		}
+		
 	}
 	
 	@Override
@@ -75,6 +71,13 @@ public class ListarComunicacion extends AsyncTask <String,Integer,Boolean> {
 
 	@Override
 	protected Boolean doInBackground(String... params) {
+		Factory.initialize(1, context);
+		try {
+			sdkJson = Factory.getJsonSDK();
+		} catch (NotInitilizedException e) {
+		}
+		
+		
 		JSONObject json = new JSONObject();
 		try {
 			json.put(Constants.jsonTipoMongo, params[0]);
