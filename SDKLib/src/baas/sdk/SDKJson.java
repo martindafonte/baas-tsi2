@@ -80,7 +80,9 @@ public class SDKJson implements ISDKJson {
 	@Override
 	public MessageJson addJson(JSONObject data,boolean save_offline) {
 		MessageJson mj = new MessageJson();
-		if (!save_offline ||isNetworkAvailable()) {
+		
+		//boolean a = isNetworkAvailable();
+		if (!save_offline ||true) {
 		try {
 			HttpPost post = new HttpPost(l_baseURL + "/" + l_appid);
 			post.setHeader("content-type", "application/json");
@@ -114,7 +116,8 @@ public class SDKJson implements ISDKJson {
 	@Override
 	public Message updateJson(int jsonId, JSONObject json, boolean save_offline) {
 		Message mj = new Message();
-		if (!save_offline ||isNetworkAvailable()) {
+		// isNetworkAvailable()
+		if (!save_offline || true) {
 			try {
 				HttpPut put = new HttpPut(l_baseURL
 						+ "/"
