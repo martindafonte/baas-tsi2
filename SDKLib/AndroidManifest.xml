@@ -9,13 +9,8 @@
         android:minSdkVersion="9"
         android:targetSdkVersion="18" />
 
-    <!-- GCM connects to Google Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
-    <!-- Keeps the processor from sleeping when a message is received. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!--
@@ -25,16 +20,21 @@
            where PACKAGE is the application's package name.
     -->
     <permission
-        android:name="com.google.android.gcm.demo.app.permission.C2D_MESSAGE"
+        android:name="baas.sdk.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.google.android.gcm.demo.app.permission.C2D_MESSAGE" />
+    <uses-permission android:name="baas.sdk.permission.C2D_MESSAGE" />
 
     <!-- This app has permission to register and receive data message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <receiver
-        android:name="com.google.android.gcm.demo.app.GCMBroadcastReceiver"
+    <application android:name="Factory">
+        <receiver
+        android:name=".utils.GCMBroadcastReceiver"
         android:permission="com.google.android.c2dm.permission.SEND" >
         <intent-filter>
 
@@ -47,13 +47,7 @@
         </intent-filter>
     </receiver>
 
-    <service android:name="com.google.android.gcm.demo.app.GcmIntentService" />
-
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-
-    <application>
+    <service android:name=".utils.GcmIntentService" />
     </application>
 
 </manifest>
