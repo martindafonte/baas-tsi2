@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+	xmlns:p="http://primefaces.org/ui">
+<!--       xmlns:b="http://richfaces.org/sandbox/bootstrap" -->
+
+<h:head>
+	<title>Baas TSI2</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="Proyecto de baas 2013" />
+	<meta name="author" content="TSI214" />
+
+	<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
+
+
+	<!-- Bootstrap -->
+	<link href="resources/css/bootstrap-responsive.css" rel="stylesheet" />
+	<link href="resources/css/bootstrap.css" rel="stylesheet"
+		media="screen" />
+	<link href="resources/css/newStyles.css" rel="stylesheet" />
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="resources/js/bootstrap.js"></script>
+	<script src="resources/js/limpiar.js"></script>
+</h:head>
+
+
+<body>
+	<ui:include src="/BannerTop.xhtml"></ui:include>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span4">
+				<h1>Introducción</h1>
+				<p>El objetivo de esta página es probar las funcionaliades ogrecidas
+				en la API del BAAS creado</p>
+			</div>
+			<div class="span4 offset2">
+
+				<h:form class="form-horizontal.span4">
+					<div class="hero-unit">
+						<fieldset>
+							<legend>Alta Usuario</legend>
+							<div class="control-group">
+								<label class="control-label" for="inputEmail">Nick </label>
+								<div class="controls">
+									<h:inputText id="nickU" type="text" value="#{userBean.nick}"
+										placeholder="Ingrese un nick" autocomplete="off"/>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="inputEmail">Password </label>
+								<div class="controls">
+									<h:inputSecret type="password" value="#{userBean.pass}"
+										placeholder="Password" />
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="inputEmail">Nombre </label>
+								<div class="controls">
+									<h:inputText id="nombreU" type="text" value="#{userBean.nombre}"
+										placeholder="Ingrese su nombre" autocomplete="off"/>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="inputEmail">Apellido </label>
+								<div class="controls">
+									<h:inputText id="apellidoU" type="text" value="#{userBean.apellido}"
+										placeholder="Ingrese su apellido" autocomplete="off"/>
+								</div>
+							</div>
+							<div class="control-group">
+								<div class="controls">
+									<h:commandButton value="Aceptar" class="btn"
+										action="#{userBean.go()}" />
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</h:form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

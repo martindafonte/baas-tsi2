@@ -1,0 +1,10 @@
+<div xmlns:h="http://java.sun.com/jsf/html">
+	<h:form class="navbar-form pull-right">
+		<h:inputText class="span2" type="text" placeholder="Usuario"
+			value="#{userLogin.nick}" />
+		<h:inputSecret class="span2" type="password" placeholder="Password"
+			value="#{userLogin.pass}" />
+		<h:commandButton class="btn btn-primary" action="#{userLogin.login()}"
+			value="log in" />
+	</h:form>
+</div>
