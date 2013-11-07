@@ -30,11 +30,13 @@ class SDKUser implements ISDKUser {
 	private String l_appid;
 	private String l_baseURL;
 	private String logged_nick;
+	private String l_regid;
 
-	SDKUser(DefaultHttpClient p_httpclient, long p_app_id) {
+	SDKUser(DefaultHttpClient p_httpclient, long p_app_id, String p_regid) {
 		l_httpClient = p_httpclient;
 		l_appid = String.valueOf(p_app_id);
 		l_baseURL = baas.sdk.utils.Constants.baseURL + "/Users";
+		l_regid = p_regid;
 	}
 
 	@Override
@@ -43,7 +45,9 @@ class SDKUser implements ISDKUser {
 		try {
 			HttpPost login = new HttpPost(l_baseURL + "/" + l_appid+"/"+nick+"/login");
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+			
 			nameValuePairs.add(new BasicNameValuePair(Constants.pass, pass));
+			nameValuePairs.add(new BasicNameValuePair("regid", l_regid));
 			login.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse resp = l_httpClient.execute(login);
 			JSONObject jObj = Helper_Http.obtenerJSONRespuesta(resp);
