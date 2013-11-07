@@ -3,8 +3,12 @@
  */
 package presentacion;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+
+import org.json.JSONException;
 
 import negocio.ServiciosLocal;
 
@@ -66,7 +70,7 @@ public class UserLogin {
 		
 		serv.login(nick, pass);
 		login = true;
-		return "/index.xhtml";
+		return "/Usuarios.xhtml";
 	}
 	
 	public String logout(){
@@ -88,6 +92,26 @@ public class UserLogin {
 	public void quitarRol(){
 		
 		serv.quitarRolUsuario(nick, rol);
+	}
+	
+	public String permitirA(){
+		try {
+			List<String> lp = serv.obtenerPermisosUsuario(nick);
+			if (lp.contains("Administrador"))
+				return "/Administradores.xhtml";
+		} catch (JSONException e) {
+		}
+		return "/ErrorPermiso.xhtml";
+	}
+	
+	public String permitirD(){
+		try {
+			List<String> lp = serv.obtenerPermisosUsuario(nick);
+			if (lp.contains("Desarrollador"))
+				return "/Desarrolladores.xhtml";
+		} catch (JSONException e) {
+		}
+		return "/ErrorPermiso.xhtml";
 	}
 	
 	public String go(){
