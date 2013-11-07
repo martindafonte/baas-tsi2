@@ -11,48 +11,67 @@ import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-public abstract class Factory {
+public abstract class Factory  {
 
-	protected static long l_app_id=-1;
+	protected static long l_app_id = -1;
 	private static SDKUser l_userSDK = null;
 	private static SDKPush l_pushSDK = null;
 	private static SDKJson l_jsonSDK = null;
-	//persistir despues la cookie de sesion
+	// persistir despues la cookie de sesion
 	private static DefaultHttpClient l_httpClient;
 	private static Context ctx;
 	private static String l_regid;
 	private static GoogleCloudMessaging l_gcm;
+	private static boolean initiliazed = false;
+	// Constants
+	public static final String AUTHORITY = "baas.sdk.sync.provider";
+	// An account type, in the form of a domain name
+	public static final String ACCOUNT_TYPE = "example.com";
+	// The account name
+	public static final String ACCOUNT = "dummyaccount";
+		// Instance fields
 
-	protected static Context getContext(){
+	protected static Context getContext() {
 		return ctx;
 	}
+
 	public static Message initialize(long p_app_id, Context p_ctx) {
 		Message msg;
+		if(!initiliazed){
 		l_app_id = p_app_id;
 		l_httpClient = new DefaultHttpClient();
 		ctx = p_ctx;
 		try {
 			registrarGCM();
-			msg= new Message(Constants.Exito);
+			msg = new Message(Constants.Exito);
 		} catch (IOException e) {
-			msg=new Message(Constants.GCM_Problem_Registering);
-			msg.descripcion+= " Excepcion: "+e.getMessage();
+			msg = new Message(Constants.GCM_Problem_Registering);
+			msg.descripcion += " Excepcion: " + e.getMessage();
 		}
+		initiliazed = true;
+//		 SharedPreferences settings = p_ctx.getSharedPreferences("baas.sdk.sync", Context.MODE_PRIVATE);
+//		 SharedPreferences.Editor editor = settings.edit();
+//	     editor.putString("key1", "value1");
+//	      editor.commit();
+		}else{
+			msg = new Message(Constants.Exito);
+		}
+//		ContentResolver.setSyncAutomatically(GenericAccountService.GetAccount(), "baas.sdk.provider", true);
 		return msg;
 	}
 
 	public static ISDKUser getUserSDK() throws NotInitilizedException {
-		if(l_app_id==-1){
+		if (l_app_id == -1) {
 			throw new NotInitilizedException();
 		}
 		if (l_userSDK == null) {
-			l_userSDK = new SDKUser(l_httpClient, l_app_id);
+			l_userSDK = new SDKUser(l_httpClient, l_app_id,l_regid);
 		}
 		return (ISDKUser) l_userSDK;
 	}
-	
+
 	public static ISDKPush getPushSDK() throws NotInitilizedException {
-		if(l_app_id==-1){
+		if (l_app_id == -1) {
 			throw new NotInitilizedException();
 		}
 		if (l_pushSDK == null) {
@@ -60,13 +79,13 @@ public abstract class Factory {
 		}
 		return (ISDKPush) l_pushSDK;
 	}
-	
+
 	public static ISDKJson getJsonSDK() throws NotInitilizedException {
-		if(l_app_id==-1){
+		if (l_app_id == -1) {
 			throw new NotInitilizedException();
 		}
 		if (l_jsonSDK == null) {
-			l_jsonSDK = new SDKJson(l_app_id);
+			l_jsonSDK = new SDKJson(l_app_id,ctx);
 		}
 		return (ISDKJson) l_jsonSDK;
 	}
