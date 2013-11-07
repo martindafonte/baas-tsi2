@@ -77,12 +77,14 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int COLUMN_ACCION = 2;
     public static final int COLUMN_JSON = 3;
     
+    private Context ctx;
     /**
      * Constructor. Obtains handle to content resolver for later use.
      */
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContentResolver = context.getContentResolver();
+        ctx = context;
     }
 
     /**
@@ -119,20 +121,21 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         sb.table(ColaSinc.TABLE_NAME);
         Cursor c =sb.query(sdb, PROJECTION, BaasContract.ColaSinc._ID);
         try {
+        	Factory.initialize(1, ctx);
 			ISDKJson sdk = Factory.getJsonSDK();
         while(c.moveToNext()){
         	Log.i(TAG, "Consigo un elemento de la cola");
 				JSONObject jobj = new JSONObject(c.getString(COLUMN_JSON));
 				String accion = c.getString(COLUMN_ACCION);
 				Message m = null;
-				if(accion == Constants.create){
+				if(accion.equals(Constants.create)){
 					m=sdk.addJson(jobj,false);
 					Log.i(TAG, "Hago add");
-				}else if (accion == Constants.update){
+				}else if (accion.equals(Constants.update)){
 					m=sdk.updateJson(c.getInt(COLUMN_ITEM_ID), jobj,false);
 					Log.i(TAG, "Hago update");
 				}
-				if(m.codigo!=Constants.Exito){
+				if(m==null || (m!=null && m.codigo!=Constants.Exito)){
 					continue;
 				}else{
 					Log.i(TAG, "Entro a borrar de la cola");
