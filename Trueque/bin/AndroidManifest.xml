@@ -41,9 +41,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         
-         <service android:name="com.google.android.gcm.demo.app.GcmIntentService" />
+         <service android:name="baas.sdk.utils.GcmIntentService" />
         <receiver
-        android:name="com.google.android.gcm.demo.app.GCMBroadcastReceiver"
+        android:name="baas.sdk.utils.GCMBroadcastReceiver"
         android:permission="com.google.android.c2dm.permission.SEND" >
         <intent-filter>
 
