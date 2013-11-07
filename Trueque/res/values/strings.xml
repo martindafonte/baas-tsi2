@@ -22,8 +22,8 @@
     <string name="title_activity_camara">Camara</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-
-    <string-array name="array_categorias">
+      <string name="account_name">FeedSync Service</string>
+      <string-array name="array_categorias">
         <item>Accesorios para Vehículos</item>
         <item>Cámaras y Accesorios</item>
         <item>Celulares y Telefonía</item>
@@ -41,5 +41,4 @@
     <string name="title_activity_login">Login</string>
     <string name="title_activity_alta_usuario">AltaUsuario</string>
     <string name="title_activity_crear_oferta">CrearOferta</string>
-
 </resources>

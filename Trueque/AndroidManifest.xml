@@ -20,9 +20,11 @@
 
     <!-- Keeps the processor from sleeping when a message is received. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    
-    
-     <permission
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
+	<permission
         android:name="com.google.android.gcm.demo.app.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
@@ -34,7 +36,6 @@
     
 
    
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -108,7 +109,7 @@
             android:name="com.trueque.Camara"
             android:label="@string/title_activity_camara" >
         </activity>
-        <activity
+         <activity
             android:name="com.trueque.IniciarSesion"
             android:label="@string/title_activity_iniciar_sesion"
             android:windowSoftInputMode="adjustResize|stateVisible" >
@@ -125,6 +126,40 @@
             android:name="com.trueque.CrearOferta"
             android:label="@string/title_activity_crear_oferta" >
         </activity>
+  <provider
+                android:name="com.example.android.network.sync.basicsyncadapter.provider.FeedProvider"
+                android:authorities="com.example.android.network.sync.basicsyncadapter"
+                android:exported="false" />
+
+        <!-- This service implements our SyncAdapter. It needs to be exported, so that the system
+        sync framework can access it. -->
+        <service android:name="com.example.android.network.sync.basicsyncadapter.SyncService"
+                 android:exported="true">
+            <!-- This intent filter is required. It allows the system to launch our sync service
+            as needed. -->
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <!-- This points to a required XML file which describes our SyncAdapter. -->
+            <meta-data android:name="android.content.SyncAdapter"
+                       android:resource="@xml/syncadapter" />
+        </service>
+
+        <!-- This implements the account we'll use as an attachment point for our SyncAdapter. Since
+        our SyncAdapter doesn't need to authenticate the current user (it just fetches a public RSS
+        feed), this account's implementation is largely empty.
+
+        It's also possible to attach a SyncAdapter to an existing account provided by another
+        package. In that case, this element could be omitted here. -->
+        <service android:name="com.example.android.network.sync.basicsyncadapter.accounts.GenericAccountService">
+            <!-- Required filter used by the system to launch our account service. -->
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <!-- This points to an XMLf ile which describes our account service. -->
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                       android:resource="@xml/authenticator" />
+        </service>
     </application>
 
 </manifest>

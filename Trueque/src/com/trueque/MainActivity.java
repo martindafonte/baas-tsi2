@@ -1,15 +1,25 @@
 package com.trueque;
 
 import baas.sdk.Factory;
+
+import com.example.android.network.sync.basicsyncadapter.SyncUtils;
+import com.example.android.network.sync.basicsyncadapter.accounts.GenericAccountService;
+import com.example.android.network.sync.basicsyncadapter.provider.FeedProvider;
+import baas.sdk.Factory;
 import baas.sdk.messages.Message;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 import rest.CrearUsuario;
 import rest.ListarComunicacion;
+import android.accounts.Account;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SyncStatusObserver;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -66,9 +76,18 @@ public class MainActivity extends Activity implements OnItemClickListener  {
 	     mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 	     mDrawerOptions.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values));
 	     mDrawerOptions.setOnItemClickListener(this);
-	    	
+	     SharedPreferences settings = getApplicationContext().getSharedPreferences("baas.sdk.sync", Context.MODE_PRIVATE);
+		 SharedPreferences.Editor editor = settings.edit();
+	      editor.putString("key1", "value1");
+	      editor.commit();
+	      Factory.initialize(0, getApplicationContext());
+	     SyncUtils.CreateSyncAccount(this);
+	     
 	}
-
+	
+	
+	        
+	    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu); 
@@ -142,7 +161,48 @@ public class MainActivity extends Activity implements OnItemClickListener  {
 		ListarComunicacion j = new ListarComunicacion(this,n);
 	    j.execute("trueque");
 	}
+	
+	
+	 /**
+     * Crfate a new anonymous SyncStatusObserver. It's attached to the app's ContentResolver in
+     * onResume(), and removed in onPause(). If status changes, it sets the state of the Refresh
+     * button. If a sync is active or pending, the Refresh button is replaced by an indeterminate
+     * ProgressBar; otherwise, the button itself is displayed.
+     */
+    private SyncStatusObserver mSyncStatusObserver = new SyncStatusObserver() {
+        /** Callback invoked with the sync adapter status changes. */
+        @Override
+        public void onStatusChanged(int which) {
+            Runnable r =new Runnable() {
+                /**
+                 * The SyncAdapter runs on a background thread. To update the UI, onStatusChanged()
+                 * runs on the UI thread.
+                 */
+                @Override
+                public void run() {
+                    // Create a handle to the account that was created by
+                    // SyncService.CreateSyncAccount(). This will be used to query the system to
+                    // see how the sync status has changed.
+                    Account account = GenericAccountService.GetAccount();
+                    if (account == null) {
+                        // GetAccount() returned an invalid value. This shouldn't happen, but
+                        // we'll set the status to "not refreshing".
+//                        setRefreshActionButtonState(false);
+                        return;
+                    }
 
+                    // Test the ContentResolver to see if the sync adapter is active or pending.
+                    // Set the state of the refresh button accordingly.
+                    boolean syncActive = ContentResolver.isSyncActive(
+                            account, FeedProvider.CONTENT_AUTHORITY);
+                    boolean syncPending = ContentResolver.isSyncPending(
+                            account, FeedProvider.CONTENT_AUTHORITY);
+//                    setRefreshActionButtonState(syncActive || syncPending);
+                }
+            };
+            r.run();
+        }
+    };
 }
 
 
