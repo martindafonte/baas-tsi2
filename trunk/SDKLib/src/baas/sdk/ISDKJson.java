@@ -14,9 +14,10 @@ public interface ISDKJson {
 	
 	public abstract MessageJsonList getJsonList(JSONObject querry, int from, int cant) throws ClientProtocolException, IOException;
 	
-	public abstract Message addJson(JSONObject data) throws ClientProtocolException, IOException;
+	public abstract Message addJson(JSONObject data,boolean save_offline) throws ClientProtocolException, IOException;
 	
 	public abstract Message deleteJson(int jsonId);
 	
-	public abstract Message updateJson(int jsonId, JSONObject json);
+	public abstract Message updateJson(int jsonId, JSONObject json,boolean save_offline);
+	
 }
