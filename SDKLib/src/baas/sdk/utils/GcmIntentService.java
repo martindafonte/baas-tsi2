@@ -34,6 +34,8 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
  */
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
+   
+    
     NotificationCompat.Builder builder;
 
     public GcmIntentService() {
@@ -60,8 +62,9 @@ public class GcmIntentService extends IntentService {
                 /////// Do nothing
             // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                
+            	
                 Context context = getApplicationContext();
+                
                 ComponentName comp = new ComponentName(context.getPackageName(),baas.sdk.ISDKPush.SDKIntentService.class.getName());
                 startService(intent.setComponent(comp));
             }
@@ -69,5 +72,6 @@ public class GcmIntentService extends IntentService {
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GCMBroadcastReceiver.completeWakefulIntent(intent);
     }
+    
 
 }
