@@ -31,7 +31,6 @@ class SDKUser implements ISDKUser {
 	private String l_baseURL;
 	private String logged_nick;
 	private String l_regid;
-	
 
 	SDKUser(DefaultHttpClient p_httpclient, long p_app_id, String p_regid) {
 		l_httpClient = p_httpclient;
@@ -57,6 +56,7 @@ class SDKUser implements ISDKUser {
 				msg = new Message();
 				msg.codigo = Helper_Http.obtenerCodigo(jObj);
 				msg.descripcion = Helper_Http.obtenerDescripcion(jObj);
+				logged_nick = nick;
 			}
 			return msg;
 		} catch (Exception ex) {
@@ -100,9 +100,9 @@ class SDKUser implements ISDKUser {
 	public Message logout() {
 		Message msg = new Message();
 		try {
-			if ((logged_nick != null) || logged_nick.isEmpty()) {
+			if ((logged_nick == null) || logged_nick.isEmpty()) {
 				msg.codigo = Constants.User_no_logged_user;
-				msg.descripcion = "No hay ningún usuario logeado";
+				msg.descripcion = "No hay ningï¿½n usuario logeado";
 				return msg;
 			}
 			HttpDelete register = new HttpDelete(l_baseURL + "/" + l_appid
