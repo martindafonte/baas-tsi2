@@ -29,16 +29,19 @@ public class ImagenGrande extends AsyncTask< String, Integer, Boolean> {
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
-		Factory.initialize(0, c);
-		try {
-			sdkJson = Factory.getJsonSDK();
-		} catch (NotInitilizedException e) {
-		}
+		
 	}
 
 	@Override
 	protected Boolean doInBackground(String... params) {
 		try{
+			
+			
+			Factory.initialize(1, context);
+			try {
+				sdkJson = Factory.getJsonSDK();
+			} catch (NotInitilizedException e) {
+			}
 			id = params[1];
 			JSONObject query = new JSONObject();
 			query.put("imagenId", params[0]);

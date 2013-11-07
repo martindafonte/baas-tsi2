@@ -17,19 +17,19 @@ public class ObterJsonComunicacion extends AsyncTask  <String,Integer,Boolean> {
 	public ObterJsonComunicacion(Context context) {
 		super();
 		this.c = context;
-		Factory.initialize(0, c);
-		try {
-			sdkJson = Factory.getJsonSDK();
-		} catch (NotInitilizedException e) {
-		}
+		
 		
 		
 	}
 
 	@Override
 	protected Boolean doInBackground(String... params) {
-		// TODO Auto-generated method stub
-		
+
+		Factory.initialize(0, c);
+		try {
+			sdkJson = Factory.getJsonSDK();
+		} catch (NotInitilizedException e) {
+		}
 		int id = Integer.parseInt(params[0]);
 		MessageJson mj = sdkJson.getJson(id);
 		trueque = mj.json.toString(); 			

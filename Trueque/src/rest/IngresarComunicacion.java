@@ -39,11 +39,7 @@ public class IngresarComunicacion extends AsyncTask<Transaccion, Integer, Boolea
 		super();
 		context = c;
 		dialog = new ProgressDialog(context);
-		Factory.initialize(0, c);
-		try {
-			sdkJson = Factory.getJsonSDK();
-		} catch (NotInitilizedException e) {
-		}
+		
 	}
 
 	@Override
@@ -68,6 +64,12 @@ public class IngresarComunicacion extends AsyncTask<Transaccion, Integer, Boolea
 	//@Override
 	protected Boolean doInBackground(Transaccion... objetos) {
 		try {
+			Factory.initialize(1, context);
+			try {
+				sdkJson = Factory.getJsonSDK();
+			} catch (NotInitilizedException e) {
+			}
+			
 			Transaccion t = objetos[0];
 			int tiempo = Calendar.getInstance().get(Calendar.SECOND);
 			// guardar imagen en 2 tamanios.
