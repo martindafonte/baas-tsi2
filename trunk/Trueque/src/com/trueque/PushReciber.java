@@ -60,7 +60,7 @@ public class PushReciber extends SDKIntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-        .setSmallIcon(com.trueque.R.drawable.ic_launcher)
+        .setSmallIcon(com.trueque.R.drawable.icono)
         .setContentTitle("Notificacion TSI2")
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))

@@ -139,6 +139,7 @@ public class VerTruequeActivity extends Activity {
 		Intent i = new Intent(VerTruequeActivity.this, CrearOferta.class);
 		try {
 			i.putExtra("nick_trueque", j.getString("_id"));
+			i.putExtra("nicktrueque",j.getString("nick"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
