@@ -23,6 +23,7 @@ public class CrearOferta extends Activity {
 	private Spinner spinner;
 	private Spinner spinnerMoneda; 
 	String id;
+	String nickPropietario;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public class CrearOferta extends Activity {
 		
 		Bundle bundle = getIntent().getExtras();
 		id = bundle.getString("nick_trueque");
-		
+		nickPropietario = bundle.getString("nicktrueque");
 		spinner = (Spinner) findViewById(R.id.spinnerCategorias);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         R.array.array_categorias, android.R.layout.simple_spinner_item);
@@ -105,7 +106,7 @@ public class CrearOferta extends Activity {
 //		
 		SharedPreferences sharedPref = this.getSharedPreferences("claves", Context.MODE_PRIVATE);
 		o.nick = sharedPref.getString(Constants.nickapp, null);
-		
+		o.nickDestinatario = nickPropietario;
 		o.idTrueque = id;
 		IngresarComunicacion claseInsertar = new IngresarComunicacion(this);
 		claseInsertar.execute(o);
