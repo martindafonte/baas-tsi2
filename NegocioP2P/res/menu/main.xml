@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/listar"
+        android:icon="@drawable/ic_action_refresh"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/action_listar">
+    </item>
+    <item
+        android:id="@+id/itemAgregar"
+        android:icon="@drawable/ic_action_new"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/action_agregar">
+    </item>
+	    <item android:id="@+id/itemcamara"
+         android:showAsAction="ifRoom"
+         android:icon="@drawable/ic_action_camera"
+         ></item>
+    <item android:id="@+id/itemaceptar"
+         android:showAsAction="ifRoom"
+         android:icon="@drawable/ic_action_accept"
+         ></item>
+</menu>
