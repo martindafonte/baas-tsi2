@@ -3,6 +3,7 @@ package baas.sdk;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import baas.sdk.messages.Message;
@@ -22,4 +23,6 @@ public interface ISDKJson {
 	
 	
 	public abstract Query getQuery(JSONObject consulta, int cantPorPagina);
+
+	public abstract MessageJsonList getJsonListSelection(JSONObject querry,String[] campos, int from, int cant);
 }

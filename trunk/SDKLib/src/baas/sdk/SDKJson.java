@@ -1,14 +1,21 @@
 package baas.sdk;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.HttpResponse;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.apache.http.NameValuePair;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -203,5 +210,48 @@ public class SDKJson implements ISDKJson {
 		return (newRowId > -1);
 	}
 
+	
+	public MessageJsonList getJsonListSelection(JSONObject querry, String[] campos, int from, int cant) {
+		MessageJsonList mj = new MessageJsonList();
+		try {
+			String appidString = l_appid;
+			String desdeString = Integer.toString(from);
+			String cantString = Integer.toString(cant);
+			HttpPost post = new HttpPost(l_baseURL + "/" + appidString
+					+ "/listaJsonCampos/" + desdeString + "/" + cantString);
+			//post.setHeader("content-type", "application/json");
+			//StringEntity entity = new StringEntity(querry.toString());
+			
+		//	post.setEntity(entity);
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+			nameValuePairs.add(new BasicNameValuePair("filtro", querry.toString()));
+		    
+		    JSONArray j = new JSONArray();
+		    for (int i = 0; i< campos.length; i++){
+		    	j.put(campos[i]);
+		    }
+		    JSONObject json = new JSONObject();
+		    json.put("select", j);
+		    nameValuePairs.add(new BasicNameValuePair("campos", json.toString()));
+
+		    post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			
+			
+			HttpResponse resp = l_httpClient.execute(post);
+			JSONObject obj = Helper_Http.obtenerJSONRespuesta(resp);
+			mj.codigo = Helper_Http.obtenerCodigo(obj);
+			mj.descripcion = Helper_Http.obtenerDescripcion(obj);
+			String a = obj.getString(Constants.json); 
+			if ( obj.getString(Constants.json).equals("null"))
+				mj.resultList = new JSONArray();
+			else
+				mj.resultList = new JSONArray(obj.get(Constants.json).toString());
+			
+		} catch (Exception e) {
+			mj.codigo = Constants.JSON_Exception;
+			mj.descripcion = e.getMessage();
+		}
+		return mj;
+	}
 	
 }
