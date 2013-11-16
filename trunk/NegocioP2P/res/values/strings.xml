@@ -1,0 +1,48 @@
+<!--
+  Copyright 2013 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Troca</string>
+    <string name="drawer_open">Abrir drawer</string>
+    <string name="drawer_close">Cerrar Drawer</string>
+    <string name="action_websearch">Busqueda</string>
+    <string name="app_not_available">Lo siento no hay ningún navegador disponible</string>
+    <string name="MisTrueques">Mis Trueques</string>
+    <string name="CerrarSesion">Cerrar Sesión</string>
+    <string name="Home">Ver Trueques</string>
+    <string name="IniciarSesion">Iniciar Sesión</string>
+    <string name="AltaUsuario">Registrarse</string>
+    <string name="action_agregar">Agregar</string>
+    <string name="action_listar">Cargar</string>
+
+    <string-array name="array_categorias">
+        <item>Accesorios para Vehículos</item>
+        <item>Cámaras y Accesorios</item>
+        <item>Celulares y Telefonía</item>
+        <item>Coleccionables</item>
+        <item>Computación</item>
+        <item>Deportes y Fitness</item>
+        <item>Electrodomésticos y Aires Ac.</item>
+        <item>Hogar, Muebles y Jardín</item>
+    </string-array>
+    
+    <string-array name="array_monedas">
+        <item>U$S</item>
+        <item>$</item>
+    </string-array>
+
+</resources>
