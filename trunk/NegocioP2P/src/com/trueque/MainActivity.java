@@ -62,6 +62,8 @@ public class MainActivity extends Activity implements ChangeFragment{
 	public int vistaActual = -1;
 	private IngresarTrueque fIngresarTrueque;
 	private CrearOferta fIngresarOferta;
+	private VerTruequesActivity fVerTrueques = null;
+	private Fragment actual = null;
 	Bundle args; 
 
 	@Override
@@ -245,7 +247,9 @@ public class MainActivity extends Activity implements ChangeFragment{
 
 	private void selectItem(int position) {
 		// update the main content by replacing fragments
+//		Bundle args = new Bundle();
 		Fragment fragment = null;
+		boolean noCambia = false;
 		if (user == null) {
 			switch (position) {
 			case op_iniciarSesion:
@@ -256,18 +260,25 @@ public class MainActivity extends Activity implements ChangeFragment{
 				break;
 			case op_home:
 				args.putString("idUsuario", null);
-				fragment = new VerTruequesActivity();
+				if(fVerTrueques == null)
+					fVerTrueques= new VerTruequesActivity();
+				fragment =fVerTrueques;
 				break;
 			}
 		} else {
 			switch (position) {
 			case op_home:
 				args.putString("idUsuario", null);
-				fragment = new VerTruequesActivity();
+				if(fVerTrueques == null)
+					fVerTrueques=new VerTruequesActivity();
+				fragment = fVerTrueques;
 				break;
 			case op_cerrarSesion:
 				CerrarSesion c = new CerrarSesion(this);
 				c.execute();
+				if(fVerTrueques == null)
+					fVerTrueques=new VerTruequesActivity();
+				fragment = fVerTrueques;
 				break;
 			case op_misTrueques:
 				args.putString("idUsuario", user);
@@ -277,20 +288,22 @@ public class MainActivity extends Activity implements ChangeFragment{
 				break;
 			}
 		}
-		vistaActual = position;
-		invalidateOptionsMenu();
-		// Bundle args = new Bundle();
-		// args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+		if(!fragment.equals(actual)){
+			vistaActual = position;
+			invalidateOptionsMenu();
+		// 	args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
 		// fragment.setArguments(args);
-		fragment.setArguments(args);
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction()
+			fragment.setArguments(args);
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, fragment).commit();
 
 		// update selected item and title, then close the drawer
-		mDrawerList.setItemChecked(position, true);
-		setTitle(l_drawerItemList[position]);
-		mDrawerLayout.closeDrawer(mDrawerList);
+			mDrawerList.setItemChecked(position, true);
+			setTitle(l_drawerItemList[position]);
+		}
+			actual = fragment;
+			mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
 	@Override
