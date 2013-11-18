@@ -58,9 +58,10 @@ public class MainActivity extends Activity implements ChangeFragment{
 	public final static int op_iniciarSesion = 0;
 	public final static int op_altaUsuario = 2;
 	public final static int op_altaTrueque = 4;
-	public final static int op_altaoferta = 5;
+	public final int op_altaoferta = 5;
 	public int vistaActual = -1;
 	private IngresarTrueque fIngresarTrueque;
+	private CrearOferta fIngresarOferta;
 	Bundle args; 
 
 	@Override
@@ -208,7 +209,11 @@ public class MainActivity extends Activity implements ChangeFragment{
 			invalidateOptionsMenu();
 			return true;
 		case R.id.itemaceptar:
-			fIngresarTrueque.Aceptar();
+			if (vistaActual == op_altaTrueque){
+				fIngresarTrueque.Aceptar();
+			}else{
+				fIngresarOferta.agregarOferta();
+			}
 			return true;
 		case R.id.itemcamara:
 			fIngresarTrueque.captureImage();
@@ -296,11 +301,10 @@ public class MainActivity extends Activity implements ChangeFragment{
 
 	public String obtenerUsuarioLogeado() {
 		// // Buscar nick
-		// SharedPreferences sharedPref = this.getSharedPreferences("claves",
-		// Context.MODE_PRIVATE);
-		// return sharedPref.getString(Constants.nickapp, null);
-		// TODO remove comments
-		return null;
+		 SharedPreferences sharedPref = this.getSharedPreferences("claves",
+		 Context.MODE_PRIVATE);
+		 return sharedPref.getString(Constants.nickapp, null);
+
 	}
 
 	@Override
@@ -382,10 +386,11 @@ public class MainActivity extends Activity implements ChangeFragment{
 
 	@Override
 	public void changeFragment(int pantalla, Fragment f) {
-		if(f == null){
-			selectItem(pantalla);
-		}else{
-			
+		
+		vistaActual = pantalla;
+		if (vistaActual == op_altaoferta){
+			fIngresarOferta =(CrearOferta) f;
 		}
+		
 	}
 }
