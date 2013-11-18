@@ -86,7 +86,7 @@ public abstract class Factory {
 			throw new NotInitilizedException();
 		}
 		if (l_userSDK == null) {
-			l_userSDK = new SDKUser(l_httpClient, l_app_id);
+			l_userSDK = new SDKUser(l_httpClient, l_app_id,ctx);
 		}
 		return (ISDKUser) l_userSDK;
 	}
