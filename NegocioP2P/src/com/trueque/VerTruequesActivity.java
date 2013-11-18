@@ -92,7 +92,7 @@ public class VerTruequesActivity extends Fragment {
 				try {
 					bw_listarComunicacion.doInBackground("trueque");
 				} catch (Exception e) {
-					dialog.setMessage("Ocurri� una excepcion");
+					dialog.setMessage("Ocurrio una excepcion");
 				}
 				return null;
 			}

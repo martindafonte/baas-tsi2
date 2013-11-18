@@ -84,7 +84,7 @@ public class CrearOferta extends Fragment {
 //	    }
 //	}
 
-	private void agregarOferta() {
+	public void agregarOferta() {
 		Oferta o = new Oferta();
 		Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinnerCategorias);
 		o.tipo = spinner.getSelectedItemPosition();

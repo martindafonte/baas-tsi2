@@ -42,7 +42,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class VerTruequeActivity extends Fragment {
+public class VerTruequeActivity extends BaseFragment {
 	
 	public static String trueque;
 	public int indice;
@@ -206,12 +206,17 @@ public class VerTruequeActivity extends Fragment {
 			e.printStackTrace();
 		}
 		
+		MainActivity m = (MainActivity)getActivity();
+		
 		Fragment f = new VerOfertas();
 		f.setArguments(args);
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 				.commit();
 		getActivity().setTitle("Ver Trueque");
+		m.vistaActual = m.op_altaoferta;
+		getActivity().invalidateOptionsMenu();
+		
 	
 	}
 	public void ofertar(){
@@ -224,13 +229,19 @@ public class VerTruequeActivity extends Fragment {
 			e.printStackTrace();
 		}
 	
+		MainActivity m = (MainActivity) getActivity();
 		Fragment f = new CrearOferta();
 		f.setArguments(args);
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 				.commit();
-		getActivity().setTitle("Ofertar");
+		m.setTitle("Ofertar");
+		getActivity().setTitle("Ver Trueque");
+		m.vistaActual = m.op_altaoferta;
 		getActivity().invalidateOptionsMenu();
+		this.changeScreen(m.op_altaoferta, f);
+		
+		
 //		Intent i = new Intent(VerTruequeActivity.this, CrearOferta.class);
 //		try {
 //			i.putExtra("nick_trueque", j.getString("_id"));
