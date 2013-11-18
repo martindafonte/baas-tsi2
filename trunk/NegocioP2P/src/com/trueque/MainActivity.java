@@ -16,6 +16,8 @@
 
 package com.trueque;
 
+import com.trueque.BaseFragment.ChangeFragment;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -39,7 +41,7 @@ import baas.sdk.messages.Message;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ChangeFragment{
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -376,5 +378,14 @@ public class MainActivity extends Activity {
 		}
 		
 		
+	}
+
+	@Override
+	public void changeFragment(int pantalla, Fragment f) {
+		if(f == null){
+			selectItem(pantalla);
+		}else{
+			
+		}
 	}
 }
