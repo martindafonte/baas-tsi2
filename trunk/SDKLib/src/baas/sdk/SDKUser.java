@@ -224,23 +224,23 @@ class SDKUser implements ISDKUser {
 
 	@Override
 	public boolean isloggedIn(String nick) throws Exception {
-		if(isNetworkAvailable()){
-				HttpGet obtener = new HttpGet(l_baseURL + "/" + l_appid + "/"
-						+ nick+"/login");
-				HttpResponse resp = l_httpClient.execute(obtener);
-				JSONObject jObj = Helper_Http.obtenerJSONRespuesta(resp);
-				if (jObj == null) {
-					throw new Exception("Error"+Constants.User_Login_parsingException);
-				} else {
-					if(Helper_Http.obtenerCodigo(jObj)==0){
-						return true;
-					}else{
-						return false;
-					}
-				}
-		}else{
+//		if(isNetworkAvailable()){
+//				HttpGet obtener = new HttpGet(l_baseURL + "/" + l_appid + "/"
+//						+ nick+"/login");
+//				HttpResponse resp = l_httpClient.execute(obtener);
+//				JSONObject jObj = Helper_Http.obtenerJSONRespuesta(resp);
+//				if (jObj == null) {
+//					throw new Exception("Error"+Constants.User_Login_parsingException);
+//				} else {
+//					if(Helper_Http.obtenerCodigo(jObj)==0){
+//						return true;
+//					}else{
+//						return false;
+//					}
+//				}
+//		}else{
 			return((logged_nick != null) &&(!logged_nick.isEmpty()));
-		}
+//		}
 	}
 	
 	private boolean isNetworkAvailable() {
