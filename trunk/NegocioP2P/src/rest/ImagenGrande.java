@@ -6,17 +6,26 @@ import org.json.JSONObject;
 //import com.trueque.VerTruequeActivity;
 //import com.trueque.VerTruequesActivity;
 
+
+
+import com.trueque.IngresarTrueque;
+import com.trueque.R;
+import com.trueque.VerTruequeActivity;
+
 import baas.sdk.Factory;
 import baas.sdk.messages.MessageJson;
 import baas.sdk.messages.MessageJsonList;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 
-public class ImagenGrande extends AsyncTask< String, Integer, Boolean> {
+public class ImagenGrande extends AsyncTask< String, Integer, String> {
 	
 	private ProgressDialog dialog;
 	private Context context;
@@ -33,33 +42,34 @@ public class ImagenGrande extends AsyncTask< String, Integer, Boolean> {
 	}
 
 	@Override
-	protected Boolean doInBackground(String... params) {
+	public String doInBackground(String... params) {
 		try{
 			
 			
-//			Factory.initialize(1, context);
-//			try {
-//				sdkJson = Factory.getJsonSDK();
-//			} catch (NotInitilizedException e) {
-//			}
-//			id = params[1];
-//			JSONObject query = new JSONObject();
-//			query.put("imagenId", params[0]);
-////			//imagenGrande.put("Imagen",Constants.json_imagen_grande);
-//			mjimagen = sdkJson.getJsonList(query, 0, 1);
-//			
+			Factory.initialize(1, context);
+			try {
+				sdkJson = Factory.getJsonSDK();
+			} catch (NotInitilizedException e) {
+			}
+			id = params[1];
+			JSONObject query = new JSONObject();
+			query.put("imagenId", params[0]);
+			mjimagen = sdkJson.getJsonList(query, 0, 1);
+			return mjimagen.resultList.getJSONObject(0).getString("Imagen");
 			
 			
 		}catch(Exception e){	
 			e.printStackTrace();
+			return null;
 		}
-		return null;
+
 	}
 
-	@Override
-	protected void onPostExecute(Boolean result) {
-		// TODO Auto-generated method stub
+//	@Override
+//	protected void onPostExecute(Boolean result) {
+//		
 		
+//		
 //		Intent i = new Intent(this.context.getApplicationContext() , VerTruequeActivity.class);
 //        i.putExtra("id", id);
 //        try {
@@ -70,7 +80,7 @@ public class ImagenGrande extends AsyncTask< String, Integer, Boolean> {
 //		}
 //       this.context.startActivity(i);	
 		
-		super.onPostExecute(result);
-	}
+//		super.onPostExecute(result);
+//	}
 
 }

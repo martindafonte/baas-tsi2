@@ -3,9 +3,15 @@ package com.trueque;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import rest.ImagenGrande;
+import baas.sdk.utils.Constants;
+
+import com.trueque.VerTruequesActivity.adaptarElemento;
+
 import rest.ListarComunicacion;
-import android.annotation.SuppressLint;
+import rest.ListarOfertas;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Looper;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -13,55 +19,46 @@ import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Looper;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import baas.sdk.utils.Constants;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class VerTruequesActivity extends Fragment {
-
-	// private TextView tv1;
+public class VerOfertas extends Fragment {
+	ListarOfertas bw_listarOfertas;
+	private ProgressDialog dialog;
+	AsyncTask<Void, Void, Void> tarea;
 	private ListView lv1;
 	private adaptarElemento adapter;
 	private String idimagen;
 	private String idtrueque;
-	ListarComunicacion bw_listarComunicacion;
-	private ProgressDialog dialog;
-	AsyncTask<Void, Void, Void> tarea;
-	String n;
-
-
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.ver_trueques, container, false);
+		return inflater.inflate(R.layout.ver_ofertas, container, false);
 	}
 
 	@Override
 	public void onStart() {
-		String n = getArguments().getString("idUsuario");
-		bw_listarComunicacion = new ListarComunicacion(getActivity(),n);
-		// Nick es null si es listar trueques si no es ver mis trueques
+		// ver nick!
+		bw_listarOfertas = new ListarOfertas(getActivity(),getArguments().getString("idTrueque"));
 		super.onStart();
 
 	}
-
+	
 	@Override
 	public void onResume() {
 		super.onResume();
 	}
-
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,7 +75,7 @@ public class VerTruequesActivity extends Fragment {
 			@Override
 			protected void onPreExecute() {
 				dialog = new ProgressDialog(getActivity());
-				dialog.setMessage("Cargando Trueques");
+				dialog.setMessage("Cargando Ofertas");
 				dialog.show();
 				super.onPreExecute();
 			}
@@ -90,7 +87,7 @@ public class VerTruequesActivity extends Fragment {
 					Looper.prepare();
 				}
 				try {
-					bw_listarComunicacion.doInBackground("trueque");
+					bw_listarOfertas.doInBackground("oferta");
 				} catch (Exception e) {
 					dialog.setMessage("Ocurri� una excepcion");
 				}
@@ -99,11 +96,21 @@ public class VerTruequesActivity extends Fragment {
 		}.execute(null, null, null);
 
 	}
+	
 
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.ver_ofertas, menu);
+//		return true;
+//	}
+	
+	
 	public void ponerAdapter() {
+		
 		lv1 = (ListView) getActivity().findViewById(R.id.list);
 		adapter = new adaptarElemento(getActivity());
-
+		
 		lv1.setEmptyView(getActivity().findViewById(R.id.empty));
 		lv1.setAdapter(adapter);
 
@@ -140,70 +147,59 @@ public class VerTruequesActivity extends Fragment {
 //			}
 		});
 	}
-
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// // Handle presses on the action bar items
-	// switch (item.getItemId()) {
-	// case android.R.id.home:
-	// Intent i = new Intent(getActivity(), MainActivity.class);
-	// startActivity(i);
-	// return true;
-	// default:
-	// return super.onOptionsItemSelected(item);
-	// }
-	// }
-
+	
 	// ********* ADAPTAR ITEM ***************
-	public class adaptarElemento extends ArrayAdapter<Object> {
-		Activity context;
-		String[] categorias;
+		public class adaptarElemento extends ArrayAdapter<Object> {
+			Activity context;
+			String[] categorias;
 
-		public adaptarElemento(Activity c) {
-			super(c, R.layout.ver_trueques, MainActivity.trueques);
-			this.context = c;
-			Resources res = getResources();
-			categorias = res.getStringArray(R.array.array_categorias);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-
-			LayoutInflater i = context.getLayoutInflater();
-			View item = i.inflate(R.layout.item_trueque, null);
-			JSONObject j;
-			try {
-				j = new JSONObject(MainActivity.trueques[position]);
-				TextView Tipo = (TextView) item.findViewById(R.id.title);
-				Tipo.setText(categorias[Integer.parseInt(j.getString("tipo"))]);
-
-				// TextView Valor = (TextView)
-				// item.findViewById(R.id.secondLine);
-				// Valor.setText(j.getString("Valor"));
-
-				TextView Descripcion = (TextView) item
-						.findViewById(R.id.artist);
-				Descripcion.setText(j.getString("descripcion"));
-
-				ImageView imagen = (ImageView) item
-						.findViewById(R.id.list_image);
-				if (!j.getString("Imagen").equals("")) {
-					byte[] encodeByte = Base64.decode(j.getString("Imagen"),
-							Base64.DEFAULT);
-					Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte,
-							0, encodeByte.length);
-					imagen.setImageBitmap(bitmap);
-				}
-
-				return item;
-			} catch (JSONException e) {
-
-				e.printStackTrace();
+			public adaptarElemento(Activity c) {
+				
+				super(c, R.layout.ver_ofertas, MainActivity.trueques);
+				this.context = c;
+				Resources res = getResources();
+				categorias = res.getStringArray(R.array.array_categorias);
 			}
 
-			return null;
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+
+				LayoutInflater i = context.getLayoutInflater();
+				View item = i.inflate(R.layout.item_trueque, null);
+				JSONObject j;
+				try {
+					j = new JSONObject(MainActivity.trueques[position]);
+					TextView Tipo = (TextView) item.findViewById(R.id.title);
+					Tipo.setText(categorias[Integer.parseInt(j.getString("tipo"))]);
+
+					// TextView Valor = (TextView)
+					// item.findViewById(R.id.secondLine);
+					// Valor.setText(j.getString("Valor"));
+
+					TextView Descripcion = (TextView) item
+							.findViewById(R.id.artist);
+					Descripcion.setText(j.getString("descripcion"));
+
+					ImageView imagen = (ImageView) item
+							.findViewById(R.id.list_image);
+					if (!j.getString("Imagen").equals("")) {
+						byte[] encodeByte = Base64.decode(j.getString("Imagen"),
+								Base64.DEFAULT);
+						Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte,
+								0, encodeByte.length);
+						imagen.setImageBitmap(bitmap);
+					}
+
+					return item;
+				} catch (JSONException e) {
+
+					e.printStackTrace();
+				}
+
+				return null;
+			}
+
 		}
 
-	}
 
 }
