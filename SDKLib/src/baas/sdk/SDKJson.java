@@ -319,7 +319,7 @@ public class SDKJson implements ISDKJson {
 		try {
 			BaasDbCache dbHelper = new BaasDbCache(l_ctx);
 			SQLiteDatabase db = dbHelper.getWritableDatabase();
-			Cursor c= db.query(Cache.TABLE_NAME, PROJECTION, Cache.COLUMN_NAME_ITEM_ID+"="+ keyvalue, null, null, null, null);
+			Cursor c= db.query(Cache.TABLE_NAME, PROJECTION, Cache.COLUMN_NAME_ITEM_ID+"= '"+keyvalue+"'",null, null, null, null);
 			if(c.moveToFirst()){
 				json =c.getString(COLUMN_JSON);
 				mj.json=new JSONObject(json);
