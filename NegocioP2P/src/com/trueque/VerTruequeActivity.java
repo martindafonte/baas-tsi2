@@ -230,8 +230,7 @@ public class VerTruequeActivity extends Fragment {
 		fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 				.commit();
 		getActivity().setTitle("Ofertar");
-		
-		
+		getActivity().invalidateOptionsMenu();
 //		Intent i = new Intent(VerTruequeActivity.this, CrearOferta.class);
 //		try {
 //			i.putExtra("nick_trueque", j.getString("_id"));

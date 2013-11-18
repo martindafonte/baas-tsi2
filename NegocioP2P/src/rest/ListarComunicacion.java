@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import baas.sdk.Factory;
+import baas.sdk.messages.MessageJson;
 import baas.sdk.messages.MessageJsonList;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
@@ -73,10 +74,13 @@ public class ListarComunicacion{
 		    MainActivity.trueques = new String[array.length()];
 
 	        for(int i=0;i<MainActivity.trueques.length;i++) {
-	        		JSONObject query = new JSONObject();
-	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
-					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
-					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
+//	        		JSONObject query = new JSONObject();
+//	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
+//					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
+//	        		MessageJson mjimagen = sdkJson.getJsonFromCache(23);
+//					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
+	        		MessageJson mjimagen = sdkJson.getJsonFromCacheWithId("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
+	        		JSONObject j = mjimagen.json;
 					array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
 					MainActivity.trueques[i] = array.getString(i);
 	        }
