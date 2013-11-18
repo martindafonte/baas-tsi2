@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import baas.sdk.messages.Message;
@@ -30,9 +31,9 @@ class SDKUser implements ISDKUser {
 	private String l_appid;
 	private String l_baseURL;
 	private String logged_nick;
+	private Context l_context;
 
-
-	SDKUser(DefaultHttpClient p_httpclient, long p_app_id) {
+	SDKUser(DefaultHttpClient p_httpclient, long p_app_id, Context c) {
 		l_httpClient = p_httpclient;
 		l_appid = String.valueOf(p_app_id);
 		l_baseURL = baas.sdk.utils.Constants.baseURL + "/Users";
@@ -56,6 +57,12 @@ class SDKUser implements ISDKUser {
 				msg.codigo = Helper_Http.obtenerCodigo(jObj);
 				msg.descripcion = Helper_Http.obtenerDescripcion(jObj);
 				logged_nick = nick;
+			}
+			if(msg.codigo==0){
+				SharedPreferences sharedPref = l_context.getSharedPreferences("SDK", Context.MODE_PRIVATE);
+				SharedPreferences.Editor editor = sharedPref.edit();
+				editor.putString("nick", nick);
+				editor.commit();
 			}
 			return msg;
 		} catch (Exception ex) {
@@ -99,9 +106,9 @@ class SDKUser implements ISDKUser {
 	public Message logout() {
 		Message msg = new Message();
 		try {
-			if ((logged_nick == null) || logged_nick.isEmpty()) {
+			if (! isloggedIn("")) {
 				msg.codigo = Constants.User_no_logged_user;
-				msg.descripcion = "No hay ning�n usuario logeado";
+				msg.descripcion = "No hay ningun usuario logeado";
 				return msg;
 			}
 			HttpDelete register = new HttpDelete(l_baseURL + "/" + l_appid
@@ -239,6 +246,8 @@ class SDKUser implements ISDKUser {
 //					}
 //				}
 //		}else{
+			SharedPreferences sharedPref = l_context.getSharedPreferences("SDK", Context.MODE_PRIVATE);
+			logged_nick = sharedPref.getString("nick",null);
 			return((logged_nick != null) &&(!logged_nick.isEmpty()));
 //		}
 	}
