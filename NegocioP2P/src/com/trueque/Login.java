@@ -60,12 +60,12 @@ public class Login extends Fragment {
 								Factory.initialize(1, getActivity());
 								u = usuarios[0];
 								Message m = Factory.getUserSDK().login(u.Nick, u.Password);
-								if (m.codigo == Constants.Exito){
+							//	if (m.codigo == Constants.Exito){
 									SharedPreferences sharedPref = getActivity().getSharedPreferences("claves", Context.MODE_PRIVATE);
 									SharedPreferences.Editor editor = sharedPref.edit();
-									editor.putString(Constants.nickapp, u.Nick);
+									editor.putString(Constants.nickapp, u.Nick);								
 									editor.commit();
-								}
+								//}
 							} catch (NotInitilizedException e) {
 							}
 							return null;

@@ -56,15 +56,17 @@ public class MainActivity extends Activity {
 	public final static int op_iniciarSesion = 0;
 	public final static int op_altaUsuario = 2;
 	public final static int op_altaTrueque = 4;
+	public final static int op_altaoferta = 5;
 	public int vistaActual = -1;
 	private IngresarTrueque fIngresarTrueque;
+	Bundle args; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		c = this;
-
+		args = new Bundle();
 		mTitle = getTitle();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -148,7 +150,7 @@ public class MainActivity extends Activity {
 			case op_altaUsuario:
 				break;
 			case op_home:
-				vListar = vAgregar = true;
+				vListar  = true;
 				break;
 			}
 		} else {
@@ -165,6 +167,11 @@ public class MainActivity extends Activity {
 				break;
 			case op_altaTrueque:
 				vCamara = vAceptar = true;
+				break;
+			case op_altaoferta:
+				vCamara = vAceptar = true;
+				break;
+			
 			}
 		}
 		menu.findItem(R.id.itemaceptar).setVisible(visible && vAceptar);
@@ -241,22 +248,26 @@ public class MainActivity extends Activity {
 				fragment = new AltaUsuario();
 				break;
 			case op_home:
+				args.putString("idUsuario", null);
 				fragment = new VerTruequesActivity();
 				break;
 			}
 		} else {
 			switch (position) {
 			case op_home:
+				args.putString("idUsuario", null);
 				fragment = new VerTruequesActivity();
 				break;
 			case op_cerrarSesion:
 				CerrarSesion c = new CerrarSesion(this);
 				c.execute();
-				return;
+				break;
 			case op_misTrueques:
-				return;
+				args.putString("idUsuario", user);
+				fragment = new VerTruequesActivity();
+				break;
 			case op_user:
-				return;
+				break;
 			}
 		}
 		vistaActual = position;
@@ -264,6 +275,7 @@ public class MainActivity extends Activity {
 		// Bundle args = new Bundle();
 		// args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
 		// fragment.setArguments(args);
+		fragment.setArguments(args);
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, fragment).commit();

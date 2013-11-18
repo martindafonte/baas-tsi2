@@ -36,51 +36,51 @@ public class ListarOfertas extends AsyncTask <String,Integer,Boolean> {
 	private Context context;
 	public JSONArray array;
 	private baas.sdk.ISDKJson sdkJson;
-	private String nick;
+	private String idTrueque;
 
 	
 	
-	public ListarOfertas(Context c,String nick) {
+	public ListarOfertas(Context c,String idTrueque) {
 		super();
 		context = c;
-		this.nick = nick;
+		this.idTrueque = idTrueque;
 		dialog = new ProgressDialog(context);
+		System.out.println("****** listar ofertas**********");
 		
 	}
 	
-	@Override
-	protected void onPostExecute(Boolean result) {
-		if (dialog.isShowing()){
-			dialog.dismiss();
-		}
-//		Intent i = new Intent(this.context.getApplicationContext(),VerTruequesActivity.class);
-//		this.context.startActivity(i);
-		super.onPostExecute(result);
-	}
+//	@Override
+//	protected void onPostExecute(Boolean result) {
+//		if (dialog.isShowing()){
+//			dialog.dismiss();
+//		}
+////		Intent i = new Intent(this.context.getApplicationContext(),VerTruequesActivity.class);
+////		this.context.startActivity(i);
+//		super.onPostExecute(result);
+//	}
+
+//	@Override
+//	protected void onPreExecute() {
+//		// TODO Auto-generated method stub
+//		super.onPreExecute();
+//		this.dialog.setMessage("Cargando Trueques");
+//		this.dialog.show();
+//		
+//		
+//	}
 
 	@Override
-	protected void onPreExecute() {
-		// TODO Auto-generated method stub
-		super.onPreExecute();
-		this.dialog.setMessage("Cargando Trueques");
-		this.dialog.show();
-		
-		
-	}
-
-	@Override
-	protected Boolean doInBackground(String... params) {
+	public Boolean doInBackground(String... params) {
 		Factory.initialize(1, context);
 		try {
 			sdkJson = Factory.getJsonSDK();
 		} catch (NotInitilizedException e) {
 		}
 		
-		
 		JSONObject json = new JSONObject();
 		try {
 			json.put(Constants.jsonTipoMongo, params[0]);
-			json.put("idTrueque", nick);
+			json.put("idTrueque", idTrueque);
 			
 			
 		} catch (JSONException e) {
@@ -89,17 +89,16 @@ public class ListarOfertas extends AsyncTask <String,Integer,Boolean> {
 		try {	
 			MessageJsonList mj = sdkJson.getJsonList(json,0,10);
 		    array =mj.resultList;
-		    
 		    // LLenar
 //		    
 //		    MainActivity.trueques = new String[array.length()];
 //
 //	        for(int i=0;i<MainActivity.trueques.length;i++) {
-////	        		JSONObject query = new JSONObject();
-////	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
-////					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
-////					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
-//					//array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
+//	        		JSONObject query = new JSONObject();
+//	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
+//					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
+//					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
+//					array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
 //					array.getJSONObject(i).put("Imagen", "");
 //					MainActivity.trueques[i] = array.getString(i);
 //	        }
