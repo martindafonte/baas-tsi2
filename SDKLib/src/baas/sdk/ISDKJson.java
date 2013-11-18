@@ -25,4 +25,8 @@ public interface ISDKJson {
 	public abstract Query getQuery(JSONObject consulta, int cantPorPagina);
 
 	public abstract MessageJsonList getJsonListSelection(JSONObject querry,String[] campos, int from, int cant);
+	
+	public MessageJson getJsonFromCache(int jsonId);
+
+	public MessageJson getJsonFromCacheWithId(String keyname, String keyvalue);
 }

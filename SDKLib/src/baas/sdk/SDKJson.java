@@ -17,11 +17,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.apache.http.NameValuePair;
 
+import com.example.android.network.sync.basicsyncadapter.util.SelectionBuilder;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import baas.sdk.datos.BaasContract.Cache;
+import baas.sdk.datos.BaasContract;
+import baas.sdk.datos.BaasDbCache;
 import baas.sdk.datos.BaasDbHelper;
 import baas.sdk.datos.BaasContract.ColaSinc;
 import baas.sdk.messages.Message;
@@ -123,8 +129,7 @@ public class SDKJson implements ISDKJson {
 	@Override
 	public Message updateJson(int jsonId, JSONObject json, boolean save_offline) {
 		Message mj = new Message();
-		// isNetworkAvailable()
-		if (!save_offline || true) {
+		if (!save_offline || isNetworkAvailable()) {
 			try {
 				HttpPut put = new HttpPut(l_baseURL
 						+ "/"
@@ -241,7 +246,7 @@ public class SDKJson implements ISDKJson {
 			JSONObject obj = Helper_Http.obtenerJSONRespuesta(resp);
 			mj.codigo = Helper_Http.obtenerCodigo(obj);
 			mj.descripcion = Helper_Http.obtenerDescripcion(obj);
-			String a = obj.getString(Constants.json); 
+			obj.getString(Constants.json); 
 			if ( obj.getString(Constants.json).equals("null"))
 				mj.resultList = new JSONArray();
 			else
@@ -254,4 +259,94 @@ public class SDKJson implements ISDKJson {
 		return mj;
 	}
 	
+    private static final String[] PROJECTION = new String[] {
+    	Cache._ID,
+    	Cache.COLUMN_NAME_ITEM_ID,
+    	Cache.COLUMN_NAME_JSON
+    };
+    public static final int COLUMN_ID = 0;
+    public static final int COLUMN_ITEM_ID = 1;
+    public static final int COLUMN_JSON = 2;
+
+	@Override
+	public MessageJson getJsonFromCache(int jsonId) {
+		MessageJson mj = new MessageJson();
+		String json;
+		try {
+			BaasDbCache dbHelper = new BaasDbCache(l_ctx);
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
+//			SelectionBuilder sb = new SelectionBuilder();
+			Cursor c= db.query(Cache.TABLE_NAME, PROJECTION, Cache.COLUMN_NAME_ITEM_ID+"="+ String.valueOf(jsonId), null, null, null, null);
+//		    sb.table(Cache.TABLE_NAME);
+//		    sb.where(Cache.COLUMN_NAME_ITEM_ID +"=?s", );
+//		    =sb.query(db, PROJECTION, Cache._ID);
+			if(c.moveToFirst()){
+				json =c.getString(COLUMN_JSON);
+				mj.json=new JSONObject(json);
+				mj.codigo=0;
+			}else{
+			String id = Integer.toString(jsonId);
+			String app = l_appid;
+			HttpGet del = new HttpGet(l_baseURL + "/" + app + "/" + id);
+			del.setHeader("content-type", "application/json");
+			HttpResponse resp = l_httpClient.execute(del);
+			JSONObject obj = Helper_Http.obtenerJSONRespuesta(resp);
+			mj.codigo = Helper_Http.obtenerCodigo(obj);
+			mj.descripcion = Helper_Http.obtenerDescripcion(obj);
+			json=obj.getString(Constants.json);
+			mj.json = new JSONObject(json);
+			//Guardo la copia en cache
+			
+			ContentValues values = new ContentValues();
+			values.put(Cache.COLUMN_NAME_JSON,json);
+			values.put(Cache.COLUMN_NAME_ITEM_ID, String.valueOf(jsonId));
+			long idkey=db.insert(Cache.TABLE_NAME, null, values);
+			}
+			db.close();
+			return mj;
+		} catch (Exception e) {
+			mj.codigo = Constants.JSON_Exception;
+			mj.descripcion = e.getMessage();
+			return mj;
+		}
+
+	}
+	
+	@Override
+	public MessageJson getJsonFromCacheWithId(String keyname, String keyvalue) {
+		MessageJson mj = new MessageJson();
+		String json;
+		try {
+			BaasDbCache dbHelper = new BaasDbCache(l_ctx);
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
+			Cursor c= db.query(Cache.TABLE_NAME, PROJECTION, Cache.COLUMN_NAME_ITEM_ID+"="+ keyvalue, null, null, null, null);
+			if(c.moveToFirst()){
+				json =c.getString(COLUMN_JSON);
+				mj.json=new JSONObject(json);
+				mj.codigo=0;
+			}else{
+				JSONObject querry = new JSONObject();
+				querry.put(keyname, keyvalue);
+			MessageJsonList mjl = getJsonList(querry, 0, 1);
+			//Guardo la copia en cache
+			mj.json = mjl.resultList.getJSONObject(0);
+			if(mj.json != null){
+				mj.codigo = 0;
+			}else{
+				mj.codigo = -1;
+			}
+			ContentValues values = new ContentValues();
+			values.put(Cache.COLUMN_NAME_JSON,mj.json.toString());
+			values.put(Cache.COLUMN_NAME_ITEM_ID, keyvalue);
+			long idkey=db.insert(Cache.TABLE_NAME, null, values);
+			}
+			db.close();
+			return mj;
+		} catch (Exception e) {
+			mj.codigo = Constants.JSON_Exception;
+			mj.descripcion = e.getMessage();
+			return mj;
+		}
+
+	}
 }

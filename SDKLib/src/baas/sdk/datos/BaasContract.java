@@ -12,4 +12,10 @@ public abstract class BaasContract {
         public static final String COLUMN_NAME_ACCION = "accion";
         public static final String COLUMN_NAME_JSON = "json";
     }
+    
+    public static abstract class Cache implements BaseColumns {
+    	public static final String TABLE_NAME = "Cache";
+        public static final String COLUMN_NAME_ITEM_ID = "itemid";
+        public static final String COLUMN_NAME_JSON = "json";
+    }
 }
