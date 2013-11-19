@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import com.trueque.R.menu;
 
 import baas.sdk.Factory;
+import baas.sdk.messages.MessageJson;
 import baas.sdk.messages.MessageJsonList;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
@@ -99,16 +100,14 @@ public class VerTruequeActivity extends BaseFragment {
 					baas.sdk.ISDKJson sdkJson = Factory.getJsonSDK();
 					JSONObject query = new JSONObject();
 					query.put("imagenId", getArguments().getString("idimagen"));
-					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
-					imagenGrande =mjimagen.resultList.getJSONObject(0).getString("Imagen");
+//					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
+					MessageJson mjimagen = sdkJson.getJsonFromCacheWithId("idImagen", getArguments().getString("idimagen"));
+//					imagenGrande =mjimagen.resultList.getJSONObject(0).getString("Imagen");
+					imagenGrande = mjimagen.json.getString("Imagen");
 					
 				} catch (NotInitilizedException e) {
 				}
 				catch (JSONException e) {
-					e.printStackTrace();
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				return null;
