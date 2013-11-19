@@ -62,28 +62,6 @@ public class CrearOferta extends Fragment {
         spinnerMoneda.setAdapter(adapter2);
 	}
 
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.crear_oferta, menu);
-//		return true;
-//	}
-	
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//	    switch (item.getItemId()) {
-//	    	case android.R.id.home:
-//	    		Intent i = new Intent(this, MainActivity.class );
-//	            startActivity(i);
-//	            return true;
-//	    	case R.id.aceptarOferta:
-//	    		agregarOferta();
-//	            return true;
-//	        default:
-//	            return super.onOptionsItemSelected(item);
-//	    }
-//	}
-
 	public void agregarOferta() {
 		Oferta o = new Oferta();
 		Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinnerCategorias);
@@ -108,8 +86,8 @@ public class CrearOferta extends Fragment {
 //       	 imagenGrande = "";
 //        }
 //        
-//        t.imagenChica = imagenchica;
-//        t.imagenGrande = imagenGrande;
+        o.imagenChica = "";
+        o.imagenGrande = "";
 //        SharedPreferences sharedPref = this.getSharedPreferences("claves", Context.MODE_PRIVATE);
 //		t.nick = sharedPref.getString(Constants.nickapp, null);
 //		

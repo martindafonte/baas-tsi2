@@ -100,42 +100,7 @@ public class IngresarTrueque extends Fragment {
 		
 	}
 	
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// super.onCreateOptionsMenu(menu);
-	// MenuInflater inflater = getMenuInflater();
-	// inflater.inflate(R.menu.main, menu);
-	// return true;
-	//
-	// }
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// // Handle presses on the action bar items
-	// switch (item.getItemId()) {
-	// case android.R.id.home:
-	// Intent i = new Intent(this, MainActivity.class );
-	// startActivity(i);
-	// return true;
-	// case R.id.itemaceptar:
-	// if (modo.equals("editar")){
-	// try {
-	// editarTrueque();
-	// } catch (JSONException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// else{
-	// agregarTrueque();
-	// }
-	//
-	// return true;
-	// case R.id.itemcamara:
-	// captureImage();
-	// return true;
-	// default:
-	// return super.onOptionsItemSelected(item);
-	// }
-	// }
+	
 
 	@Override
 	public void onStart() {

@@ -47,6 +47,7 @@ public class MainActivity extends Activity implements ChangeFragment{
 	private ActionBarDrawerToggle mDrawerToggle;
 	public static Context c;
 	public static String trueques[];
+	public static String ofertas[];
 	// private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	private String[] l_drawerItemList;
@@ -59,9 +60,11 @@ public class MainActivity extends Activity implements ChangeFragment{
 	public final static int op_altaUsuario = 2;
 	public final static int op_altaTrueque = 4;
 	public final int op_altaoferta = 5;
+	public final int op_verofertas = 6;
 	public int vistaActual = -1;
 	private IngresarTrueque fIngresarTrueque;
 	private CrearOferta fIngresarOferta;
+	private VerOfertas fVerOfertas;
 	private VerTruequesActivity fVerTrueques = null;
 	private Fragment actual = null;
 	Bundle args; 
@@ -176,7 +179,6 @@ public class MainActivity extends Activity implements ChangeFragment{
 			case op_altaoferta:
 				vCamara = vAceptar = true;
 				break;
-			
 			}
 		}
 		menu.findItem(R.id.itemaceptar).setVisible(visible && vAceptar);
@@ -401,9 +403,14 @@ public class MainActivity extends Activity implements ChangeFragment{
 	public void changeFragment(int pantalla, Fragment f) {
 		
 		vistaActual = pantalla;
-		if (vistaActual == op_altaoferta){
+		switch (vistaActual) {
+		case op_altaoferta:
 			fIngresarOferta =(CrearOferta) f;
+			break;
+
+		case op_verofertas:
+			fVerOfertas = (VerOfertas) f;
+			break;
 		}
-		
 	}
 }
