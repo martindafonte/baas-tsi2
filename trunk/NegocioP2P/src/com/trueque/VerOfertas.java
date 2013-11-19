@@ -155,7 +155,7 @@ public class VerOfertas extends Fragment {
 
 			public adaptarElemento(Activity c) {
 				
-				super(c, R.layout.ver_ofertas, MainActivity.trueques);
+				super(c, R.layout.ver_ofertas, MainActivity.ofertas);
 				this.context = c;
 				Resources res = getResources();
 				categorias = res.getStringArray(R.array.array_categorias);
@@ -168,7 +168,7 @@ public class VerOfertas extends Fragment {
 				View item = i.inflate(R.layout.item_trueque, null);
 				JSONObject j;
 				try {
-					j = new JSONObject(MainActivity.trueques[position]);
+					j = new JSONObject(MainActivity.ofertas[position]);
 					TextView Tipo = (TextView) item.findViewById(R.id.title);
 					Tipo.setText(categorias[Integer.parseInt(j.getString("tipo"))]);
 

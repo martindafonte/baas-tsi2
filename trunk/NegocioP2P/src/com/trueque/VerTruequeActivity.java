@@ -212,9 +212,10 @@ public class VerTruequeActivity extends BaseFragment {
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 				.commit();
-		getActivity().setTitle("Ver Trueque");
-		m.vistaActual = m.op_altaoferta;
+		getActivity().setTitle("Ofertas");
+		m.vistaActual = m.op_verofertas;
 		getActivity().invalidateOptionsMenu();
+		this.changeScreen(m.op_verofertas, f);
 		
 	
 	}
