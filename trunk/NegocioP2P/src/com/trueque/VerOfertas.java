@@ -89,7 +89,7 @@ public class VerOfertas extends Fragment {
 				try {
 					bw_listarOfertas.doInBackground("oferta");
 				} catch (Exception e) {
-					dialog.setMessage("Ocurri� una excepcion");
+					dialog.setMessage("Ocurrio una excepcion");
 				}
 				return null;
 			}
