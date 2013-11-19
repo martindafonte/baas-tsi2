@@ -90,18 +90,22 @@ public class ListarOfertas extends AsyncTask <String,Integer,Boolean> {
 			MessageJsonList mj = sdkJson.getJsonList(json,0,10);
 		    array =mj.resultList;
 		    // LLenar
-//		    
-//		    MainActivity.trueques = new String[array.length()];
-//
-//	        for(int i=0;i<MainActivity.trueques.length;i++) {
-//	        		JSONObject query = new JSONObject();
-//	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
-//					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
-//					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
-//					array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
-//					array.getJSONObject(i).put("Imagen", "");
-//					MainActivity.trueques[i] = array.getString(i);
-//	        }
+		    
+		    MainActivity.ofertas = new String[array.length()];
+
+	        for(int i=0;i<MainActivity.ofertas.length;i++) {
+	        	try{
+	        		JSONObject query = new JSONObject();
+	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
+					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
+					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
+					array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
+					array.getJSONObject(i).put("Imagen", "");
+					MainActivity.ofertas[i] = array.getString(i);
+	        	}catch(Exception e){
+	        		
+	        	}
+	        }
 			
 		} catch (ClientProtocolException e1) {
 			e1.printStackTrace();
