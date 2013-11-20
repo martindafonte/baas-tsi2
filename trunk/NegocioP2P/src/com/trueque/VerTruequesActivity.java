@@ -50,7 +50,7 @@ public class VerTruequesActivity extends Fragment {
 
 	@Override
 	public void onStart() {
-		String n = getArguments().getString("idUsuario");
+		n = getArguments().getString("idUsuario");
 		bw_listarComunicacion = new ListarComunicacion(getActivity(),n);
 		// Nick es null si es listar trueques si no es ver mis trueques
 		super.onStart();
@@ -125,7 +125,9 @@ public class VerTruequesActivity extends Fragment {
 					FragmentManager fragmentManager = getFragmentManager();
 					fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 							.commit();
-					getActivity().setTitle("Ver Trueque");
+					MainActivity m = (MainActivity) getActivity();
+					
+					m.setTitle("Ver Trueque");
 					
 					//Buscarfoto();
 				} catch (JSONException e) {

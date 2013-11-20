@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import baas.sdk.Factory;
+import baas.sdk.messages.MessageJsonList;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
@@ -58,8 +59,26 @@ public class EliminarComunicacion  extends AsyncTask<JSONObject,Integer,Boolean>
 				dialog.dismiss();
 			}
 			JSONObject j = params[0];
-			//sdkJson.deleteJson(j.getInt(Constants.json_id_imagen_chica));
-			//sdkJson.deleteJson(j.getInt(Constants.json_id_imagen_grande));
+			String idImagenChica = j.getString(Constants.json_id_imagen_chica);
+			String idImagenGrande = j.getString(Constants.json_id_imagen_grande);
+			// Pedir ids y imagen id
+			JSONObject j2 = new JSONObject();
+			j2.put("imagenId", idImagenChica);
+			j2.put("TipoObjeto", "ImagenChica");
+			String[] s = new String[1];
+			s[0] = "_id";
+			MessageJsonList m = sdkJson.getJsonListSelection(j2, s, 0, 1);
+			int imchicha = Integer.parseInt((m.resultList.getJSONObject(0)).getString("_id"));
+			sdkJson.deleteJson(imchicha);
+			j2 = new JSONObject();
+			j2.put("imagenId", idImagenGrande);
+			j2.put("TipoObjeto", "ImagenGrande");
+			s = new String[1];
+			s[0] = "_id";
+			m = sdkJson.getJsonListSelection(j2, s, 0, 1);
+			int imgrande = Integer.parseInt((m.resultList.getJSONObject(0)).getString("_id"));
+			
+			sdkJson.deleteJson(imgrande);
 			sdkJson.deleteJson(j.getInt(Constants.jsonidMongo));
 			
 			return true;

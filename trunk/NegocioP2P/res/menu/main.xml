@@ -19,4 +19,13 @@
          android:showAsAction="ifRoom"
          android:icon="@drawable/ic_action_accept"
          ></item>
+    <item android:id="@+id/itemeditar"
+         android:showAsAction="ifRoom"
+         android:icon="@drawable/ic_action_edit"
+         ></item>
+     <item android:id="@+id/itemeborrar"
+         android:showAsAction="ifRoom"
+         android:icon="@drawable/ic_action_remove"
+         ></item>
+    
 </menu>

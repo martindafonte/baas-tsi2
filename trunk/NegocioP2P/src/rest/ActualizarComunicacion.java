@@ -19,8 +19,12 @@ import org.json.JSONObject;
 
 
 
+
+
 import baas.sdk.Factory;
+import baas.sdk.messages.Message;
 import baas.sdk.messages.MessageJson;
+import baas.sdk.messages.MessageJsonList;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
@@ -77,26 +81,43 @@ public class ActualizarComunicacion extends AsyncTask<Trueque,Integer,Boolean> {
 			
 			Gson g = new Gson();
 			Transaccion t = trueques[0];
-			int tiempo = Calendar.getInstance().get(Calendar.SECOND);
+		//	int tiempo = Calendar.getInstance().get(Calendar.SECOND);
 			try {	
 				// si no cambio la foto no actualizo
 				if (!t.imagenChica.equals("")){
 					JSONObject imagenChica = new JSONObject();
 					imagenChica.put(Constants.jsonTipoMongo,Constants.json_imagen_chica);
 					imagenChica.put("Imagen",t.imagenChica);
-					imagenChica.put("imagenId","chica"+t.nick+tiempo);
-					MessageJson mjImagenChica = sdkJson.addJson(imagenChica,true);
-					//sdkJson.updateJson(t.id_imagenChica,imagenChica);
+					imagenChica.put("imagenId", t.id_imagenChica);
+				//	imagenChica.put("imagenId","chica"+t.nick+tiempo);
+				//	MessageJson mjImagenChica = sdkJson.addJson(imagenChica,true);
+					
+					JSONObject j2 = new JSONObject();
+					j2.put("imagenId", t.id_imagenChica);
+					j2.put("TipoObjeto", "ImagenChica");
+					String[] s = new String[1];
+					s[0] = "_id";
+					MessageJsonList m = sdkJson.getJsonListSelection(j2, s, 0, 1);
+					int imchicha = Integer.parseInt((m.resultList.getJSONObject(0)).getString("_id"));
+					Message m2 = sdkJson.updateJson(imchicha,imagenChica,true);
 					
 					JSONObject imagenGrande = new JSONObject();
 					imagenGrande.put(Constants.jsonTipoMongo, Constants.json_imagen_grande);
 					imagenGrande.put("Imagen",t.imagenGrande);
-					imagenGrande.put("imagenId","grande"+t.nick+tiempo);
-					MessageJson mjImagenGrande = sdkJson.addJson(imagenGrande,true);
-					//sdkJson.updateJson(t.id_imagenGrande, imagenGrande);
+					imagenGrande.put("imagenId",t.id_imagenGrande);
+				//	MessageJson mjImagenGrande = sdkJson.addJson(imagenGrande,true);
 					
-					t.id_imagenChica = "chica"+t.nick+tiempo;
-					t.id_imagenGrande = "grande"+t.nick+tiempo;
+					j2 = new JSONObject();
+					j2.put("imagenId", t.id_imagenGrande);
+					j2.put("TipoObjeto", "ImagenGrande");
+					s = new String[1];
+					s[0] = "_id";
+					m = sdkJson.getJsonListSelection(j2, s, 0, 1);
+					int imgrande = Integer.parseInt((m.resultList.getJSONObject(0)).getString("_id"));
+				  	m2 = sdkJson.updateJson(imgrande, imagenGrande,true);
+					
+//					t.id_imagenChica = "chica"+t.nick+tiempo;
+//					t.id_imagenGrande = "grande"+t.nick+tiempo;
 				}
 				t.imagenChica = "";
 				t.imagenGrande = "";
@@ -105,11 +126,7 @@ public class ActualizarComunicacion extends AsyncTask<Trueque,Integer,Boolean> {
 				
 		    }catch(JSONException e){
 		    	e.printStackTrace();
-		    } catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} 
+		    } 
 			return true;
 	}
 
