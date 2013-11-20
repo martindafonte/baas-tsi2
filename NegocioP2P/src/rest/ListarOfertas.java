@@ -97,10 +97,11 @@ public class ListarOfertas extends AsyncTask <String,Integer,Boolean> {
 	        	try{
 	        		JSONObject query = new JSONObject();
 	        		query.put("imagenId",array.getJSONObject(i).getString(Constants.json_id_imagen_chica));
+	        		query.put("TipoObjeto", "ImagenChica");
 					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
 					JSONObject j = (JSONObject) mjimagen.resultList.get(0);
 					array.getJSONObject(i).put("Imagen", j.getString("Imagen"));
-					array.getJSONObject(i).put("Imagen", "");
+				//	array.getJSONObject(i).put("Imagen", "");
 					MainActivity.ofertas[i] = array.getString(i);
 	        	}catch(Exception e){
 	        		
