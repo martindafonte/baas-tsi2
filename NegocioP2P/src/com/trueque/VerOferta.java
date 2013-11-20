@@ -77,7 +77,7 @@ public class VerOferta extends BaseFragment {
 					// MessageJsonList mjimagen = sdkJson.getJsonList(query, 0,
 					// 1);
 					MessageJson mjimagen = sdkJson.getJsonFromCacheWithId(
-							"idImagen", getArguments().getString("idimagen"));
+							"imagenId", getArguments().getString("idimagen"));
 					// imagenGrande
 					// =mjimagen.resultList.getJSONObject(0).getString("Imagen");
 					imagenGrande = mjimagen.json.getString("Imagen");
