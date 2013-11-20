@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements ChangeFragment{
 	public final static int op_altaoferta = 5;
 	public final static int op_verofertas = 6;
 	public final static int op_veroferta = 7;
-	public final int op_verTrueque = 7;
+	public final int op_verTrueque = 9;
 	public final int op_editarTrueque = 8;
 	public boolean op_miTrueque = false;
 	
@@ -149,8 +149,6 @@ public class MainActivity extends Activity implements ChangeFragment{
 	@Override
 	protected void onStart() {
 		super.onStart();
-//		Intent in = getIntent();
-		//TODO ver si me llega un intent que hacer con el
 	}
 
 	@Override
@@ -259,7 +257,10 @@ public class MainActivity extends Activity implements ChangeFragment{
 			}
 			return true;
 		case R.id.itemcamara:
-			fIngresarTrueque.captureImage();
+			if (vistaActual == op_altaTrueque)
+				fIngresarTrueque.captureImage();
+			else if (vistaActual == op_altaoferta)
+				fIngresarOferta.captureImage();
 			return true;
 		case R.id.itemeborrar:
     		 try {
