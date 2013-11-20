@@ -15,6 +15,7 @@
  */
 
 package com.trueque;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,9 +28,6 @@ import rest.EliminarComunicacion;
 import com.google.gson.JsonObject;
 import com.example.android.network.sync.basicsyncadapter.SyncUtils;
 import com.trueque.BaseFragment.ChangeFragment;
-
-
-
 
 import android.app.Activity;
 import android.content.Context;
@@ -56,7 +54,9 @@ import baas.sdk.messages.Message;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
-public class MainActivity extends FragmentActivity implements ChangeFragment{
+public class MainActivity extends FragmentActivity implements ChangeFragment {
+	public final static String anavegarextra = "Navigate";
+	public final static String navegarOferta = "oferta";
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 	public final int op_verTrueque = 9;
 	public final int op_editarTrueque = 8;
 	public boolean op_miTrueque = false;
-	
+
 	public int vistaActual = -1;
 	private IngresarTrueque fIngresarTrueque;
 	private CrearOferta fIngresarOferta;
@@ -91,7 +91,7 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 	FragmentManager fragmentManager;
 	public String imagenGrande;
 	Fragment f;
-	Bundle args; 
+	Bundle args;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,12 +143,33 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+		Bundle e = getIntent().getExtras();
+		if (e != null) {
+			String extra = getIntent().getExtras().getString(anavegarextra);
+			if (extra != null && extra.equals(navegarOferta)) {
+				setVerOfertas(getIntent().getExtras().getString("truequeId"));
+			}else{
+				selectItem(1);
+			}
+		}
 		if (savedInstanceState == null) {
 			selectItem(1);
 		}
 		SyncUtils.CreateSyncAccount(this);
-		
+
+	}
+
+	private void setVerOfertas(String truequeId) {
+		Bundle args = new Bundle();
+		args.putString("idTrueque", truequeId);
+		Fragment f = new VerOfertas();
+		f.setArguments(args);
+		android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.content_frame, f)
+				.commit();
+		setTitle("Ofertas");
+		vistaActual = op_verofertas;
+		invalidateOptionsMenu();
 	}
 
 	@Override
@@ -173,7 +194,7 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content
 		// view
-		boolean vAceptar = false, vCamara = false, vListar = false, vAgregar = false, vEditar = false, vBorrar = false ;
+		boolean vAceptar = false, vCamara = false, vListar = false, vAgregar = false, vEditar = false, vBorrar = false;
 
 		boolean visible = !mDrawerLayout.isDrawerOpen(mDrawerList);
 		if (user == null) {
@@ -183,7 +204,7 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 			case op_altaUsuario:
 				break;
 			case op_home:
-				vListar  = true;
+				vListar = true;
 				break;
 			}
 		} else {
@@ -248,11 +269,11 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 			invalidateOptionsMenu();
 			return true;
 		case R.id.itemaceptar:
-			if (vistaActual == op_altaTrueque){
+			if (vistaActual == op_altaTrueque) {
 				fIngresarTrueque.Aceptar();
-			}else if(vistaActual == op_altaoferta){
+			} else if (vistaActual == op_altaoferta) {
 				fIngresarOferta.agregarOferta();
-			}else if (vistaActual == op_editarTrueque){
+			} else if (vistaActual == op_editarTrueque) {
 				try {
 					fIngresarTrueque.editarTrueque();
 				} catch (JSONException e) {
@@ -268,10 +289,10 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 				fIngresarOferta.captureImage();
 			return true;
 		case R.id.itemeborrar:
-    		 try {
-    			 EliminarComunicacion eliminar = new EliminarComunicacion(this);
+			try {
+				EliminarComunicacion eliminar = new EliminarComunicacion(this);
 				JSONObject j = new JSONObject(trueques[indice]);
-				 eliminar.execute(j);
+				eliminar.execute(j);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -288,7 +309,7 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 			setTitle("Editar Trueque");
 			vistaActual = op_editarTrueque;
 			invalidateOptionsMenu();
-   		
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -316,7 +337,7 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 
 	private void selectItem(int position) {
 		// update the main content by replacing fragments
-//		Bundle args = new Bundle();
+		// Bundle args = new Bundle();
 		Fragment fragment = null;
 		boolean noCambia = false;
 		if (user == null) {
@@ -329,53 +350,56 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 				break;
 			case op_home:
 				args.putString("idUsuario", null);
-				if(fVerTrueques == null)
-					fVerTrueques= new VerTruequesActivity();
-				fragment =fVerTrueques;
+				if (fVerTrueques == null){
+					fVerTrueques = new VerTruequesActivity();
+					fVerTrueques.setArguments(args);
+				}
+				fragment = fVerTrueques;
 				break;
 			}
 		} else {
 			switch (position) {
 			case op_home:
 				args.putString("idUsuario", null);
-				if(fVerTrueques == null)
-					fVerTrueques=new VerTruequesActivity();
+				if (fVerTrueques == null) {
+					fVerTrueques = new VerTruequesActivity();
+					fVerTrueques.setArguments(args);
+				}
 				fragment = fVerTrueques;
 				break;
 			case op_cerrarSesion:
 				CerrarSesion c = new CerrarSesion(this);
 				c.execute();
-				if(fVerTrueques == null)
-					fVerTrueques=new VerTruequesActivity();
+				if (fVerTrueques == null)
+					fVerTrueques = new VerTruequesActivity();
 				fragment = fVerTrueques;
 				break;
 			case op_misTrueques:
 				args.putString("idUsuario", user);
 				fragment = new VerTruequesActivity();
+				fragment.setArguments(args);
 				break;
 			case op_user:
 				break;
 			}
 		}
-		if(!fragment.equals(actual)){
+		if (!fragment.equals(actual)) {
 			vistaActual = position;
 			invalidateOptionsMenu();
-		// 	args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-		// fragment.setArguments(args);
-			fragment.setArguments(args);
+			// args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+			// fragment.setArguments(args);
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction().addToBackStack(null)
-				.replace(R.id.content_frame, fragment).commit();
+					.replace(R.id.content_frame, fragment).commit();
 
-		// update selected item and title, then close the drawer
+			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);
 			setTitle(l_drawerItemList[position]);
 		}
-			actual = fragment;
-			mDrawerLayout.closeDrawer(mDrawerList);
+		actual = fragment;
+		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
-	
 	@Override
 	public void setTitle(CharSequence title) {
 		mTitle = title;
@@ -384,9 +408,9 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 
 	public String obtenerUsuarioLogeado() {
 		// // Buscar nick
-		 SharedPreferences sharedPref = this.getSharedPreferences("claves",
-		 Context.MODE_PRIVATE);
-		 return sharedPref.getString(Constants.nickapp, null);
+		SharedPreferences sharedPref = this.getSharedPreferences("claves",
+				Context.MODE_PRIVATE);
+		return sharedPref.getString(Constants.nickapp, null);
 
 	}
 
@@ -417,36 +441,37 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 					R.layout.drawer_list_item, l_drawerItemList));
 		}
 	}
-	
-	class CerrarSesion extends AsyncTask<String, String, String>{
-		
+
+	class CerrarSesion extends AsyncTask<String, String, String> {
+
 		private Context c;
-		
-		
-		public CerrarSesion(Context context){
+
+		public CerrarSesion(Context context) {
 			c = context;
-			
+
 		}
-		
+
 		@Override
 		protected String doInBackground(String... params) {
 			try {
 				Factory.initialize(1, c);
 				Message m = Factory.getUserSDK().logout();
-				if (m.codigo == Constants.Exito){
-					SharedPreferences sharedPref = c.getSharedPreferences("claves", Context.MODE_PRIVATE);
+				if (m.codigo == Constants.Exito) {
+					SharedPreferences sharedPref = c.getSharedPreferences(
+							"claves", Context.MODE_PRIVATE);
 					SharedPreferences.Editor editor = sharedPref.edit();
 					editor.putString(Constants.nickapp, null);
 					editor.commit();
-				}else{
-					SharedPreferences sharedPref = c.getSharedPreferences("claves", Context.MODE_PRIVATE);
+				} else {
+					SharedPreferences sharedPref = c.getSharedPreferences(
+							"claves", Context.MODE_PRIVATE);
 					SharedPreferences.Editor editor = sharedPref.edit();
 					editor.putString(Constants.nickapp, null);
 					editor.commit();
 				}
 			} catch (NotInitilizedException e) {
 			}
-			
+
 			return null;
 		}
 
@@ -459,37 +484,33 @@ public class MainActivity extends FragmentActivity implements ChangeFragment{
 				l_drawerItemList[0] = getString(R.string.IniciarSesion);
 				l_drawerItemList[1] = getString(R.string.Home);
 				l_drawerItemList[2] = getString(R.string.AltaUsuario);
-				mDrawerList.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
-						R.layout.drawer_list_item, l_drawerItemList));
+				mDrawerList.setAdapter(new ArrayAdapter<String>(
+						getApplicationContext(), R.layout.drawer_list_item,
+						l_drawerItemList));
 			}
 		}
-		
-		
-	}
 
-	
+	}
 
 	@Override
 	public void changeFragment(int pantalla, android.support.v4.app.Fragment f) {
 		vistaActual = pantalla;
 		switch (vistaActual) {
 		case op_altaoferta:
-			fIngresarOferta =(CrearOferta) f;
+			fIngresarOferta = (CrearOferta) f;
 			break;
 
 		case op_verofertas:
 			fVerOfertas = (VerOfertas) f;
 			break;
 		}
-		
+
 	}
 
 	@Override
 	public void changeuser(String nick) {
-		this.user=nick;		
+		this.user = nick;
+		logeado(nick);
 	}
 
-
-	
-	
 }

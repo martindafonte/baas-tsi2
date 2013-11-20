@@ -16,6 +16,7 @@ import android.app.Activity;
 
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -110,9 +111,13 @@ public class VerOfertas extends BaseFragment{
 	public void ponerAdapter() {
 		
 		lv1 = (ListView) getActivity().findViewById(R.id.list);
+		lv1.setEmptyView(getActivity().findViewById(R.id.empty));
+		if(MainActivity.ofertas==null || MainActivity.ofertas.length == 0){
+			return;
+		}
 		adapter = new adaptarElemento(getActivity());
 		
-		lv1.setEmptyView(getActivity().findViewById(R.id.empty));
+		
 		lv1.setAdapter(adapter);
 
 		lv1.setOnItemClickListener(new OnItemClickListener() {
@@ -120,26 +125,30 @@ public class VerOfertas extends BaseFragment{
 					int myItemInt, long mylng) {
 				String selectedFromList = (String) (lv1
 						.getItemAtPosition(myItemInt));
-				try {
-					JSONObject json = new JSONObject(selectedFromList);
-					idimagen = json.getString(Constants.json_id_imagen_grande);
-					idoferta = json.getString(Constants.jsonidMongo);
-					// Nuevoo***************
-					Fragment f = new VerOferta();
-					Bundle args = new Bundle();
-					args.putString("idimagen", idimagen);
-					args.putString("idoferta", idoferta);
-					args.putString("jsonoferta", selectedFromList);
-					f.setArguments(args);
-					android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-					fragmentManager.beginTransaction().replace(R.id.content_frame, f)
-							.commit();
-					getActivity().setTitle("Ver Oferta");
-					changeScreen(MainActivity.op_veroferta,null);
-					//Buscarfoto();
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+				 Intent intent = new Intent(getActivity(), VerOfertaColeccionActivity.class);
+				 intent.putExtra("indice", 1);
+				 intent.putExtra("truequeId", getArguments().getString("idTrueque"));
+                 startActivity(intent);
+//				try {
+//					JSONObject json = new JSONObject(selectedFromList);
+//					idimagen = json.getString(Constants.json_id_imagen_grande);
+//					idoferta = json.getString(Constants.jsonidMongo);
+//					// Nuevoo***************
+//					Fragment f = new VerOferta();
+//					Bundle args = new Bundle();
+//					args.putString("idimagen", idimagen);
+//					args.putString("idoferta", idoferta);
+//					args.putString("jsonoferta", selectedFromList);
+//					f.setArguments(args);
+//					android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+//					fragmentManager.beginTransaction().replace(R.id.content_frame, f)
+//							.commit();
+//					getActivity().setTitle("Ver Oferta");
+//					changeScreen(MainActivity.op_veroferta,null);
+//					//Buscarfoto();
+//				} catch (JSONException e) {
+//					e.printStackTrace();
+//				}
 
 			}
 

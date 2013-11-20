@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 
 
 public class BaseFragment extends Fragment {
-	ChangeFragment chfragment;
+	ChangeFragment chfragment = null;
 	
 	public interface ChangeFragment{
 		public void changeFragment(int pantalla, Fragment f);
@@ -14,8 +14,10 @@ public class BaseFragment extends Fragment {
 
 	@Override
 	public void onAttach(Activity activity) {
+		if (activity instanceof ChangeFragment){
+			chfragment = (ChangeFragment) activity;
+		}
 		super.onAttach(activity);
-		chfragment = (ChangeFragment) activity;
 	}
 	
 	public void changeScreen(int pantalla, Fragment f){

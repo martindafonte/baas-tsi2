@@ -5,11 +5,15 @@ import org.json.JSONObject;
 
 import rest.ImagenGrande;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +27,7 @@ import baas.sdk.ISDKPush;
 import baas.sdk.messages.MessageJson;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
-public class VerOferta extends BaseFragment {
+public class VerOferta extends Fragment {
 
 	ImagenGrande bw_ImagenGrande;
 	AsyncTask<Void, Void, Void> tarea;
@@ -80,7 +84,9 @@ public class VerOferta extends BaseFragment {
 							"imagenId", getArguments().getString("idimagen"));
 					// imagenGrande
 					// =mjimagen.resultList.getJSONObject(0).getString("Imagen");
-					imagenGrande = mjimagen.json.getString("Imagen");
+					if(!((mjimagen.json == null) ||(mjimagen.json.isNull("Imagen")))){
+						imagenGrande = mjimagen.json.getString("Imagen");
+					}
 
 				} catch (NotInitilizedException e) {
 				} catch (JSONException e) {
@@ -111,8 +117,8 @@ public class VerOferta extends BaseFragment {
 		truqueid= j.getInt("idTrueque");
 		nickDestinatario= j.getString("nickDestinatario");
 		Resources res = getResources();
-		Button b = (Button)getActivity().findViewById(R.id.buttonAceptar);		
-        b.setOnClickListener(new View.OnClickListener() {
+		getView().findViewById(R.id.buttonAceptarOferta)	
+        .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             	new AsyncTask<Void, Void, Void>(){
@@ -134,20 +140,22 @@ public class VerOferta extends BaseFragment {
 					}
             		
             	}.execute();
+            	Intent upIntent = new Intent(getActivity(), MainActivity.class);
+                NavUtils.navigateUpTo(getActivity(), upIntent);
             }
         });;
-		TextView Tipo = (TextView)getActivity().findViewById(R.id.titulo);
+		TextView Tipo = (TextView)getActivity().findViewById(R.id.tituloOferta);
 		Tipo.setText(res.getStringArray(R.array.array_categorias)[Integer.parseInt(j.getString("tipo"))]);
 		
-		TextView Valor = (TextView)getActivity().findViewById(R.id.valor);
+		TextView Valor = (TextView)getActivity().findViewById(R.id.valorOferta);
 		String moneda = res.getStringArray(R.array.array_monedas)[j.getInt("moneda")];
 		
 		Valor.setText(moneda + " " +j.getString("valor"));
 		
-		TextView Descripcion = (TextView) getActivity().findViewById(R.id.descripcion1);
+		TextView Descripcion = (TextView) getActivity().findViewById(R.id.descripcion1Oferta);
 		Descripcion.setText(j.getString("descripcion"));
 		
-		ImageView imagen = (ImageView)getActivity().findViewById(R.id.imagen);
+		ImageView imagen = (ImageView)getActivity().findViewById(R.id.imagenOferta);
 		byte [] encodeByte=Base64.decode(imagenGrande,Base64.DEFAULT);
         Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         imagen.setImageBitmap(bitmap);
