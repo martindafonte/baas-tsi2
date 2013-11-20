@@ -89,7 +89,8 @@ public class VerTruequeActivity extends BaseFragment {
 //					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
 					MessageJson mjimagen = sdkJson.getJsonFromCacheWithId("imagenId", getArguments().getString("idimagen"));
 //					imagenGrande =mjimagen.resultList.getJSONObject(0).getString("Imagen");
-					imagenGrande = mjimagen.json.getString("Imagen");
+					if(!((mjimagen.json == null) ||(mjimagen.json.isNull("Imagen"))))
+						imagenGrande = mjimagen.json.getString("Imagen");
 					
 				} catch (NotInitilizedException e) {
 				}

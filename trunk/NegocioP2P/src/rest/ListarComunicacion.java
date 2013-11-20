@@ -70,7 +70,9 @@ public class ListarComunicacion{
 		    array =mj.resultList;
 		    
 		    // LLenar
-		    
+		    if(array == null){
+		       	return null;
+		    }
 		    MainActivity.trueques = new String[array.length()];
 
 	        for(int i=0;i<MainActivity.trueques.length;i++) {

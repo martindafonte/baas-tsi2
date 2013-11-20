@@ -44,5 +44,7 @@
         <item>U$S</item>
         <item>$</item>
     </string-array>
+        <string name="DescripcionImagenOferta">Imagen de la oferta</string>
+        <string name="aceptarofertaboton">Aceptar Oferta</string>
 
 </resources>

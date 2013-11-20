@@ -92,7 +92,9 @@ public class VerTruequesActivity extends Fragment {
 				try {
 					bw_listarComunicacion.doInBackground("trueque");
 				} catch (Exception e) {
-					dialog.setMessage("Ocurrio una excepcion");
+					dialog.dismiss();
+					lv1 = (ListView) getActivity().findViewById(R.id.list);
+					lv1.setEmptyView(getActivity().findViewById(R.id.empty));
 				}
 				return null;
 			}
@@ -102,9 +104,13 @@ public class VerTruequesActivity extends Fragment {
 
 	public void ponerAdapter() {
 		lv1 = (ListView) getActivity().findViewById(R.id.list);
-		adapter = new adaptarElemento(getActivity());
+		
 
 		lv1.setEmptyView(getActivity().findViewById(R.id.empty));
+		if(MainActivity.trueques==null || MainActivity.trueques.length == 0){
+			return;
+		}
+		adapter = new adaptarElemento(getActivity());
 		lv1.setAdapter(adapter);
 
 		lv1.setOnItemClickListener(new OnItemClickListener() {
