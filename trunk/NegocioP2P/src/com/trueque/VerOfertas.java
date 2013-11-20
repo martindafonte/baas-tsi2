@@ -13,12 +13,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.app.Activity;
-import android.app.Fragment;
+
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -130,11 +131,11 @@ public class VerOfertas extends BaseFragment{
 					args.putString("idoferta", idoferta);
 					args.putString("jsonoferta", selectedFromList);
 					f.setArguments(args);
-					FragmentManager fragmentManager = getFragmentManager();
+					android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
 					fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 							.commit();
 					getActivity().setTitle("Ver Oferta");
-					((MainActivity)getActivity()).vistaActual = MainActivity.op_veroferta;
+					changeScreen(MainActivity.op_veroferta,null);
 					//Buscarfoto();
 				} catch (JSONException e) {
 					e.printStackTrace();

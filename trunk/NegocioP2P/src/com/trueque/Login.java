@@ -1,10 +1,11 @@
 package com.trueque;
 
-import android.app.Fragment;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import baas.sdk.utils.Constants;
 import baas.sdk.utils.User;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
-public class Login extends Fragment {
+public class Login extends BaseFragment {
 	private static EditText nick;
 	private static EditText contrasenia;
 	
@@ -72,8 +73,7 @@ public class Login extends Fragment {
 						}
 						@Override
 						protected void onPostExecute(String result) {
-							MainActivity ma = (MainActivity)getActivity();
-							ma.logeado(u.Nick);
+							changeUser(u.Nick);
 						}
             		}.execute(u);
             	}
