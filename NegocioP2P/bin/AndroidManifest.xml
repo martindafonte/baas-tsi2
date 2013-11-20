@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+
     <permission
         android:name="baas.sdk.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -30,16 +31,19 @@
 
     <!-- This app has permission to register and receive data message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-<!--     <permission -->
-<!--         android:name="baas.sdk.permission.C2D_MESSAGE" -->
-<!--         android:protectionLevel="signature" /> -->
+    <!-- <permission -->
+    <!-- android:name="baas.sdk.permission.C2D_MESSAGE" -->
+    <!-- android:protectionLevel="signature" /> -->
 
-<!--     <uses-permission android:name="baas.sdk.permission.C2D_MESSAGE" /> -->
+
+    <!-- <uses-permission android:name="baas.sdk.permission.C2D_MESSAGE" /> -->
+
 
     <!-- This app has permission to register and receive data message. -->
-<!--     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /> -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /> -->
+ 
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -55,55 +59,69 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+		<service android:name="baas.sdk.utils.GcmIntentService" />
         <receiver
-        android:name="baas.sdk.utils.GCMBroadcastReceiver"
-        android:permission="com.google.android.c2dm.permission.SEND" >
-        <intent-filter>
+            android:name="baas.sdk.utils.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
 
-            <!-- Receives the actual messages. -->
-            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            <!-- Receives the registration id. -->
-            <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-            <category android:name="com.google.android.gcm.demo.app" />
-        </intent-filter>
-    </receiver>
+                <category android:name="com.google.android.gcm.demo.app" />
+            </intent-filter>
+        </receiver>
+
         <provider
-                android:name="com.example.android.network.sync.basicsyncadapter.provider.FeedProvider"
-                android:authorities="com.example.android.network.sync.basicsyncadapter"
-                android:exported="false" />
+            android:name="com.example.android.network.sync.basicsyncadapter.provider.FeedProvider"
+            android:authorities="com.example.android.network.sync.basicsyncadapter"
+            android:exported="false" />
 
-        <!-- This service implements our SyncAdapter. It needs to be exported, so that the system
-        sync framework can access it. -->
-        <service android:name="com.example.android.network.sync.basicsyncadapter.SyncService"
-                 android:exported="true">
-            <!-- This intent filter is required. It allows the system to launch our sync service
-            as needed. -->
+        <!--
+        This service implements our SyncAdapter. It needs to be exported, so that the system
+        sync framework can access it.
+        -->
+        <service
+            android:name="com.example.android.network.sync.basicsyncadapter.SyncService"
+            android:exported="true" >
+
+            <!--
+            This intent filter is required. It allows the system to launch our sync service
+            as needed.
+            -->
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
             <!-- This points to a required XML file which describes our SyncAdapter. -->
-            <meta-data android:name="android.content.SyncAdapter"
-                       android:resource="@xml/syncadapter" />
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
         </service>
 
-        <!-- This implements the account we'll use as an attachment point for our SyncAdapter. Since
+        <!--
+        This implements the account we'll use as an attachment point for our SyncAdapter. Since
         our SyncAdapter doesn't need to authenticate the current user (it just fetches a public RSS
         feed), this account's implementation is largely empty.
 
         It's also possible to attach a SyncAdapter to an existing account provided by another
-        package. In that case, this element could be omitted here. -->
-        <service android:name="com.example.android.network.sync.basicsyncadapter.accounts.GenericAccountService">
+        package. In that case, this element could be omitted here.
+        -->
+        <service android:name="com.example.android.network.sync.basicsyncadapter.accounts.GenericAccountService" >
+
             <!-- Required filter used by the system to launch our account service. -->
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
             <!-- This points to an XMLf ile which describes our account service. -->
-            <meta-data android:name="android.accounts.AccountAuthenticator"
-                       android:resource="@xml/authenticator" />
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
         </service>
-        <service android:name="baas.sdk.ISDKPush$SDKIntentService">
-
+        <service android:name="baas.sdk.ISDKPush$SDKIntentService" >
+        </service>
+        <service android:name="com.trueque.PushReciber" >
         </service>
     </application>
 
