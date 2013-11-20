@@ -6,6 +6,7 @@ import baas.sdk.utils.Constants;
 
 public class Trueque extends Transaccion {
 	public LinkedList<Integer> tipoOfertas;
+	boolean activo;
 	
 	public Trueque() {
 		super();

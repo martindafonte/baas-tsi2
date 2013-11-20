@@ -31,14 +31,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class VerOfertas extends Fragment {
+public class VerOfertas extends BaseFragment{
 	ListarOfertas bw_listarOfertas;
 	private ProgressDialog dialog;
 	AsyncTask<Void, Void, Void> tarea;
 	private ListView lv1;
 	private adaptarElemento adapter;
 	private String idimagen;
-	private String idtrueque;
+	private String idoferta;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,18 +122,19 @@ public class VerOfertas extends Fragment {
 				try {
 					JSONObject json = new JSONObject(selectedFromList);
 					idimagen = json.getString(Constants.json_id_imagen_grande);
-					idtrueque = json.getString(Constants.jsonidMongo);
+					idoferta = json.getString(Constants.jsonidMongo);
 					// Nuevoo***************
-					Fragment f = new VerTruequeActivity();
+					Fragment f = new VerOferta();
 					Bundle args = new Bundle();
 					args.putString("idimagen", idimagen);
-					args.putString("idtrueque", idtrueque);
+					args.putString("idoferta", idoferta);
+					args.putString("jsonoferta", selectedFromList);
 					f.setArguments(args);
 					FragmentManager fragmentManager = getFragmentManager();
 					fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 							.commit();
-					getActivity().setTitle("Ver Trueque");
-					
+					getActivity().setTitle("Ver Oferta");
+					((MainActivity)getActivity()).vistaActual = MainActivity.op_veroferta;
 					//Buscarfoto();
 				} catch (JSONException e) {
 					e.printStackTrace();

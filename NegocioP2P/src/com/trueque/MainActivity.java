@@ -15,19 +15,24 @@
  */
 
 package com.trueque;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import rest.EliminarComunicacion;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import rest.EliminarComunicacion;
 
 import com.google.gson.JsonObject;
+import com.example.android.network.sync.basicsyncadapter.SyncUtils;
 import com.trueque.BaseFragment.ChangeFragment;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -66,8 +71,9 @@ public class MainActivity extends Activity implements ChangeFragment{
 	public final static int op_iniciarSesion = 0;
 	public final static int op_altaUsuario = 2;
 	public final static int op_altaTrueque = 4;
-	public final int op_altaoferta = 5;
-	public final int op_verofertas = 6;
+	public final static int op_altaoferta = 5;
+	public final static int op_verofertas = 6;
+	public final static int op_veroferta = 7;
 	public final int op_verTrueque = 7;
 	public final int op_editarTrueque = 8;
 	public boolean op_miTrueque = false;
@@ -137,12 +143,14 @@ public class MainActivity extends Activity implements ChangeFragment{
 		if (savedInstanceState == null) {
 			selectItem(1);
 		}
-		// SyncUtils.CreateSyncAccount(this);
+		SyncUtils.CreateSyncAccount(this);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
+//		Intent in = getIntent();
+		//TODO ver si me llega un intent que hacer con el
 	}
 
 	@Override
@@ -186,7 +194,7 @@ public class MainActivity extends Activity implements ChangeFragment{
 				vListar = vAgregar = true;
 				break;
 			case op_user:
-				break;
+				return true;
 			case op_altaTrueque:
 				vCamara = vAceptar = true;
 				break;
@@ -466,4 +474,26 @@ public class MainActivity extends Activity implements ChangeFragment{
 			break;
 		}
 	}
+
+	@Override
+	public boolean onNavigateUp() {
+		if (vistaActual == op_home){
+			return super.onNavigateUp();
+		}else{
+			selectItem(op_home);
+			return true;
+		}
+	}
+
+	@Override
+	public boolean onNavigateUpFromChild(Activity child) {
+		if (vistaActual == op_home){
+			return super.onNavigateUp();
+		}else{
+			selectItem(op_home);
+			return true;
+		}
+	}
+	
+	
 }
