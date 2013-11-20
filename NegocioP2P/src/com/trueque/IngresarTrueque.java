@@ -62,6 +62,7 @@ public class IngresarTrueque extends Fragment {
 	private AdaptarCategoria adapterCategorias;
 	public String[] categorias;
 	public String nick;
+	public boolean fromcamera;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,8 @@ public class IngresarTrueque extends Fragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+		if(fromcamera)
+			return;
 		Resources res = getResources();
 		categorias = res.getStringArray(R.array.array_categorias);
 //		Activity a = getActivity();
@@ -147,7 +150,7 @@ public class IngresarTrueque extends Fragment {
 
 	public void setCampos() {
 		try {
-			jsonActual = new JSONObject(bundle.getString("trueque"));
+			jsonActual = new JSONObject(getArguments().getString("trueque"));
 
 			spinner.setId(Integer.parseInt(jsonActual.get("tipo").toString()));
 
@@ -167,7 +170,7 @@ public class IngresarTrueque extends Fragment {
 
 			imagen = (ImageView) getActivity().findViewById(R.id.Preview);
 
-			byte[] encodeByte = Base64.decode(bundle.getString("imagen"),
+			byte[] encodeByte = Base64.decode(jsonActual.getString("Imagen"),
 					Base64.DEFAULT);
 			Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,
 					encodeByte.length);
@@ -177,7 +180,7 @@ public class IngresarTrueque extends Fragment {
 		}
 	}
 
-	private void editarTrueque() throws JSONException {
+	public void editarTrueque() throws JSONException {
 
 		Trueque t = new Trueque();
 		t.id = jsonActual.getInt(Constants.jsonidMongo);
@@ -321,7 +324,7 @@ public class IngresarTrueque extends Fragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+//		super.onActivityResult(requestCode, resultCode, data);
 
 		if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
 			if (resultCode == android.app.Activity.RESULT_OK) {
@@ -336,6 +339,7 @@ public class IngresarTrueque extends Fragment {
 						.show();
 			}
 		}
+		fromcamera = true;
 
 	}
 

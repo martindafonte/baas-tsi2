@@ -1,47 +1,33 @@
 package com.trueque;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.trueque.R.menu;
-
-import baas.sdk.Factory;
-import baas.sdk.messages.MessageJson;
-import baas.sdk.messages.MessageJsonList;
-import baas.sdk.utils.Constants;
-import baas.sdk.utils.exceptions.NotInitilizedException;
 import rest.EliminarComunicacion;
 import rest.ImagenGrande;
-import rest.ListarComunicacion;
-import rest.ListarOfertas;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import baas.sdk.Factory;
+import baas.sdk.messages.MessageJson;
+import baas.sdk.utils.Constants;
+import baas.sdk.utils.exceptions.NotInitilizedException;
 
 public class VerTruequeActivity extends BaseFragment {
 	
@@ -101,7 +87,7 @@ public class VerTruequeActivity extends BaseFragment {
 					JSONObject query = new JSONObject();
 					query.put("imagenId", getArguments().getString("idimagen"));
 //					MessageJsonList mjimagen = sdkJson.getJsonList(query, 0, 1);
-					MessageJson mjimagen = sdkJson.getJsonFromCacheWithId("idImagen", getArguments().getString("idimagen"));
+					MessageJson mjimagen = sdkJson.getJsonFromCacheWithId("imagenId", getArguments().getString("idimagen"));
 //					imagenGrande =mjimagen.resultList.getJSONObject(0).getString("Imagen");
 					imagenGrande = mjimagen.json.getString("Imagen");
 					
@@ -145,18 +131,24 @@ public class VerTruequeActivity extends BaseFragment {
 		nick = sharedPref.getString(Constants.nickapp, null);
 		
 		Button b = (Button)getActivity().findViewById(R.id.buttonOfertar);
-	
+		MainActivity m = (MainActivity) getActivity();
+		m.vistaActual = m.op_verTrueque;
+		
 		try {
 			if ((nick == null) || (nick.equals(j.getString("nick")))){
 				b.setText("Ver Ofertas");
+				m.op_miTrueque = true;
+				
 			}else{
 				b.setText("Ofertar");
+				m.op_miTrueque = false;
 			}
 				
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-		
+		m.indice = indice;
+		m.invalidateOptionsMenu();
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -214,6 +206,7 @@ public class VerTruequeActivity extends BaseFragment {
 				.commit();
 		getActivity().setTitle("Ofertas");
 		m.vistaActual = m.op_verofertas;
+		m.imagenGrande = imagenGrande;
 		getActivity().invalidateOptionsMenu();
 		this.changeScreen(m.op_verofertas, f);
 		
@@ -251,7 +244,7 @@ public class VerTruequeActivity extends BaseFragment {
 //		}
 //		
 //        startActivity(i);
-	}
+//	}
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {
 //		super.onCreateOptionsMenu(menu); 
@@ -271,10 +264,21 @@ public class VerTruequeActivity extends BaseFragment {
 //		
 //	}
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//	    // Handle presses on the action bar items
+//		MainActivity m = (MainActivity) getActivity();
+//		switch (item.getItemId()) {
+//		case R.id.itemeditar:
+//			
+//			break;
+//		case R.id.itemeborrar:
+//			EliminarComunicacion eliminar = new EliminarComunicacion(m);
+//			eliminar.execute(j);
+//			break;
+//		}
+		
+			
 //		Intent i;
 //	    switch (item.getItemId()) {
 //	    	case android.R.id.home:
@@ -297,7 +301,7 @@ public class VerTruequeActivity extends BaseFragment {
 //	        default:
 //	            return super.onOptionsItemSelected(item);
 //	    }
-		return true;
+	//	return true;
 		
 	}
 	

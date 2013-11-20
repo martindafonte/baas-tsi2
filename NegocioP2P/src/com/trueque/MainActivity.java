@@ -16,6 +16,12 @@
 
 package com.trueque;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import rest.EliminarComunicacion;
+
+import com.google.gson.JsonObject;
 import com.trueque.BaseFragment.ChangeFragment;
 
 import android.app.Activity;
@@ -47,6 +53,7 @@ public class MainActivity extends Activity implements ChangeFragment{
 	private ActionBarDrawerToggle mDrawerToggle;
 	public static Context c;
 	public static String trueques[];
+	public int indice = -1;
 	public static String ofertas[];
 	// private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
@@ -61,12 +68,19 @@ public class MainActivity extends Activity implements ChangeFragment{
 	public final static int op_altaTrueque = 4;
 	public final int op_altaoferta = 5;
 	public final int op_verofertas = 6;
+	public final int op_verTrueque = 7;
+	public final int op_editarTrueque = 8;
+	public boolean op_miTrueque = false;
+	
 	public int vistaActual = -1;
 	private IngresarTrueque fIngresarTrueque;
 	private CrearOferta fIngresarOferta;
 	private VerOfertas fVerOfertas;
 	private VerTruequesActivity fVerTrueques = null;
 	private Fragment actual = null;
+	FragmentManager fragmentManager;
+	public String imagenGrande;
+	Fragment f;
 	Bundle args; 
 
 	@Override
@@ -148,7 +162,7 @@ public class MainActivity extends Activity implements ChangeFragment{
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content
 		// view
-		boolean vAceptar = false, vCamara = false, vListar = false, vAgregar = false;
+		boolean vAceptar = false, vCamara = false, vListar = false, vAgregar = false, vEditar = false, vBorrar = false ;
 
 		boolean visible = !mDrawerLayout.isDrawerOpen(mDrawerList);
 		if (user == null) {
@@ -179,12 +193,22 @@ public class MainActivity extends Activity implements ChangeFragment{
 			case op_altaoferta:
 				vCamara = vAceptar = true;
 				break;
+			case op_verTrueque:
+				if (op_miTrueque) {
+					vEditar = vBorrar = true;
+				}
+				break;
+			case op_editarTrueque:
+				vCamara = vAceptar = true;
+				break;
 			}
 		}
 		menu.findItem(R.id.itemaceptar).setVisible(visible && vAceptar);
 		menu.findItem(R.id.itemcamara).setVisible(visible && vCamara);
 		menu.findItem(R.id.listar).setVisible(visible && vListar);
 		menu.findItem(R.id.itemAgregar).setVisible(visible && vAgregar);
+		menu.findItem(R.id.itemeborrar).setVisible(visible && vBorrar);
+		menu.findItem(R.id.itemeditar).setVisible(visible && vEditar);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -215,13 +239,42 @@ public class MainActivity extends Activity implements ChangeFragment{
 		case R.id.itemaceptar:
 			if (vistaActual == op_altaTrueque){
 				fIngresarTrueque.Aceptar();
-			}else{
+			}else if(vistaActual == op_altaoferta){
 				fIngresarOferta.agregarOferta();
+			}else if (vistaActual == op_editarTrueque){
+				try {
+					fIngresarTrueque.editarTrueque();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return true;
 		case R.id.itemcamara:
 			fIngresarTrueque.captureImage();
 			return true;
+		case R.id.itemeborrar:
+    		 try {
+    			 EliminarComunicacion eliminar = new EliminarComunicacion(this);
+				JSONObject j = new JSONObject(trueques[indice]);
+				 eliminar.execute(j);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		case R.id.itemeditar:
+			f = fIngresarTrueque = new IngresarTrueque();
+			args = new Bundle();
+			args.putString("modo", "editar");
+			args.putString("trueque", trueques[indice]);
+			args.putString("imagen", imagenGrande);
+			f.setArguments(args);
+			fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, f)
+					.commit();
+			setTitle("Editar Trueque");
+			vistaActual = op_editarTrueque;
+			invalidateOptionsMenu();
+   		
 		default:
 			return super.onOptionsItemSelected(item);
 		}
