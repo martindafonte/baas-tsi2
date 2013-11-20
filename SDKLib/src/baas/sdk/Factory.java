@@ -4,13 +4,15 @@ import java.io.IOException;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.app.Application;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.os.Looper;
+import android.content.SharedPreferences;
 import baas.sdk.messages.Message;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
+import com.example.android.network.sync.basicsyncadapter.accounts.GenericAccountService;
+import com.example.android.network.sync.basicsyncadapter.provider.FeedProvider;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public abstract class Factory {
@@ -35,21 +37,13 @@ public abstract class Factory {
 	// Instance fields
 
 	protected static Context getContext() {
-//		if(app==null){
-//			app = new SDKActivity();
-//		}
-//		return app.getApplicationContext();
 		return ctx;
 	}
 
 	protected static String getRegid() {
-//		if(app==null){
-//			app = new SDKActivity();
-//		}
-//		return app.getApplicationContext();
 		return l_regid;
 	}
-	
+
 	public static Message initialize(long p_app_id, Context p_ctx) {
 		Message msg = null;
 		l_app_id = 1;
@@ -58,26 +52,28 @@ public abstract class Factory {
 			initiliazed = true;
 		}
 		ctx = p_ctx;
+		SharedPreferences settings = p_ctx.getSharedPreferences(
+				"baas.sdk.sync", Context.MODE_PRIVATE);
+		
 		if ((l_regid == "") || (l_regid == null)) {
+			l_regid=settings.getString("regid", "");
+			if ((l_regid == "") || (l_regid == null)) {
 			try {
 				registrarGCM();
 				msg = new Message(Constants.Exito);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString("regid", l_regid);
+				editor.commit();
 			} catch (IOException e) {
 				msg = new Message(Constants.GCM_Problem_Registering);
 				msg.descripcion += " Excepcion: " + e.getMessage();
+			}
 			}
 		}
 		if (msg == null) {
 			msg = new Message(Constants.Exito);
 		}
-		// SharedPreferences settings =
-		// p_ctx.getSharedPreferences("baas.sdk.sync", Context.MODE_PRIVATE);
-		// SharedPreferences.Editor editor = settings.edit();
-		// editor.putString("key1", "value1");
-		// editor.commit();
-
-		// ContentResolver.setSyncAutomatically(GenericAccountService.GetAccount(),
-		// "baas.sdk.provider", true);
+		ContentResolver.setSyncAutomatically(GenericAccountService.GetAccount(),FeedProvider.CONTENT_AUTHORITY, true);
 		return msg;
 	}
 
@@ -86,7 +82,7 @@ public abstract class Factory {
 			throw new NotInitilizedException();
 		}
 		if (l_userSDK == null) {
-			l_userSDK = new SDKUser(l_httpClient, l_app_id,ctx);
+			l_userSDK = new SDKUser(l_httpClient, l_app_id, ctx);
 		}
 		return (ISDKUser) l_userSDK;
 	}

@@ -211,7 +211,6 @@ public class FeedProvider extends ContentProvider {
         public static final String DATABASE_NAME = "feed.db";
 
         private static final String TYPE_TEXT = " TEXT";
-        private static final String TYPE_INTEGER = " INTEGER";
         private static final String COMMA_SEP = ",";
         /** SQL statement to create "entry" table. */
         private static final String SQL_CREATE_ENTRIES =

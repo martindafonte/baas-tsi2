@@ -146,15 +146,14 @@ public class SDKJson implements ISDKJson {
 				mj.codigo = Constants.JSON_Exception;
 				mj.descripcion = e.getMessage();
 			}
-		} else {
+		} 
 			if(saveInBD(Constants.update, json.toString(), String.valueOf(jsonId))){
 				mj.codigo=Constants.Exito;
-				mj.descripcion="Guardado en la BD para enviar luego";
+				mj.descripcion="Guardado en la BD";
 			}else{
 				mj.codigo = Constants.JSON_Error_Saving_BD;
 				mj.descripcion ="Ocurrio un error al guardar en la bd";
 			}
-		}
 		return mj;
 	}
 
