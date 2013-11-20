@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import rest.EliminarComunicacion;
 import rest.ImagenGrande;
 import android.app.ActionBar;
-import android.app.Fragment;
+
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -202,7 +203,7 @@ public class VerTruequeActivity extends BaseFragment {
 		
 		Fragment f = new VerOfertas();
 		f.setArguments(args);
-		FragmentManager fragmentManager = getFragmentManager();
+		android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 				.commit();
 		getActivity().setTitle("Ofertas");
@@ -223,17 +224,18 @@ public class VerTruequeActivity extends BaseFragment {
 			e.printStackTrace();
 		}
 	
-		MainActivity m = (MainActivity) getActivity();
+//		MainActivity m = (MainActivity) getActivity();
 		Fragment f = new CrearOferta();
 		f.setArguments(args);
-		FragmentManager fragmentManager = getFragmentManager();
+		android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 				.commit();
-		m.setTitle("Ofertar");
+//		m.setTitle("Ofertar");
 		getActivity().setTitle("Ver Trueque");
-		m.vistaActual = m.op_altaoferta;
+//		changeScreen(MainActivity.op_altaoferta,null);
+		changeScreen(MainActivity.op_altaoferta, f);
 		getActivity().invalidateOptionsMenu();
-		this.changeScreen(m.op_altaoferta, f);
+		
 		
 		
 //		Intent i = new Intent(VerTruequeActivity.this, CrearOferta.class);

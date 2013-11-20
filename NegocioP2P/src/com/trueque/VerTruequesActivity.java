@@ -7,7 +7,7 @@ import rest.ImagenGrande;
 import rest.ListarComunicacion;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
+
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.res.Resources;
@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -128,7 +129,7 @@ public class VerTruequesActivity extends Fragment {
 					args.putString("idimagen", idimagen);
 					args.putString("idtrueque", idtrueque);
 					f.setArguments(args);
-					FragmentManager fragmentManager = getFragmentManager();
+					android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
 					fragmentManager.beginTransaction().replace(R.id.content_frame, f)
 							.commit();
 					MainActivity m = (MainActivity) getActivity();
