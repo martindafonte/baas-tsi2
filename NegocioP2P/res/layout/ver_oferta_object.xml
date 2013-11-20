@@ -8,7 +8,7 @@
     tools:context=".VerTruequeActivity" >
 
     <ImageView
-        android:id="@+id/imagen"
+        android:id="@+id/imagenOferta"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
@@ -19,7 +19,7 @@
         android:src="@drawable/ic_action_person" />
 
     <TextView
-        android:id="@+id/titulo"
+        android:id="@+id/tituloOferta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -27,7 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/descripcion1"
+        android:id="@+id/descripcion1Oferta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -35,7 +35,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/valor"
+        android:id="@+id/valorOferta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -47,10 +47,9 @@
         android:minHeight="10dp" />
 
     <Button
-        android:id="@+id/buttonAceptar"
+        android:id="@+id/buttonAceptarOferta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="ofertar"
         android:text="@string/aceptarofertaboton" />
 
 </LinearLayout>
