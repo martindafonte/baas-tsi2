@@ -117,7 +117,7 @@ public class VerOferta extends Fragment {
 		String jsonFromArgs = getArguments().getString("jsonoferta");
 		JSONObject j = new JSONObject(jsonFromArgs); 
 		truqueid= j.getInt("idTrueque");
-		nickDestinatario= j.getString("nickDestinatario");
+		nickDestinatario= j.getString("nick");
 		Resources res = getResources();
 		getView().findViewById(R.id.buttonAceptarOferta)	
         .setOnClickListener(new View.OnClickListener() {
@@ -150,20 +150,20 @@ public class VerOferta extends Fragment {
 		String[] a = res.getStringArray(R.array.array_categorias);
 		int num = j.getInt("tipo");
 		String texto = a[num];
-		//Tipo.setText(texto.toString());
+		Tipo.setText(texto.toString());
 		
 		TextView Valor = (TextView)getActivity().findViewById(R.id.valorOferta);
 		String moneda = res.getStringArray(R.array.array_monedas)[j.getInt("moneda")];
 		
-	//	Valor.setText(moneda + " " +j.getString("valor"));
+		Valor.setText(moneda + " " +j.getString("valor"));
 		
 		TextView Descripcion = (TextView) getActivity().findViewById(R.id.descripcion1Oferta);
-	//	Descripcion.setText(j.getString("descripcion"));
+		Descripcion.setText(j.getString("descripcion"));
 		
 		ImageView imagen = (ImageView)getActivity().findViewById(R.id.imagenOferta);
 		byte [] encodeByte=Base64.decode(imagenGrande,Base64.DEFAULT);
         Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-//        imagen.setImageBitmap(bitmap);
+        imagen.setImageBitmap(bitmap);
 		
 		}catch(JSONException e){
 		}
