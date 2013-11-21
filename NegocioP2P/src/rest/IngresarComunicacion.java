@@ -22,6 +22,7 @@ import android.text.format.DateUtils;
 import android.text.method.DateTimeKeyListener;
 import baas.sdk.Factory;
 import baas.sdk.messages.MessageJson;
+import baas.sdk.messages.MessageJsonList;
 import baas.sdk.utils.Constants;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
@@ -91,19 +92,28 @@ public class IngresarComunicacion extends AsyncTask<Transaccion, Integer, Boolea
 			t.imagenChica = "";
 			t.imagenGrande = "";
 			JSONObject dato = new JSONObject(g.toJson(t));
-			sdkJson.addJson(dato,true);		
+					
 			
 			if (t.TipoObjeto == Constants.tipoOferta){
 				Oferta o = (Oferta) t;
 				try {
 					//Resources res = getResources();
 					//String[] categorias = res.getStringArray(R.array.array_categorias);
+//					JSONObject j = new JSONObject();
+//					j.put("_id", Integer.parseInt(o.idTrueque));
+//					String[] s = new String[1];
+//					s[0] = "nick";
+					MessageJson mj = sdkJson.getJson(Integer.parseInt(o.idTrueque));
+					o.nickDestinatario = mj.json.getString("nick");
+					dato.put("nickDestinatario", mj.json.getString("nick"));
 					Factory.getPushSDK().sendToUser(o.nickDestinatario, "El usuario "+o.nick +" ha ofertado por en tu trueque.");
 				} catch (NotInitilizedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 			}
+			sdkJson.addJson(dato,true);
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

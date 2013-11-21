@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import rest.ImagenGrande;
+import android.R.array;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -45,7 +46,7 @@ public class VerOferta extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.ver_oferta, container, false);
+		return inflater.inflate(R.layout.ver_oferta_object, container, false);
 	}
 
 	@Override
@@ -87,6 +88,7 @@ public class VerOferta extends Fragment {
 					if(!((mjimagen.json == null) ||(mjimagen.json.isNull("Imagen")))){
 						imagenGrande = mjimagen.json.getString("Imagen");
 					}
+					setVerOferta();
 
 				} catch (NotInitilizedException e) {
 				} catch (JSONException e) {
@@ -144,21 +146,24 @@ public class VerOferta extends Fragment {
                 NavUtils.navigateUpTo(getActivity(), upIntent);
             }
         });;
-		TextView Tipo = (TextView)getActivity().findViewById(R.id.tituloOferta);
-		Tipo.setText(res.getStringArray(R.array.array_categorias)[Integer.parseInt(j.getString("tipo"))]);
+		TextView Tipo = (TextView) getActivity().findViewById(R.id.tituloOferta);
+		String[] a = res.getStringArray(R.array.array_categorias);
+		int num = j.getInt("tipo");
+		String texto = a[num];
+		//Tipo.setText(texto.toString());
 		
 		TextView Valor = (TextView)getActivity().findViewById(R.id.valorOferta);
 		String moneda = res.getStringArray(R.array.array_monedas)[j.getInt("moneda")];
 		
-		Valor.setText(moneda + " " +j.getString("valor"));
+	//	Valor.setText(moneda + " " +j.getString("valor"));
 		
 		TextView Descripcion = (TextView) getActivity().findViewById(R.id.descripcion1Oferta);
-		Descripcion.setText(j.getString("descripcion"));
+	//	Descripcion.setText(j.getString("descripcion"));
 		
 		ImageView imagen = (ImageView)getActivity().findViewById(R.id.imagenOferta);
 		byte [] encodeByte=Base64.decode(imagenGrande,Base64.DEFAULT);
         Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-        imagen.setImageBitmap(bitmap);
+//        imagen.setImageBitmap(bitmap);
 		
 		}catch(JSONException e){
 		}
