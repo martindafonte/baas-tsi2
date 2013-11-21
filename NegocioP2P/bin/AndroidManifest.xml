@@ -123,6 +123,7 @@
         </service>
         <service android:name="com.trueque.PushReciber" >
         </service>
+        <activity android:name="VerOfertaColeccionActivity" android:label="Trueques" />
     </application>
 
 </manifest>
