@@ -1,14 +1,19 @@
 package baas.sdk;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import baas.sdk.messages.Message;
 import baas.sdk.utils.Constants;
+import baas.sdk.utils.ProptiesReader;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
 import com.example.android.network.sync.basicsyncadapter.accounts.GenericAccountService;
@@ -33,6 +38,8 @@ public abstract class Factory {
 	public static final String ACCOUNT_TYPE = "example.com";
 	// The account name
 	public static final String ACCOUNT = "dummyaccount";
+	
+	public static String baseURL;
 
 	// Instance fields
 
@@ -74,6 +81,10 @@ public abstract class Factory {
 			msg = new Message(Constants.Exito);
 		}
 		ContentResolver.setSyncAutomatically(GenericAccountService.GetAccount(),FeedProvider.CONTENT_AUTHORITY, true);
+		ProptiesReader pr = new ProptiesReader(p_ctx);
+		Properties p = pr.getProperties("tsi2.properties");
+		String s = p.get("URL").toString();
+		baseURL = s;
 		return msg;
 	}
 
