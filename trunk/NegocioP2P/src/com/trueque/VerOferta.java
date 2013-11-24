@@ -88,7 +88,7 @@ public class VerOferta extends Fragment {
 					if(!((mjimagen.json == null) ||(mjimagen.json.isNull("Imagen")))){
 						imagenGrande = mjimagen.json.getString("Imagen");
 					}
-					setVerOferta();
+					
 
 				} catch (NotInitilizedException e) {
 				} catch (JSONException e) {
@@ -147,10 +147,11 @@ public class VerOferta extends Fragment {
             }
         });;
 		TextView Tipo = (TextView) getActivity().findViewById(R.id.tituloOferta);
-		String[] a = res.getStringArray(R.array.array_categorias);
-		int num = j.getInt("tipo");
-		String texto = a[num];
-		Tipo.setText(texto.toString());
+		
+	//	String[] a = );
+	//	String num = j.getString("tipo");
+	//	String texto = a[num];
+		Tipo.setText(res.getStringArray(R.array.array_categorias)[Integer.parseInt(j.getString("tipo"))]);
 		
 		TextView Valor = (TextView)getActivity().findViewById(R.id.valorOferta);
 		String moneda = res.getStringArray(R.array.array_monedas)[j.getInt("moneda")];
