@@ -37,7 +37,7 @@ class SDKPush implements ISDKPush {
 
 	SDKPush(String p_regId, long p_appId) {
 		l_httpClient = new DefaultHttpClient();
-		l_baseURL = Constants.baseURL+"/Push";
+		l_baseURL = Factory.baseURL+"/Push";
 		l_regId = p_regId;
 		l_appId = String.valueOf(p_appId);
 	}

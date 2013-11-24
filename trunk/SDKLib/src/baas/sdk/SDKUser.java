@@ -36,7 +36,7 @@ class SDKUser implements ISDKUser {
 	SDKUser(DefaultHttpClient p_httpclient, long p_app_id, Context c) {
 		l_httpClient = p_httpclient;
 		l_appid = String.valueOf(p_app_id);
-		l_baseURL = baas.sdk.utils.Constants.baseURL + "/Users";
+		l_baseURL = Factory.baseURL + "/Users";
 	}
 
 	@Override
