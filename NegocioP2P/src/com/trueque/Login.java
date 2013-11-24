@@ -20,6 +20,7 @@ public class Login extends BaseFragment {
 	private static EditText nick;
 	private static EditText contrasenia;
 	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,7 +38,8 @@ public class Login extends BaseFragment {
 		nick = (EditText)getView().findViewById(R.id.loginUsuario);
 		contrasenia = (EditText) getView().findViewById(R.id.loginPassword);
 		getView().findViewById(R.id.buttonRegistrar).setOnClickListener(new View.OnClickListener() {
-            @Override
+			
+			@Override
             public void onClick(View view) {
             	
             	User u = new User();
@@ -55,25 +57,29 @@ public class Login extends BaseFragment {
 //            		i.execute(u);
             		new AsyncTask<User, String, String>(){
             			User u;
+            			boolean exito = false;
 						@Override
 						protected String doInBackground(User... usuarios) {
 							try {
 								Factory.initialize(1, getActivity());
 								u = usuarios[0];
 								Message m = Factory.getUserSDK().login(u.Nick, u.Password);
-							//	if (m.codigo == Constants.Exito){
+								if (m.codigo == Constants.Exito){
 									SharedPreferences sharedPref = getActivity().getSharedPreferences("claves", Context.MODE_PRIVATE);
 									SharedPreferences.Editor editor = sharedPref.edit();
 									editor.putString(Constants.nickapp, u.Nick);								
 									editor.commit();
-								//}
+									exito = true;
+									
+								}
 							} catch (NotInitilizedException e) {
 							}
 							return null;
 						}
 						@Override
 						protected void onPostExecute(String result) {
-							changeUser(u.Nick);
+							if (exito)
+								changeUser(u.Nick);
 						}
             		}.execute(u);
             	}
