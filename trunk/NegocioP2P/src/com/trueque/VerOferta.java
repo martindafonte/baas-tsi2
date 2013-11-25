@@ -28,7 +28,7 @@ import baas.sdk.ISDKPush;
 import baas.sdk.messages.MessageJson;
 import baas.sdk.utils.exceptions.NotInitilizedException;
 
-public class VerOferta extends Fragment {
+public class VerOferta extends BaseFragment {
 
 	ImagenGrande bw_ImagenGrande;
 	AsyncTask<Void, Void, Void> tarea;
@@ -142,8 +142,9 @@ public class VerOferta extends Fragment {
 					}
             		
             	}.execute();
-            	Intent upIntent = new Intent(getActivity(), MainActivity.class);
-                NavUtils.navigateUpTo(getActivity(), upIntent);
+//            	Intent upIntent = new Intent(getActivity(), MainActivity.class);
+//                NavUtils.navigateUpTo(getActivity(), upIntent);
+            	changeScreen(MainActivity.op_home, null);
             }
         });;
 		TextView Tipo = (TextView) getActivity().findViewById(R.id.tituloOferta);

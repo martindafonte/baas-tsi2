@@ -504,6 +504,8 @@ public class MainActivity extends FragmentActivity implements ChangeFragment {
 		case op_verofertas:
 			fVerOfertas = (VerOfertas) f;
 			break;
+		case op_home:
+			selectItem(op_home);
 		}
 
 	}
