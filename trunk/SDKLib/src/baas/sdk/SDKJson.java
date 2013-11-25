@@ -45,7 +45,7 @@ public class SDKJson implements ISDKJson {
 	
 	public SDKJson(long p_appid, Context ctx) {
 		l_appid = String.valueOf(p_appid);
-		l_baseURL = Constants.baseURL + "/JSon";
+		l_baseURL = Factory.baseURL+"/JSon";
 		l_httpClient = new DefaultHttpClient();
 		l_ctx = ctx;
 	}
