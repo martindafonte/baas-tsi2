@@ -32,6 +32,9 @@ public class EliminarComunicacion  extends AsyncTask<JSONObject,Integer,Boolean>
 	protected void onPostExecute(Boolean result) {
 		
 		// Llamar a ver perfil.
+		if (this.dialog.isShowing()){
+			this.dialog.dismiss();
+		} 
 		
 		Intent i = new Intent(this.context.getApplicationContext(),MainActivity.class);
 		this.context.startActivity(i);
@@ -44,7 +47,6 @@ public class EliminarComunicacion  extends AsyncTask<JSONObject,Integer,Boolean>
 		this.dialog.setMessage("Eliminando");
 		this.dialog.show();
 		super.onPreExecute();
-		super.onPreExecute();
 	}
 
 	@Override
@@ -55,9 +57,9 @@ public class EliminarComunicacion  extends AsyncTask<JSONObject,Integer,Boolean>
 				sdkJson = Factory.getJsonSDK();
 			} catch (NotInitilizedException e) {
 			}
-			if (dialog.isShowing()){
-				dialog.dismiss();
-			}
+//			if (dialog.isShowing()){
+//				dialog.dismiss();
+//			}
 			JSONObject j = params[0];
 			String idImagenChica = j.getString(Constants.json_id_imagen_chica);
 			String idImagenGrande = j.getString(Constants.json_id_imagen_grande);

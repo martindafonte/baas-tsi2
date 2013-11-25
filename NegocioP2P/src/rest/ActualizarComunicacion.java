@@ -68,7 +68,6 @@ public class ActualizarComunicacion extends AsyncTask<Trueque,Integer,Boolean> {
 		this.dialog.setMessage("Guardando");
 		this.dialog.show();
 		super.onPreExecute();
-		super.onPreExecute();
 	}
 
 	@Override
