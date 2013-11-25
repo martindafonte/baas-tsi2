@@ -293,6 +293,7 @@ public class MainActivity extends FragmentActivity implements ChangeFragment {
 				EliminarComunicacion eliminar = new EliminarComunicacion(this);
 				JSONObject j = new JSONObject(trueques[indice]);
 				eliminar.execute(j);
+				return true;
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -309,7 +310,7 @@ public class MainActivity extends FragmentActivity implements ChangeFragment {
 			setTitle("Editar Trueque");
 			vistaActual = op_editarTrueque;
 			invalidateOptionsMenu();
-
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
